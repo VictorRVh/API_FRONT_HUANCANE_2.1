@@ -213,11 +213,10 @@ class GrupoController extends Controller
         return response()->json($grupos, 200);
     }
 
-    public function getAlumnosPorGrupoYDocente($docente_id, $grupo_id)
+    public function getAlumnosPorGrupoYDocente( $grupo_id)
     {
-        $alumnos = Matricula::whereHas('grupos', function ($query) use ($docente_id, $grupo_id) {
-            $query->where('id_docente', $docente_id)
-                ->where('id_grupo', $grupo_id);
+        $alumnos = Matricula::whereHas('grupos', function ($query) use ( $grupo_id) {
+            $query->where('id_grupo', $grupo_id);
         })
             ->with('estudiante')
             ->get();

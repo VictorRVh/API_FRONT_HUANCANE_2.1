@@ -139,7 +139,16 @@ export default [
             permissions: ['groups-all', 'groups-view'],
         },
     },
-
+    {
+        path: '/grupos/:id',
+        name: 'grupoEst',
+        component: () => import('../pages/Grupo/Estudiantes.vue'),
+        props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        meta: {
+            layout: 'dashboard',
+            permissions: ['groups-all', 'groups-view'],
+        },
+    },
     {
         path: '/matricula',
         name: 'matriculas',

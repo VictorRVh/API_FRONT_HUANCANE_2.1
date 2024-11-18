@@ -340,7 +340,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     //RUTA DE ESTUDIANTE POR GRUPO Y DOCENTE 
 
-    Route::get('grupoEstudiante/{docente_id}/{grupo_id}', [
+    Route::get('grupoDocente/{grupo_id}', [
         \App\Http\Controllers\GrupoController::class,
         'getAlumnosPorGrupoYDocente',
     ])->middleware('permission:groups-all|groups-view');

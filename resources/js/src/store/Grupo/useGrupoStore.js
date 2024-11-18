@@ -23,11 +23,13 @@ const useGroupsStore = defineStore('Groups', () => {
     //obtenemos docentes :´) 
     const {
         showTwo: getGrupoDocente,
+        show: getGrupoStudent
     } = useHttpRequest('/grupoDocente');
-
+ 
 
     const group = ref(null); // Para almacenar una sola Groupa
     const groups = ref([]);  // Para almacenar la lista de Groupa es
+    const student = ref([]);
 
 
     // Función para establecer una Groupa específica
@@ -63,15 +65,21 @@ const useGroupsStore = defineStore('Groups', () => {
         const response = await getGroupById(id); // Usamos el método show
         group.value = response;
     };
+    const loadGroupStudent = async (id) => {
+        const response = await getGrupoStudent(id); // Usamos el método show
+        student.value = response;
+    };
 
     return {
         group,
+        student,
         setGroup,
         groups,
         GroupsLoading,
         GroupsFirstTimeLoading,
         loadGroups,
         loadGroupById, // Retornamos la nueva función para obtener una Groupa por ID
+        loadGroupStudent
     };
 });
 
