@@ -24,7 +24,8 @@ class Programa extends Model
         return $this->belongsTo(Planes::class, 'id_plan');
     }
 
-    public function programa(){
+    public function programa()
+    {
         return $this->hasMany(Grupo::class, 'id_programa');
     }
 

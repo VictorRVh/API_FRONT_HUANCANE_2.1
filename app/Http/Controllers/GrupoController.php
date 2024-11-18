@@ -213,21 +213,35 @@ class GrupoController extends Controller
         return response()->json($grupos, 200);
     }
 
-    public function getAlumnosPorGrupoYDocente( $grupo_id)
+    public function getAlumnosYUnidadesPorGrupo($grupo_id)
     {
-        $alumnos = Matricula::whereHas('grupos', function ($query) use ( $grupo_id) {
+        $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
             $query->where('id_grupo', $grupo_id);
         })
-            ->with('estudiante')
+            ->with('estudiante') 
             ->get();
 
+        $grupo = Grupo::with('programa.unidadesDidacticas')
+            ->find($grupo_id);
+
         $alumnos->each(function ($matricula) {
-            $matricula->makeHidden(['created_at', 'updated_at']); 
+            $matricula->makeHidden(['created_at', 'updated_at']);
             if ($matricula->estudiante) {
-                $matricula->estudiante->makeHidden(['created_at', 'updated_at', 'email_verified_at']); 
+                $matricula->estudiante->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
             }
         });
 
-        return response()->json($alumnos, 200);
+        if ($grupo && $grupo->programa) {
+            $unidadesDidacticas = $grupo->programa->unidadesDidacticas->makeHidden(['created_at', 'updated_at']);
+        } else {
+            $unidadesDidacticas = [];
+        }
+
+        $response = [
+            'estudiantes' => $alumnos,
+            'unidades_didacticas' => $unidadesDidacticas
+        ];
+
+        return response()->json($response, 200);
     }
 }

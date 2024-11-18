@@ -25,4 +25,9 @@ class Especialidad extends Model
     {
         return $this->hasMany(Grupo::class, 'id_especialidad', 'id_especialidad');
     }
+
+    public function unidadesDidacticas()
+    {
+        return $this->hasMany(UnidadDidactica::class, 'id_especialidad');
+    }
 }
