@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1; /* Mejora la legibilidad */
+
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #333; /* Color de texto predeterminado más oscuro */
+    background-color: #f9f9f9; /* Fondo claro para mayor contraste */
+}
+
+/* Estilo de enlaces */
+a {
+
+    color: #007bff; /* Color azul profesional */
+    text-decoration: none; /* Eliminar subrayado */
+    transition: color 0.3s; /* Suavizar el cambio de color */
+}
+a:hover {
+    color: #0056b3; /* Color azul más oscuro en hover */
+}
+
+/* Estilo de enlaces en modo oscuro */
+.dark a:hover {
+    color: #9fcae3; /* Color claro para contraste en modo oscuro */
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .flex-start {
+        @apply flex flex-row items-center;
+    }
+    .flex-between {
+        @apply flex flex-row justify-between items-center;
+    }
+    .flex-center {
+        @apply flex flex-row justify-center items-center;
+    }
+    .flex-end {
+        @apply flex flex-row justify-end items-center;
+    }
+}
+
+@font-palette-values --Inter {
+    font-family: 'Inter';
+    override-colors:
+        0 #fb923c,
+        1 #009688,
+        2 #fb923c,
+        3 #009688,
+        4 #009688,
+        5 #6ee7b7,
+        6 #16a34a,
+        7 #6ee7b7,
+        8 #009688,
+        9 #fda4af;
+}
+
+span.logo-char {
+    animation: depth 1s ease-in-out alternate infinite;
+    position: relative;
+    display: inline-block;
+    font-variation-settings: 'EDPT' 30;
+    font-palette: --Inter;
+}
+
+@keyframes depth {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    100% {
+        font-variation-settings: 'EDPT' 200;
+        transform: translateX(0.07em) translateY(0.05em);
+    }
+}
+
+.edit-list-move,
+.edit-list-enter-active,
+.edit-list-leave-active {
+    transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.edit-list-enter-from,
+.edit-list-leave-to {
+    opacity: 0;
+    transform: scaleY(0.01) translate(30px, 0);
+}
+
+.edit-list-leave-active {
+    width: 100%;
+    position: absolute;
+}

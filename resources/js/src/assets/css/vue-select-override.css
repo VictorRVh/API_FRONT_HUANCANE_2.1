@@ -1,0 +1,31 @@
+.v-select .vs__dropdown-toggle {
+    height: 40px;
+    background-color: #F8F8FA; /* Reemplaza 'theme('colors.gray.50')' */
+}
+
+.vs__dropdown-option--highlight {
+    background-color: #921733; /* Reemplaza 'theme('colors.active.DEFAULT')' */
+}
+
+.dark .v-select .vs__dropdown-toggle {
+    background-color: #49454F; /* Reemplaza 'theme('colors.gray.700')' */
+    color: #333333; /* Aquí debes reemplazar 'theme('colors.dark-color')', asumiendo que sea el valor correcto */
+}
+
+.dark .v-select .vs__selected {
+    color: #333333; /* Reemplaza por el color que has definido para 'dark-color' */
+}
+
+.dark .v-select .vs__dropdown-menu {
+    background-color: #F8F8FA; /* Reemplaza 'theme('colors.cc-10')' */
+}
+
+.dark .v-select .vs__clear svg {
+    stroke: #aaa;
+    fill: #aaa;
+}
+
+.dark .v-select .vs__open-indicator {
+    stroke: #aaa;
+    fill: #aaa;
+}
