@@ -20,6 +20,12 @@ const useGroupsStore = defineStore('Groups', () => {
         initialLoading: GroupsFirstTimeLoading,
     } = useHttpRequest('/grupo');
 
+    //obtenemos docentes :´) 
+    const {
+        showTwo: getGrupoDocente,
+    } = useHttpRequest('/grupoDocente');
+
+
     const group = ref(null); // Para almacenar una sola Groupa
     const groups = ref([]);  // Para almacenar la lista de Groupa es
 
@@ -29,44 +35,26 @@ const useGroupsStore = defineStore('Groups', () => {
         group.value = authGroup;
     };
 
+    const userStore = useUserStore();
+    const user = userStore.user; // Accedemos al valor real del usuario
+    const isDocente = user?.roles?.[0]?.name === 'docente';
+
+
     // Función para cargar todas las Groupaes
     const loadGroups = async (plan = 1, especialty) => {
 
-        const userStore = useUserStore();
-        const user = userStore.user; // Accedemos al valor real del usuario
-
-        console.log('DEDEHDE', userStore.user.roles[0].name); // Verificamos que tenemos el objeto de usuario
-
-        // Determina si el usuario es docente
-        const isDocente = user?.roles?.[0]?.name === 'docente';
-
         // // Obtiene los grupos según el rol del usuario
         // const response = await getGroups(plan, especialty);
-
         if (isDocente) {
-            console.log('DOCENTE');
-            console.log('PLAN', plan);
-            
-            // Si el usuario es docente, realiza la llamada específica a la ruta `grupoDocente`
-            try {
-                const docenteResponse = await fetch(`/api/grupoDocente/${user.id}/${plan}`);
-                if (docenteResponse.ok) {
-                    const gruposDocente = await docenteResponse.json();
-                    console.log('Grupos específicos del docente para el plan:', gruposDocente);
-    
-                    // Asigna directamente la respuesta a `groups.value`
-                    groups.value = gruposDocente;
-                } else {
-                    console.error('Error al obtener los grupos específicos del docente');
-                }
-            } catch (error) {
-                console.error('Error de red al obtener los grupos específicos del docente:', error);
-            }
+            const response = await getGrupoDocente(user?.roles?.[0].pivot.user_id, plan);
+            groups.value = response;
+          //  console.log('Docentes store en ici: ',user?.roles?.[0].pivot.user_id);
+
         } else {
             // Si es administrativo, carga todos los grupos con el método original `getGroups`
             const response = await getGroups(plan, especialty);
             groups.value = response;
-            console.log('Administrativo');
+          //  console.log('Administrativo');
         }
     };
 

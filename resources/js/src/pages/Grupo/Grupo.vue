@@ -38,14 +38,14 @@ import { ref } from "vue"; // Asegúrate de incluir ref
 const roleStore = useRoleStore();
 console.log("Roles victor: ",roleStore.role[0].id)
 
-let specialtiesStore;
-let userStore;
-let placesStore;
+let specialtiesStore = ref(null);
+let userStore = ref(null);
+let placesStore = ref(null);
 
 const selectSpecialties = ref(0);
 
 
-if (roleStore.role[0].id) {
+if (roleStore.role[0].id !=7) {
   specialtiesStore = useSpecialtyStore();
   if (!specialtiesStore.specialties?.length) await specialtiesStore.loadSpecialties();
   placesStore = usePlaceStore();
@@ -128,7 +128,7 @@ const changePlan = () => {
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
         <h2 class="text-active font-bold text-2xl">{{}} / Grupos</h2>
-        <CreateButton @click="showSlider(true)" />
+        <CreateButton v-if="roleStore.role[0].id !=7" @click="showSlider(true)" />
       </div>
 
       <!-- selecionar Periodo Academico-->
@@ -153,15 +153,16 @@ const changePlan = () => {
 
         <select
           id="plan-select"
+          v-if ="roleStore.role[0].id !=7"
           @change="changePlan()"
           v-model="selectSpecialties"
           class="border rounded-md p-2"
         >
           <option value="" disabled>Select a specialties</option>
           <option
-            v-for="specialty in specialtiesStore.specialties"
-            :key="specialty.id_especialidad"
-            :value="specialty.id_especialidad"
+            v-for="specialty in specialtiesStore?.specialties"
+            :key="specialty?.id_especialidad"
+            :value="specialty?.id_especialidad"
           >
             {{ specialty.nombre_especialidad }}
           </option>
@@ -231,11 +232,11 @@ const changePlan = () => {
     </div>
 
     <GrupoSlider
-      :sedeId="placesStore.Places.sedes"
+      :sedeId="placesStore?.Places?.sedes"
       :turnoId="['M', 'T', 'N']"
-      :specialtyId="specialtiesStore.specialties"
+      :specialtyId="specialtiesStore?.specialties"
       :planId="planStore.plans"
-      :docenteId="userStore.students"
+      :docenteId="userStore?.students"
       :show="slider"
       :group="sliderData"
       :searchId="[selectedPlan, selectSpecialties]"
