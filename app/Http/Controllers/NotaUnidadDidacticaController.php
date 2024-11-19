@@ -24,7 +24,7 @@ class NotaUnidadDidacticaController extends Controller
             'nota' => 'required|integer',
             'id_unidad_didactica' => 'required|exists:unidades_didacticas,id_unidad_didactica',
             'id_estudiante' => 'required|exists:users,id',
-            'id_docente' => 'required|exists:users,id',
+            'id_grupo' => 'required|exists:grupos,id_grupo',
         ]);
 
         if ($validator->fails()) {
@@ -40,7 +40,7 @@ class NotaUnidadDidacticaController extends Controller
             'nota' => $request->nota,
             'id_unidad_didactica' => $request->id_unidad_didactica,
             'id_estudiante' => $request->id_estudiante,
-            'id_docente' => $request->id_docente,
+            'id_grupo' => $request->id_grupo,
         ]);
 
         return response()->json([
@@ -54,7 +54,7 @@ class NotaUnidadDidacticaController extends Controller
      */
     public function show($id)
     {
-        $nota = NotaUnidadDidactica::with(['unidadDidactica', 'estudiante', 'docente'])->find($id);
+        $nota = NotaUnidadDidactica::with(['unidadDidactica', 'estudiante', 'grupo'])->find($id);
 
         if (!$nota) {
             return response()->json([
@@ -75,7 +75,7 @@ class NotaUnidadDidacticaController extends Controller
             'nota' => 'required|integer',
             'id_unidad_didactica' => 'required|exists:unidades_didacticas,id_unidad_didactica',
             'id_estudiante' => 'required|exists:users,id',
-            'id_docente' => 'required|exists:users,id',
+            'id_grupo' => 'required|exists:grupos,id_grupo',
         ]);
 
         if ($validator->fails()) {
@@ -98,7 +98,7 @@ class NotaUnidadDidacticaController extends Controller
         $notaUnidadDidactica->nota = $request->nota;
         $notaUnidadDidactica->id_unidad_didactica = $request->id_unidad_didactica;
         $notaUnidadDidactica->id_estudiante = $request->id_estudiante;
-        $notaUnidadDidactica->id_docente = $request->id_docente;
+        $notaUnidadDidactica->id_grupo = $request->id_grupo;
         $notaUnidadDidactica->save();
 
         return response()->json([
@@ -130,5 +130,43 @@ class NotaUnidadDidacticaController extends Controller
             'message' => 'Nota eliminada exitosamente',
             'status' => 204
         ], 204);
+    }
+
+    public function registrarNotas(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'notas' => 'required|array',
+            'notas.*.nota' => 'required|integer',
+            'notas.*.id_unidad_didactica' => 'required|exists:unidades_didacticas,id_unidad_didactica',
+            'notas.*.id_estudiante' => 'required|exists:users,id',
+            'notas.*.id_grupo' => 'required|exists:grupos,id_grupo',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Error en la validación de los datos',
+                'errors' => $validator->errors(),
+                'status' => 400
+            ], 400);
+        }
+
+        // Insertar las notas masivamente
+        $notas = array_map(function ($nota) {
+            return [
+                'nota' => $nota['nota'],
+                'id_unidad_didactica' => $nota['id_unidad_didactica'],
+                'id_estudiante' => $nota['id_estudiante'],
+                'id_grupo' => $nota['id_grupo'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }, $request->notas);
+
+        NotaUnidadDidactica::insert($notas);
+
+        return response()->json([
+            'message' => 'Notas guardadas exitosamente',
+            'status' => 201
+        ], 201);
     }
 }
