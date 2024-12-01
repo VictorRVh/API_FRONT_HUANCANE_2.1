@@ -150,6 +150,16 @@ export default [
         },
     },
     {
+        path: '/grupos/notas/:idgroup/:idunit',
+        name: 'notasEst',
+        component: () => import('../pages/Grupo/AddNotas.vue'),
+        props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        meta: {
+            layout: 'dashboard',
+            permissions: ['groups-all', 'groups-view'],
+        },
+    },
+    {
         path: '/matricula',
         name: 'matriculas',
         component: () => import('../pages/Matricula/Matricula.vue'),

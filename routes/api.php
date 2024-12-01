@@ -414,7 +414,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('registrar_notas_unidades', [
         \App\Http\Controllers\NotaUnidadDidacticaController::class,
         'registrarNotas',
-    ])->middleware('permission:permissions-all|permissions-create');
+    ])->middleware('permission:note-all|note-create');
 
     Route::patch('nota_unidad_didactica/{notaUnidadId}', [
         \App\Http\Controllers\NotaUnidadDidacticaController::class,

@@ -1,7 +1,6 @@
 <script setup>
-import { defineProps, watch } from "vue";
-
-// Componentes de tabla y UI
+import { defineProps, watch, ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import Table from "../../components/table/Table.vue";
 import THead from "../../components/table/THead.vue";
 import TBody from "../../components/table/TBody.vue";
@@ -9,14 +8,10 @@ import Tr from "../../components/table/Tr.vue";
 import Th from "../../components/table/Th.vue";
 import Td from "../../components/table/Td.vue";
 import CreateButton from "../../components/ui/CreateButton.vue";
-import EditButton from "../../components/ui/EditButton.vue";
-import ViewButton from "../../components/ui/ViewButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
-
-// Store de estudiantes
 import useStudentsStore from "../../store/Grupo/useGrupoStore";
 
-// Definir propiedades
+const router = useRouter();
 const props = defineProps({
   id: {
     type: Number,
@@ -25,28 +20,64 @@ const props = defineProps({
 });
 
 const userStore = useStudentsStore();
+const listUnit = ref([]);
+const selectUnit = ref(null);
 
-// Cargar estudiantes si aún no se han cargado
-if (!userStore.student?.length) await userStore.loadGroupStudent(props.id);
-
-
-console.log(userStore.student)
-
-// Observar cambios en props.id y recargar estudiantes
-watch(() => props.id, (newId) => {
-  userStore.loadStudents(newId);
+onMounted(async () => {
+  if (!userStore.student?.length) {
+    await userStore.loadGroupStudent(props.id);
+  }
+  listUnit.value = userStore.student?.unidades_didacticas || [];
+  
+  // Seleccionar la primera unidad por defecto si existe
+  if (listUnit.value.length > 0) {
+    selectUnit.value = listUnit.value[0].id_unidad_didactica;
+  }
 });
+
+watch(() => props.id, async (newId) => {
+  await userStore.loadGroupStudent(newId);
+  listUnit.value = userStore.student?.unidades_didacticas || [];
+  if (listUnit.value.length > 0) {
+    selectUnit.value = listUnit.value[0].id_unidad_didactica;
+  }
+});
+
+const seeNote = () => {
+  if (selectUnit.value) {
+    router.push({
+      name: "notasEst",
+      params: { idgroup: props.id, idunit: selectUnit.value },
+    });
+  } else {
+    console.error("Por favor, seleccione una unidad antes de continuar.");
+  }
+};
 </script>
 
 <template>
   <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">
-          Estudiantes
-        </h2>
+        <h2 class="text-active font-bold text-2xl">Estudiantes</h2>
       </div>
-
+      <div class="flex justify-between">
+        <select
+          id="plan-select"
+          v-model="selectUnit"
+          class="border rounded-md p-2"
+        >
+          <option value="" disabled>Select a specialty</option>
+          <option
+            v-for="unit in listUnit"
+            :key="unit?.id_unidad_didactica"
+            :value="unit?.id_unidad_didactica"
+          >
+            {{ unit.nombre_unidad }}
+          </option>
+        </select>
+        <CreateButton @click="seeNote" value="Hazlo" />
+      </div>
       <div class="w-full">
         <Table>
           <THead>
@@ -56,12 +87,11 @@ watch(() => props.id, (newId) => {
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
               <Th>DNI</Th>
-              <Th>Acción</Th>
+              <Th>Unidad</Th>
             </Tr>
           </THead>
-
           <TBody>
-            <Tr v-for="user in userStore.student" :key="user.id">
+            <Tr v-for="user in userStore.student.estudiantes" :key="user.id">
               <Td>{{ user.estudiante?.id }}</Td>
               <Td>
                 <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.name }}</div>
@@ -76,11 +106,7 @@ watch(() => props.id, (newId) => {
               <Td>
                 <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.dni }}</div>
               </Td>
-              <Td class="align-middle">
-                <div class="flex flex-row gap-2 justify-center items-center">
-                  <ViewButton />
-                </div>
-              </Td>
+              <Td class="text-emerald-500 dark:text-emerald-200"></Td>
             </Tr>
           </TBody>
         </Table>
