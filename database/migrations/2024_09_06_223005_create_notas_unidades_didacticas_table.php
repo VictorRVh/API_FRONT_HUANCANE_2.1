@@ -18,9 +18,7 @@ return new class extends Migration
             $table->foreign('id_unidad_didactica')->references('id_unidad_didactica')->on('unidades_didacticas')->onDelete('cascade');
             $table->unsignedBigInteger('id_estudiante'); // Asegúrate de que el tipo de dato coincida
             $table->foreign('id_estudiante')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('id_docente'); // Asegúrate de que el tipo de dato coincida
-            $table->foreign('id_docente')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('id_programa')->constrained('programas', 'id_programa')->onDelete('cascade');
+            $table->foreignId('id_grupo')->constrained('grupos', 'id_grupo')->onDelete('cascade');
             $table->timestamps();
         });
     }

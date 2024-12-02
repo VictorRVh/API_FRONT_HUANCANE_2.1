@@ -51,7 +51,7 @@ if (roleStore.role[0].id !=7) {
   placesStore = usePlaceStore();
   if (!placesStore.Places?.length) await placesStore.loadPlaces();
   userStore = useStudentsStore();
-  if (!userStore.students?.length) await userStore.loadStudents("7");
+  if (!userStore.students?.length) await userStore.loadStudents(7);
 
   if (specialtiesStore.specialties.length > 0) {
     selectSpecialties.value =
