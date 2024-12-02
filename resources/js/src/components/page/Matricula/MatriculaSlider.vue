@@ -67,7 +67,7 @@ const requiredEnrollment = computed(() =>
     : ["enrollmentStudent-all", "enrollmentStudent-create"]
 );
 const title = computed(() =>
-  props.Enrollment ? `Update Matrícula "${props.Enrollment?.nombre_grupo}"` : "Add new Matrícula"
+  props.Enrollment ? `Update Matrícula "${props.Enrollment?.nombre_grupo}"` : "Agregar Matrícula"
 );
 
 
@@ -103,7 +103,7 @@ const searchStudentByDNI = async () => {
     try {
       // Llamar a la función para cargar los datos del estudiante
       await EnrollmentStore.loadEnrollmentById(searchQuery.value);
-      
+
       // Verificar si se encontraron estudiantes
       if (EnrollmentStore?.EnrollmentDni && EnrollmentStore.EnrollmentDni?.length > 0) {
         studentOptions.value = EnrollmentStore?.EnrollmentDni.map(student => ({
@@ -138,7 +138,7 @@ const onSubmit = async () => {
   const response = props.Enrollment?.id_matricula
     ? await updateEnrollment(props.Enrollment?.id_matricula, data)
     : await createEnrollment(data);
-  
+
     //console.log("hola a todos",response.matricula?.id_matricula)
 
   if (response.matricula?.id_matricula) {
@@ -178,7 +178,7 @@ watch([idPlanRef, idSpecialty], ([newPlan, newSpecialty]) => {
 </script>
 
 <template>
-  <Slider :show="show" :title="title" @hide="emit('hide')">
+  <Slider :show="show" :title="title" @hide="emit('hide') ">
     <AuthorizationFallback :permissions="requiredEnrollment">
       <div class="mt-4 space-y-4">
         <FormLabelError label="Buscar Estudiante por DNI">

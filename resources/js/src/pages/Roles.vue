@@ -19,13 +19,13 @@
 
                     <TBody>
                         <Tr v-for="role in paginatedRoles" :key="role.id">
-                            <Td class="py-1 px-2">{{ role?.id }}</Td>
-                            <Td class="py-1 px-2">
-                                <div class="font-bold text-granate dark:text-white">
+                            <Td class="py-1 px-2  ">{{ role?.id }}</Td>
+                            <Td class="py-1 px-2 ">
+                                <div class="font-bold text-granate dark:text-white  ">
                                     {{ role?.name }}
                                 </div>
                             </Td>
-                            <Td class="py-1 px-2">
+                            <Td class="py-1 px-2 ">
                                 <div class="max-h-[75px] overflow-y-auto"> <!-- Altura limitada de permisos -->
                                     <ul class="list-disc pl-4">
                                         <li v-for="permission in role.permissions" :key="permission.id">

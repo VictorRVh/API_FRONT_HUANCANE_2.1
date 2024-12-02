@@ -115,7 +115,7 @@ const menuItems = [
     route: "grupos",
     permissions: ["groups-all", "groups-view"],
   },
-  
+
 
 ];
 
@@ -142,14 +142,11 @@ const hasPermission = (itemPermissions) =>
         class="w-full flex items-center pl-4 py-2 rounded-md hover:bg-granate dark:hover:bg-granate-dark group transition-all duration-200"
       >
         <template v-slot="{ isActive }">
-          <span
-            class="text-sm font-normal flex items-center justify-start w-full h-full group-hover:text-white"
-            :class="[
-              isActive
-                ? 'mt-2 border-b border-b-granate text-granate dark:text-white'
-                : 'text-granate dark:text-gray-400',
-            ]"
-          >
+            <span class="text-sm font-normal flex items-center justify-start w-full h-full group-hover:text-white relative" :class="[
+            isActive
+                ? 'mt-2 text-white bg-gradient-to-r from-granate to-pink-500 dark:text-white transition-all duration-300 rounded-lg px-6 p-2'
+                : 'text-granate dark:text-gray-400'
+            ]">
             <component :is="item.icon" class="w-5 h-5 mr-2" />
             <p>{{ item.name }}</p>
           </span>
