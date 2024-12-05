@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Grupo;
+use App\Models\Matricula;
 use App\Models\NotaUnidadDidactica;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +12,7 @@ class NotaUnidadDidacticaController extends Controller
 {
     public function index()
     {
-        $notas = NotaUnidadDidactica::with(['unidadDidactica', 'estudiante', 'docente'])->get();
+        $notas = NotaUnidadDidactica::with(['unidadDidactica', 'estudiante', 'grupo'])->get();
         return response()->json($notas);
     }
 
@@ -169,4 +171,6 @@ class NotaUnidadDidacticaController extends Controller
             'status' => 201
         ], 201);
     }
+
+    
 }

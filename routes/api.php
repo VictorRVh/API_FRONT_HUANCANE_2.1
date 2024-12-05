@@ -333,14 +333,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //RUTA DE GRUPO POR DOCENTE Y PLAN
 
-    Route::get('grupoDocente/{usuario_id}/{plan_id}', [
-        \App\Http\Controllers\GrupoController::class,
-        'getGruposPorUsuarioYPlan',
-    ])->middleware('permission:groups-all|groups-view');
+    // Route::get('grupoDocente/{usuario_id}/{plan_id}', [
+    //     \App\Http\Controllers\GrupoController::class,
+    //     'getGruposPorUsuarioYPlan',
+    // ])->middleware('permission:groups-all|groups-view');
+
     
     //RUTA DE ESTUDIANTE POR GRUPO Y DOCENTE 
 
     Route::get('grupoDocente/{grupo_id}', [
+        \App\Http\Controllers\GrupoController::class,
+        'getAlumnosYUnidadesPorGrupo',
+    ])->middleware('permission:groups-all|groups-view');
+
+    // FUNCION QUE NO FUNCIONA PIPIPIPI - - - - - - - - - - - 
+
+    Route::get('grupoDocenteTwo/{grupo_id}', [
         \App\Http\Controllers\GrupoController::class,
         'getAlumnosYUnidadesPorGrupo',
     ])->middleware('permission:groups-all|groups-view');

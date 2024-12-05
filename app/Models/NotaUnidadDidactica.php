@@ -16,7 +16,7 @@ class NotaUnidadDidactica extends Model
         'nota',
         'id_unidad_didactica',
         'id_estudiante',
-        'id_docente',
+        'id_grupo'
     ];
 
     public function unidadDidactica()
