@@ -19,16 +19,23 @@ class PermissionTableSeeder extends Seeder
             'users-create',
             'users-edit',
             'users-delete',
+            'users-icon',
+
+
             'roles-all',
             'roles-view',
             'roles-create',
             'roles-edit',
             'roles-delete',
+            'roles-icon',
+
+
             'permissions-all',
             'permissions-view',
             'permissions-create',
             'permissions-edit',
             'permissions-delete',
+            'permissions-icon',
             
             ///Especialidades
             'specialties-all',
@@ -36,12 +43,14 @@ class PermissionTableSeeder extends Seeder
             'specialties-create',
             'specialties-edit',
             'specialties-delete',
+            'specialties-icon',
 
             'students-all',
             'students-view',
             'students-create',
             'students-edit',
             'students-delete',
+            'students-icon',
             
             // profesores 
             'teachers-all',
@@ -49,6 +58,7 @@ class PermissionTableSeeder extends Seeder
             'teachers-create',
             'teachers-edit',
             'teachers-delete',
+            'teachers-icon',
 
             // permisos de plan 
             'plan-all',
@@ -56,6 +66,7 @@ class PermissionTableSeeder extends Seeder
             'plan-create',
             'plan-edit',
             'plan-delete',
+            'plan-icon',
 
             // Permisos porgrama
             'program-all',
@@ -63,6 +74,7 @@ class PermissionTableSeeder extends Seeder
             'program-create',
             'program-edit',
             'program-delete',
+            'program-icon',
 
             // unidades didacticas
             'units-all',
@@ -70,6 +82,7 @@ class PermissionTableSeeder extends Seeder
             'units-create',
             'units-edit',
             'units-delete',
+            //'units-icon',
 
             // Indocador de logro indicators
 
@@ -78,6 +91,7 @@ class PermissionTableSeeder extends Seeder
             'indicators-create',
             'indicators-edit',
             'indicators-delete',
+            //'indicators-delete',
 
             // sededes 
             'places-all',
@@ -85,6 +99,7 @@ class PermissionTableSeeder extends Seeder
             'places-create',
             'places-edit',
             'places-delete',
+            'places-icon',
             
             // Grupos
             'groups-all',
@@ -92,6 +107,7 @@ class PermissionTableSeeder extends Seeder
             'groups-create',
             'groups-edit',
             'groups-delete',
+            'groups-icon',
 
             //Matricula estudiante 
             'enrollmentStudent-all',
@@ -99,7 +115,15 @@ class PermissionTableSeeder extends Seeder
             'enrollmentStudent-create',
             'enrollmentStudent-edit',
             'enrollmentStudent-delete',
+            'enrollmentStudent-icon',
 
+            //Notas estudiante 
+            'note-all',
+            'note-view',
+            'note-create',
+            'note-edit',
+            'note-delete',
+            'note-icon',
         ];
 
         $permissions = array_map(function ($name) {

@@ -20,11 +20,38 @@ const props = defineProps({
 });
 
 const userStore = useStudentsStore();
+const listUnit = ref([]);
+const selectUnit = ref(null);
 
+onMounted(async () => {
+  if (!userStore.student?.length) {
+    await userStore.loadGroupStudent(props.id);
+  }
+  listUnit.value = userStore.student?.unidades_didacticas || [];
+  
+  // Seleccionar la primera unidad por defecto si existe
+  if (listUnit.value.length > 0) {
+    selectUnit.value = listUnit.value[0].id_unidad_didactica;
+  }
+});
 
+watch(() => props.id, async (newId) => {
+  await userStore.loadGroupStudent(newId);
+  listUnit.value = userStore.student?.unidades_didacticas || [];
+  if (listUnit.value.length > 0) {
+    selectUnit.value = listUnit.value[0].id_unidad_didactica;
+  }
+});
 
 const seeNote = () => {
-  alert("hola mundo")
+  if (selectUnit.value) {
+    router.push({
+      name: "notasEst",
+      params: { idgroup: props.id, idunit: selectUnit.value },
+    });
+  } else {
+    console.error("Por favor, seleccione una unidad antes de continuar.");
+  }
 };
 </script>
 
@@ -34,7 +61,23 @@ const seeNote = () => {
       <div class="flex-between">
         <h2 class="text-active font-bold text-2xl">Estudiantes</h2>
       </div>
-    
+      <div class="flex justify-between">
+        <select
+          id="plan-select"
+          v-model="selectUnit"
+          class="border rounded-md p-2"
+        >
+          <option value="" disabled>Select a specialty</option>
+          <option
+            v-for="unit in listUnit"
+            :key="unit?.id_unidad_didactica"
+            :value="unit?.id_unidad_didactica"
+          >
+            {{ unit.nombre_unidad }}
+          </option>
+        </select>
+        <CreateButton @click="seeNote" value="Hazlo" />
+      </div>
       <div class="w-full">
         <Table>
           <THead>
@@ -44,6 +87,7 @@ const seeNote = () => {
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
               <Th>DNI</Th>
+              <Th>Unidad</Th>
             </Tr>
           </THead>
           <TBody>
@@ -62,6 +106,7 @@ const seeNote = () => {
               <Td>
                 <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.dni }}</div>
               </Td>
+              <Td class="text-emerald-500 dark:text-emerald-200"></Td>
             </Tr>
           </TBody>
         </Table>

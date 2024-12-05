@@ -19,6 +19,8 @@ const icons = {
   PencilSquareIcon: defineAsyncComponent(() => import('@heroicons/vue/24/outline/PencilSquareIcon')),
   TrashIcon: defineAsyncComponent(() => import('@heroicons/vue/24/outline/TrashIcon')),
   CalendarIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/CalendarIcon')),
+  ClipboardDocumentListIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/ClipboardDocumentListIcon')),
+ // BookOpenIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/BookOpenIcon')),
   // Agrega más íconos aquí según sea necesario
 };
 
