@@ -35,4 +35,9 @@ class UnidadDidactica extends Model
     {
         return $this->hasMany(NotaUnidadDidactica::class, 'id_unidad_didactica', 'id_unidad_didactica');
     }
+
+    public function notas()
+    {
+        return $this->hasMany(NotaUnidadDidactica::class, 'id_unidad_didactica', 'id_unidad_didactica');
+    }
 }

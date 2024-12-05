@@ -218,11 +218,10 @@ class GrupoController extends Controller
         $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
             $query->where('id_grupo', $grupo_id);
         })
-            ->with('estudiante') 
+            ->with(['estudiante.notas.unidadDidactica']) // Relación anidada
             ->get();
 
-        $grupo = Grupo::with('programa.unidadesDidacticas')
-            ->find($grupo_id);
+        $grupo = Grupo::with('programa.unidadesDidacticas')->find($grupo_id);
 
         $alumnos->each(function ($matricula) {
             $matricula->makeHidden(['created_at', 'updated_at']);
@@ -238,8 +237,32 @@ class GrupoController extends Controller
         }
 
         $response = [
-            'estudiantes' => $alumnos,
-            'unidades_didacticas' => $unidadesDidacticas
+            'estudiantes' => $alumnos->map(function ($matricula) {
+                return [
+                    'id' => $matricula->id_matricula,
+                    'estudiante' => [
+                        'id' => $matricula->estudiante->id,
+                        'name' => $matricula->estudiante->name,
+                        'apellido_paterno' => $matricula->estudiante->apellido_paterno,
+                        'apellido_materno' => $matricula->estudiante->apellido_materno,
+                        'dni' => $matricula->estudiante->dni,
+                        'sexo' => $matricula->estudiante->sexo,
+                        'celular' => $matricula->estudiante->celular,
+                        'fecha_nacimiento' => $matricula->estudiante->fecha_nacimiento,
+                        'email' => $matricula->estudiante->email,
+                        'notas' => $matricula->estudiante->notas->map(function ($nota) {
+                            return [
+                                'id_nota' => $nota->id_nota,
+                                'nota' => $nota->nota,
+                                'id_unidad_didactica' => $nota->id_unidad_didactica,
+                                'nombre_unidad' => $nota->unidadDidactica->nombre_unidad ?? null,
+                                'id_grupo' => $nota->id_grupo,
+                            ];
+                        }),
+                    ],
+                ];
+            }),
+            'unidades_didacticas' => $unidadesDidacticas,
         ];
 
         return response()->json($response, 200);
