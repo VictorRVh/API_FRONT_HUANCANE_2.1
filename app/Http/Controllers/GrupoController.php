@@ -218,39 +218,6 @@ class GrupoController extends Controller
         $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
             $query->where('id_grupo', $grupo_id);
         })
-            ->with('estudiante')
-            ->get();
-
-        $grupo = Grupo::with('programa.unidadesDidacticas')
-            ->find($grupo_id);
-
-        $alumnos->each(function ($matricula) {
-            $matricula->makeHidden(['created_at', 'updated_at']);
-            if ($matricula->estudiante) {
-                $matricula->estudiante->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
-            }
-        });
-
-        if ($grupo && $grupo->programa) {
-            $unidadesDidacticas = $grupo->programa->unidadesDidacticas->makeHidden(['created_at', 'updated_at']);
-        } else {
-            $unidadesDidacticas = [];
-        }
-
-        $response = [
-            'estudiantes' => $alumnos,
-            'unidades_didacticas' => $unidadesDidacticas
-        ];
-
-        return response()->json($response, 200);
-    }
-
-
-    public function getNotasYUnidadesPorGrupo($grupo_id)
-    {
-        $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
-            $query->where('id_grupo', $grupo_id);
-        })
             ->with(['estudiante.notas.unidadDidactica']) // Relación anidada
             ->get();
 
@@ -263,12 +230,18 @@ class GrupoController extends Controller
             }
         });
 
+        // Obtener las unidades didácticas del grupo
         if ($grupo && $grupo->programa) {
-            $unidadesDidacticas = $grupo->programa->unidadesDidacticas->makeHidden(['created_at', 'updated_at']);
+            $unidadesDidacticas = $grupo->programa->unidadesDidacticas;
         } else {
-            $unidadesDidacticas = [];
+            $unidadesDidacticas = collect(); // Colección vacía
         }
 
+        // Filtrar unidades didácticas que no tienen notas registradas
+        $unidadesConNotas = $alumnos->pluck('estudiante.notas.*.id_unidad_didactica')->flatten()->unique();
+        $unidadesSinNotas = $unidadesDidacticas->whereNotIn('id_unidad_didactica', $unidadesConNotas);
+
+        // Preparar la respuesta
         $response = [
             'estudiantes' => $alumnos->map(function ($matricula) {
                 return [
@@ -295,7 +268,40 @@ class GrupoController extends Controller
                     ],
                 ];
             }),
-            'unidades_didacticas' => $unidadesDidacticas,
+            'unidades_didacticas' => $unidadesSinNotas->makeHidden(['created_at', 'updated_at']),
+        ];
+
+        return response()->json($response, 200);
+    }
+
+
+    public function getEstudiantesYUnidadesPorGrupo($grupo_id)
+    {
+        $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
+            $query->where('id_grupo', $grupo_id);
+        })
+            ->with('estudiante')
+            ->get();
+
+        $grupo = Grupo::with('programa.unidadesDidacticas')
+            ->find($grupo_id);
+
+        $alumnos->each(function ($matricula) {
+            $matricula->makeHidden(['created_at', 'updated_at']);
+            if ($matricula->estudiante) {
+                $matricula->estudiante->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
+            }
+        });
+
+        if ($grupo && $grupo->programa) {
+            $unidadesDidacticas = $grupo->programa->unidadesDidacticas->makeHidden(['created_at', 'updated_at']);
+        } else {
+            $unidadesDidacticas = [];
+        }
+
+        $response = [
+            'estudiantes' => $alumnos,
+            'unidades_didacticas' => $unidadesDidacticas
         ];
 
         return response()->json($response, 200);
