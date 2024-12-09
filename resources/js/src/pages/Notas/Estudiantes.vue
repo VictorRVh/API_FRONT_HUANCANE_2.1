@@ -33,6 +33,7 @@ onMounted(async () => {
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
+  console.log("unidades cada: ",userStore.student?.unidades_didacticas)
 });
 
 watch(() => props.id, async (newId) => {
@@ -53,6 +54,10 @@ const seeNote = () => {
     console.error("Por favor, seleccione una unidad antes de continuar.");
   }
 };
+
+
+//console.log("unidades cada: ",userStore.student?.unidades_didacticas)
+
 </script>
 
 <template>
@@ -87,7 +92,7 @@ const seeNote = () => {
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
               <Th>DNI</Th>
-              <Th>Unidad</Th>
+              <Th v-for="(unid, index) in userStore.student?.unidades_didacticas" :key="unid.id_unidad_didactica">Unidad {{ index + 1}}</Th>
             </Tr>
           </THead>
           <TBody>
@@ -106,7 +111,9 @@ const seeNote = () => {
               <Td>
                 <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.dni }}</div>
               </Td>
-              <Td class="text-emerald-500 dark:text-emerald-200"></Td>
+              <Td class="text-emerald-500 dark:text-emerald-200" v-for="note in user.estudiante?.notas" :key="note.id_nota">
+                    {{ note.nota  }}
+              </Td>
             </Tr>
           </TBody>
         </Table>

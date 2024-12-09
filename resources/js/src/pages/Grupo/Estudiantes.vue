@@ -20,11 +20,22 @@ const props = defineProps({
 });
 
 const userStore = useStudentsStore();
+const listUnit = ref([]);
+const selectUnit = ref(null);
 
+onMounted(async () => {
+  if (!userStore.student?.length) {
+    await userStore.loadGroupStudent(props.id);
+  }
+});
 
+watch(() => props.id, async (newId) => {
+  await userStore.loadGroupStudent(newId);
+ 
+});
 
 const seeNote = () => {
-  alert("hola mundo")
+ 
 };
 </script>
 
@@ -34,7 +45,9 @@ const seeNote = () => {
       <div class="flex-between">
         <h2 class="text-active font-bold text-2xl">Estudiantes</h2>
       </div>
-    
+      <div class="flex justify-between">
+        
+      </div>
       <div class="w-full">
         <Table>
           <THead>
@@ -44,6 +57,7 @@ const seeNote = () => {
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
               <Th>DNI</Th>
+
             </Tr>
           </THead>
           <TBody>
