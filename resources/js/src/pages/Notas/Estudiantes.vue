@@ -21,27 +21,31 @@ const props = defineProps({
 
 const userStore = useStudentsStore();
 const listUnit = ref([]);
+let lengthUnit = 0;
 const selectUnit = ref(null);
 
 onMounted(async () => {
   if (!userStore.student?.length) {
-    await userStore.loadGroupStudent(props.id);
+    await userStore.loadGroupStudentNote(props.id);
   }
   listUnit.value = userStore.student?.unidades_didacticas || [];
-  
+  lengthUnit = userStore.student?.total_unidades
   // Seleccionar la primera unidad por defecto si existe
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
-  console.log("unidades cada: ",userStore.student?.unidades_didacticas)
+  //console.log("unidades cada: ",userStore.student?.unidades_didacticas)
+  console.log("unidades lonfiugtus: ",lengthUnit)
 });
 
 watch(() => props.id, async (newId) => {
-  await userStore.loadGroupStudent(newId);
+  await userStore.loadGroupStudentNote(newId);
   listUnit.value = userStore.student?.unidades_didacticas || [];
+  
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
+ 
 });
 
 const seeNote = () => {
@@ -56,7 +60,7 @@ const seeNote = () => {
 };
 
 
-//console.log("unidades cada: ",userStore.student?.unidades_didacticas)
+
 
 </script>
 
@@ -92,7 +96,7 @@ const seeNote = () => {
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
               <Th>DNI</Th>
-              <Th v-for="(unid, index) in userStore.student?.unidades_didacticas" :key="unid.id_unidad_didactica">Unidad {{ index + 1}}</Th>
+              <Th v-for="i in 4" :key="i"> unid</Th>
             </Tr>
           </THead>
           <TBody>
