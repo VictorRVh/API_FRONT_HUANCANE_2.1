@@ -92,7 +92,7 @@ const SeeMore = (idr) => {
   <AuthorizationFallback :permissions="['specialties-all', 'specialties-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">Specialties</h2>
+        <h2 class="text-active font-bold text-2xl">Especialidades</h2>
 
         <CreateButton @click="showSlider(true)" />
       </div>
@@ -116,8 +116,8 @@ const SeeMore = (idr) => {
           <THead>
             <Tr>
               <Th> Id </Th>
-              <Th> Specialties </Th>
-              <Th> Action </Th>
+              <Th> Especialidades </Th>
+              <Th> Accion </Th>
             </Tr>
           </THead>
 

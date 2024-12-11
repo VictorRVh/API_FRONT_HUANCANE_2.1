@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, watch} from "vue";
+import { defineProps, watch, ref, computed } from "vue";
 
 import Table from "../../components/table/Table.vue";
 import THead from "../../components/table/THead.vue";
@@ -10,7 +10,6 @@ import Td from "../../components/table/Td.vue";
 import CreateButton from "../../components/ui/CreateButton.vue";
 import EditButton from "../../components/ui/EditButton.vue";
 import ViewButton from "../../components/ui/ViewButton.vue";
-
 import DeleteButton from "../../components/ui/DeleteButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import EstudianteSlider from "../../components/page/Estudiante/EstudianteSlider.vue";
@@ -22,14 +21,14 @@ import useSlider from "../../composables/useSlider";
 import useModalToast from "../../composables/useModalToast";
 import useHttpRequest from "../../composables/useHttpRequest";
 
+import Page from "../../components/pagination/page.vue"; // Importa el componente de paginación
+
 const props = defineProps({
   id: {
     type: Number,
     default: 0,
   },
 });
-
-//console.log()
 
 const userStore = useStudentsStore();
 const roleStore = useRoleStore();
@@ -55,12 +54,28 @@ const onDelete = (user) => {
   });
 };
 
-//Observa cambios en props.id y recarga la lista de estudiantes
+// Paginación
+const currentPage = ref(1);
+const itemsPerPage = 10;
+const totalPages = computed(() =>
+  Math.ceil(userStore.students.length / itemsPerPage)
+);
+
+const paginatedStudents = computed(() =>
+  userStore.students.slice(
+    (currentPage.value - 1) * itemsPerPage,
+    currentPage.value * itemsPerPage
+  )
+);
+
+const changePage = (page) => {
+  currentPage.value = page;
+};
+
+// Observa cambios en props.id y recarga la lista de estudiantes
 watch(() => props.id, (newId) => {
   userStore.loadStudents(newId);
 });
-
-
 </script>
 
 <template>
@@ -68,7 +83,7 @@ watch(() => props.id, (newId) => {
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
         <h2 v-if="props.id === 8" class="text-active font-bold text-2xl">Estudiantes</h2>
-        <h2 v-else="props.id" class="text-active font-bold text-2xl">Docentes</h2>
+        <h2 v-else="props.id" class="text-active font-bold text-2xl">Estudiantes </h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
@@ -81,15 +96,15 @@ watch(() => props.id, (newId) => {
               <Th> Apellido Paterno </Th>
               <Th> Apellido Materno </Th>
               <Th> Dni </Th>
-              <Th> Action </Th>
+              <Th> Acción </Th>
             </Tr>
           </THead>
 
           <TBody>
-            <Tr v-for="user in userStore.students" :key="user.id">
+            <Tr v-for="user in paginatedStudents" :key="user.id">
               <Td>{{ user?.id }}</Td>
               <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
+                <div class="text-dark-500 dark:text-white-200">
                   {{ user?.name }}
                 </div>
                 <div class="text-xsm text-[#aaa]">
@@ -98,19 +113,19 @@ watch(() => props.id, (newId) => {
               </Td>
 
               <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
+                <div class="text-dark-500 dark:text-white-200">
                   {{ user?.apellido_paterno }}
                 </div>
               </Td>
 
               <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
+                <div class="text-dark-500 dark:text-white-200">
                   {{ user?.apellido_materno }}
                 </div>
               </Td>
 
               <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
+                <div class="text-black-500 dark:text-black-200">
                   {{ user?.dni }}
                 </div>
               </Td>
@@ -125,6 +140,15 @@ watch(() => props.id, (newId) => {
             </Tr>
           </TBody>
         </Table>
+      </div>
+
+      <!-- Componente de paginación -->
+      <div class="flex justify-end mt-4">
+        <Page
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          @page-changed="changePage"
+        />
       </div>
     </div>
 
