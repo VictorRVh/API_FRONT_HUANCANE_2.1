@@ -10,7 +10,7 @@ class NotaExperienciaFormativaController extends Controller
 {
     public function index()
     {
-        $notas = NotaExperienciaFormativa::with(['experienciaFormativa', 'estudiante', 'docente'])->get();
+        $notas = NotaExperienciaFormativa::with(['experienciaFormativa', 'estudiante', 'grupo'])->get();
         return response()->json($notas);
     }
 
@@ -24,7 +24,7 @@ class NotaExperienciaFormativaController extends Controller
             'nota' => 'required|integer',
             'id_experiencia' => 'required|exists:experiencias_formativas,id_experiencia',
             'id_estudiante' => 'required|exists:users,id',
-            'id_docente' => 'required|exists:users,id',
+            'id_grupo' => 'required|exists:grupos,id_grupo',
         ]);
 
         if ($validator->fails()) {
@@ -40,7 +40,7 @@ class NotaExperienciaFormativaController extends Controller
             'nota' => $request->nota,
             'id_experiencia' => $request->id_experiencia,
             'id_estudiante' => $request->id_estudiante,
-            'id_docente' => $request->id_docente,
+            'id_grupo' => $request->id_grupo,
         ]);
 
         return response()->json([
@@ -54,7 +54,7 @@ class NotaExperienciaFormativaController extends Controller
      */
     public function show($id)
     {
-        $nota = NotaExperienciaFormativa::with(['experienciaFormativa', 'estudiante', 'docente'])->find($id);
+        $nota = NotaExperienciaFormativa::with(['experienciaFormativa', 'estudiante', 'grupo'])->find($id);
 
         if (!$nota) {
             return response()->json([
@@ -76,7 +76,7 @@ class NotaExperienciaFormativaController extends Controller
             'nota' => 'required|integer',
             'id_experiencia' => 'required|exists:experiencias_formativas,id_experiencia',
             'id_estudiante' => 'required|exists:users,id',
-            'id_docente' => 'required|exists:users,id',
+            'id_grupo' => 'required|exists:grupos,id_grupo',
         ]);
 
         if ($validator->fails()) {
@@ -101,7 +101,7 @@ class NotaExperienciaFormativaController extends Controller
         $nota->nota = $request->nota;
         $nota->id_experiencia = $request->id_experiencia;
         $nota->id_estudiante = $request->id_estudiante;
-        $nota->id_docente = $request->id_docente;
+        $nota->id_grupo = $request->id_grupo;
         $nota->save();
 
         return response()->json([

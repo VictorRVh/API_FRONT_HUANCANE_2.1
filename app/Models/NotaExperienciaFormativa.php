@@ -17,7 +17,7 @@ class NotaExperienciaFormativa extends Model
         'nota',
         'id_experiencia',
         'id_estudiante',
-        'id_docente',
+        'id_grupo',
     ];
 
 
@@ -31,8 +31,8 @@ class NotaExperienciaFormativa extends Model
         return $this->belongsTo(User::class, 'id_estudiante', 'id');
     }
 
-    public function docente()
+    public function grupo()
     {
-        return $this->belongsTo(User::class, 'id_docente', 'id');
+        return $this->belongsTo(Grupo::class, 'id_grupo', 'id_grupo');
     }
 }

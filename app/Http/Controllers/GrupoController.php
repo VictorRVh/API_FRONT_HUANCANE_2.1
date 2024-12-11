@@ -241,6 +241,9 @@ class GrupoController extends Controller
         $unidadesConNotas = $alumnos->pluck('estudiante.notas.*.id_unidad_didactica')->flatten()->unique();
         $unidadesSinNotas = $unidadesDidacticas->whereNotIn('id_unidad_didactica', $unidadesConNotas);
 
+        // Calcular el total de unidades didácticas
+        $totalUnidades = $unidadesDidacticas->count();
+
         // Preparar la respuesta
         $response = [
             'estudiantes' => $alumnos->map(function ($matricula) {
@@ -269,10 +272,12 @@ class GrupoController extends Controller
                 ];
             }),
             'unidades_didacticas' => $unidadesSinNotas->makeHidden(['created_at', 'updated_at']),
+            'total_unidades' => $totalUnidades,
         ];
 
         return response()->json($response, 200);
     }
+
 
 
     public function getEstudiantesYUnidadesPorGrupo($grupo_id)

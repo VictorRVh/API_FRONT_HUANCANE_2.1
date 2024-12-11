@@ -18,8 +18,7 @@ return new class extends Migration
             $table->foreign('id_experiencia')->references('id_experiencia')->on('experiencias_formativas')->onDelete('cascade');
             $table->unsignedBigInteger('id_estudiante'); // Cambia a unsignedBigInteger para coincidir con la definición en usuarios
             $table->foreign('id_estudiante')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('id_docente'); // Cambia a unsignedBigInteger para coincidir con la definición en usuarios
-            $table->foreign('id_docente')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('id_grupo')->constrained('grupos', 'id_grupo')->onDelete('cascade');
             $table->timestamps();
         });
     }
