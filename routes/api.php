@@ -352,9 +352,18 @@ Route::middleware('auth:sanctum')->group(function () {
         'getEstudiantesYUnidadesPorGrupo',
     ])->middleware('permission:groups-all|groups-view');
 
+    // RUTA QUE TRAE ESTUDIANTES Y EXPERIENCIAS FORMATIVAS
+
     Route::get('grupoDocenteThree/{grupo_id}', [
         \App\Http\Controllers\GrupoController::class,
         'getExperienciaYEstudiantesPorGrupo',
+    ])->middleware('permission:groups-all|groups-view');
+
+    //RUTA PARA MOSTRAR NOTAS DE EXPERIENCIAS FORMATIVAS
+
+    Route::get('grupoNotasExperiencia/{grupo_id}', [
+        \App\Http\Controllers\GrupoController::class,
+        'getNotasYExperienciasPorGrupo',
     ])->middleware('permission:groups-all|groups-view');
 
     Route::post('grupo', [
