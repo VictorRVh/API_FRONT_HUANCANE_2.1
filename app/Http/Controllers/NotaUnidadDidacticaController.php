@@ -23,7 +23,7 @@ class NotaUnidadDidacticaController extends Controller
     {
         // Validación de datos
         $validator = Validator::make($request->all(), [
-            'nota' => 'required|integer',
+            'nota' => 'required|string',
             'id_unidad_didactica' => 'required|exists:unidades_didacticas,id_unidad_didactica',
             'id_estudiante' => 'required|exists:users,id',
             'id_grupo' => 'required|exists:grupos,id_grupo',
@@ -74,7 +74,7 @@ class NotaUnidadDidacticaController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nota' => 'required|integer',
+            'nota' => 'required|string',
             'id_unidad_didactica' => 'required|exists:unidades_didacticas,id_unidad_didactica',
             'id_estudiante' => 'required|exists:users,id',
             'id_grupo' => 'required|exists:grupos,id_grupo',
@@ -138,7 +138,7 @@ class NotaUnidadDidacticaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'notas' => 'required|array',
-            'notas.*.nota' => 'required|integer',
+            'notas.*.nota' => 'required|string',
             'notas.*.id_unidad_didactica' => 'required|exists:unidades_didacticas,id_unidad_didactica',
             'notas.*.id_estudiante' => 'required|exists:users,id',
             'notas.*.id_grupo' => 'required|exists:grupos,id_grupo',

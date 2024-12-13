@@ -57,4 +57,5 @@ class Grupo extends Model
     {
         return $this->hasMany(Matricula::class, 'id_grupo', 'id_grupo');
     }
+
 }

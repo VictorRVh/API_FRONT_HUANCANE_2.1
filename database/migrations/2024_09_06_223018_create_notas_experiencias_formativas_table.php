@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('notas_experiencias_formativas', function (Blueprint $table) {
             $table->id('id_nota');
-            $table->integer('nota');
+            $table->string('nota');
             $table->unsignedBigInteger('id_experiencia'); // Cambia a unsignedBigInteger para coincidir con la definición en experiencias_formativas
             $table->foreign('id_experiencia')->references('id_experiencia')->on('experiencias_formativas')->onDelete('cascade');
             $table->unsignedBigInteger('id_estudiante'); // Cambia a unsignedBigInteger para coincidir con la definición en usuarios

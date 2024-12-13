@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExperienciaFormativa;
 use App\Models\NotaExperienciaFormativa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -21,7 +22,7 @@ class NotaExperienciaFormativaController extends Controller
     {
         // Validación de datos
         $validator = Validator::make($request->all(), [
-            'nota' => 'required|integer',
+            'nota' => 'required|string',
             'id_experiencia' => 'required|exists:experiencias_formativas,id_experiencia',
             'id_estudiante' => 'required|exists:users,id',
             'id_grupo' => 'required|exists:grupos,id_grupo',
@@ -73,7 +74,7 @@ class NotaExperienciaFormativaController extends Controller
     {
         // Validación de datos
         $validator = Validator::make($request->all(), [
-            'nota' => 'required|integer',
+            'nota' => 'required|string',
             'id_experiencia' => 'required|exists:experiencias_formativas,id_experiencia',
             'id_estudiante' => 'required|exists:users,id',
             'id_grupo' => 'required|exists:grupos,id_grupo',
@@ -132,5 +133,43 @@ class NotaExperienciaFormativaController extends Controller
             'message' => 'Nota eliminada exitosamente',
             'status' => 204
         ], 204);
+    }
+
+    public function registrarNotaExperiencia(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'notas' => 'required|array',
+            'notas.*.nota' => 'required|string',
+            'notas.*.id_experiencia' => 'required|exists:experiencias_formativas,id_experiencia',
+            'notas.*.id_estudiante' => 'required|exists:users,id',
+            'notas.*.id_grupo' => 'required|exists:grupos,id_grupo',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Error en la validación de los datos',
+                'errors' => $validator->errors(),
+                'status' => 400
+            ], 400);
+        }
+
+        // Insertar las notas masivamente
+        $notas = array_map(function ($nota) {
+            return [
+                'nota' => $nota['nota'],
+                'id_experiencia' => $nota['id_experiencia'],
+                'id_estudiante' => $nota['id_estudiante'],
+                'id_grupo' => $nota['id_grupo'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }, $request->notas);
+
+        NotaExperienciaFormativa::insert($notas);
+
+        return response()->json([
+            'message' => 'Notas guardadas exitosamente',
+            'status' => 201
+        ], 201);
     }
 }

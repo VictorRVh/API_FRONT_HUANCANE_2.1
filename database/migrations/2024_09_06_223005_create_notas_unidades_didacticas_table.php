@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('notas_unidades_didacticas', function (Blueprint $table) {
             $table->id('id_nota');
-            $table->integer('nota');
+            $table->string('nota');
             $table->unsignedBigInteger('id_unidad_didactica'); // Asegúrate de que el tipo de dato coincida
             $table->foreign('id_unidad_didactica')->references('id_unidad_didactica')->on('unidades_didacticas')->onDelete('cascade');
             $table->unsignedBigInteger('id_estudiante'); // Asegúrate de que el tipo de dato coincida
