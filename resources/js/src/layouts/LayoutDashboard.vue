@@ -131,7 +131,7 @@ const goBack = () => {
 
       <!-- Contenido principal con scroll delgado -->
       <div
-        class="container mx-auto max-w-full w-[99%] h-[calc(90%-5rem)] bg-white rounded-md shadow-lg mt-1 p-4 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600 overflow-auto custom-scrollbar"
+        class="container mx-auto max-w-full w-[99%] h-[calc(90%-5rem)] bg-white rounded-md shadow-lg mt-1 pl-4 pr-4  dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600 overflow-auto custom-scrollbar"
       >
         <RouterView v-slot="{ Component }">
           <template v-if="Component">

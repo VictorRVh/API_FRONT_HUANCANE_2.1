@@ -34,101 +34,27 @@ const onLogout = async () => {
 
 // Crear elementos de menú dinámicamente
 const menuItems = [
-  {
-    name: "Home",
-    icon: "HomeIcon",
-    route: "users",
-    permissions: ["users-all", "users-icon"],
-  },
-  {
-    name: "Docente",
-    icon: "UserIcon",
-    route: "docentes",
-    permissions: ["teachers-all", "teachers-icon"],
-    id: 7
-  },
-  {
-    name: "Estudiante",
-    icon: "AcademicCapIcon",
-    route: "estudiantes",
-    permissions: ["students-all", "students-icon"],
-    id: 8
-  },
-  {
-    name: "PlanFormativo",
-    icon: "CalendarIcon",
-    route: "plan",
-    permissions: ["plan-all", "plan-icon"],
-    id: 8
-  },
-  {
-    name: "Matricula",
-    icon: "BookOpenIcon",
-    route: "matriculas",
-    permissions: ["enrollmentStudent-all", "enrollmentStudent-icon"],
-  },
-  {
-    name: "Especialidad",
-    icon: "BuildingOfficeIcon",
-    route: "especialidad",
-    permissions: ["specialties-all", "specialties-icon"],
-  },
-  {
-    name: "Reportes",
-    icon: "ChartBarIcon",
-    route: "users",
-    permissions: ["users-all", "users-icon"],
-  },
-  {
-    name: "Certificados",
-    icon: "FolderIcon",
-    route: "users",
-    permissions: ["users-all", "users-icon"],
-  },
-  {
-    name: "Users",
-    icon: "UsersIcon",
-    route: "users",
-    permissions: ["users-all", "users-icon"],
-  },
-  {
-    name: "Roles",
-    icon: "BookmarkIcon",
-    route: "roles",
-    permissions: ["roles-all", "roles-icon"],
-  },
-  {
-    name: "Permissions",
-    icon: "BookmarkSquareIcon",
-    route: "permissions",
-    permissions: ["permissions-all", "permissions-icon"],
-  },
-  {
-    name: "Sede",
-    icon: "BookmarkSquareIcon",
-    route: "sedes",
-    permissions: ['places-all', 'places-icon'],
-  },
-  {
-    name: "Grupos",
-    icon: "UsersIcon",
-    route: "grupos",
-    permissions: ["groups-all", "groups-icon"],
-  },
-  {
-    name: "Notas",
-    icon: "ClipboardDocumentListIcon",
-    route: "notas",
-    permissions: ["note-all", "note-icon"],
-  },
-
-
+  { name: "Home", icon: "HomeIcon", route: "home", permissions: ["users-all", "users-icon"] },
+  { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"], id: 7 },
+  { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"], id: 8 },
+  { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"], id: 8 },
+  { name: "Matricula", icon: "BookOpenIcon", route: "matriculas", permissions: ["enrollmentStudent-all", "enrollmentStudent-icon"] },
+  { name: "Especialidad", icon: "BuildingOfficeIcon", route: "especialidad", permissions: ["specialties-all", "specialties-icon"] },
+  { name: "Reportes", icon: "ChartBarIcon", route: "users", permissions: ["users-all", "users-icon"] },
+  { name: "Certificados", icon: "FolderIcon", route: "users", permissions: ["users-all", "users-icon"] },
+  { name: "Users", icon: "UsersIcon", route: "users", permissions: ["users-all", "users-icon"] },
+  { name: "Roles", icon: "BookmarkIcon", route: "roles", permissions: ["roles-all", "roles-icon"] },
+  { name: "Permissions", icon: "BookmarkSquareIcon", route: "permissions", permissions: ["permissions-all", "permissions-icon"] },
+  { name: "Sede", icon: "BookmarkSquareIcon", route: "sedes", permissions: ["places-all", "places-icon"] },
+  { name: "Grupos", icon: "UsersIcon", route: "grupos", permissions: ["groups-all", "groups-icon"] },
+  { name: "Notas", icon: "ClipboardDocumentListIcon", route: "notas", permissions: ["note-all", "note-icon"] },
 ];
 
 // Comprobar permisos
 const hasPermission = (itemPermissions) =>
   itemPermissions.some((perm) => userPermissions.value.includes(perm));
 </script>
+
 <template>
   <div
     class="flex flex-col min-h-screen bg-blancoPuro dark:bg-gray-800 text-granate dark:text-gray-400 font-inter w-12/12 max-w-3xl"
@@ -138,8 +64,10 @@ const hasPermission = (itemPermissions) =>
       Menu
     </h2>
 
-    <!-- Menú de elementos -->
-    <div class="flex flex-col items-start w-full mt-2 space-y-2">
+    <!-- Menú de elementos con scroll vertical -->
+    <div
+      class="flex flex-col items-start w-full mt-2 space-y-2 overflow-y-auto h-[70vh] custom-scrollbar"
+    >
       <RouterLink
         v-for="item in menuItems"
         :key="item.name"
@@ -148,11 +76,14 @@ const hasPermission = (itemPermissions) =>
         class="w-full flex items-center pl-4 py-2 rounded-md hover:bg-granate dark:hover:bg-granate-dark group transition-all duration-200"
       >
         <template v-slot="{ isActive }">
-            <span class="text-sm font-normal flex items-center justify-start w-full h-full group-hover:text-white relative" :class="[
-            isActive
+          <span
+            class="text-sm font-normal flex items-center justify-start w-full h-full group-hover:text-white relative"
+            :class="[
+              isActive
                 ? ' bg-granate text-white dark:text-white transition-all duration-300 rounded-lg px-6 '
                 : 'text-granate dark:text-white-400'
-            ]">
+            ]"
+          >
             <component :is="item.icon" class="w-5 h-5 mr-2" />
             <p>{{ item.name }}</p>
           </span>
@@ -161,7 +92,7 @@ const hasPermission = (itemPermissions) =>
     </div>
 
     <!-- Logout y Modo Oscuro -->
-    <div class="flex items-center mb-4 space-x-2 pl-4 mt-auto">
+    <div class="flex items-center mb-4 space-x-2 pl-4 mt-6">
       <!-- Logout -->
       <span
         class="cursor-pointer text-negroClaro dark:text-gray-400 hover:text-white hover:bg-granate dark:hover:bg-granate-dark rounded-md px-4 py-1 transition-colors font-normal text-sm"
@@ -209,3 +140,20 @@ const hasPermission = (itemPermissions) =>
     </div>
   </div>
 </template>
+
+<style>
+/* Personaliza el scrollbar vertical */
+.custom-scrollbar {
+  overflow-x: hidden; /* Oculta el scroll horizontal */
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #a0a0a0;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #8a8a8a;
+}
+</style>
