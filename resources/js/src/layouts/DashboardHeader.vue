@@ -150,7 +150,7 @@ const hasPermission = (itemPermissions) =>
         <template v-slot="{ isActive }">
             <span class="text-sm font-normal flex items-center justify-start w-full h-full group-hover:text-white relative" :class="[
             isActive
-                ? 'mt-2 bg-granate text-white dark:text-white transition-all duration-300 rounded-lg px-6 p-2'
+                ? ' bg-granate text-white dark:text-white transition-all duration-300 rounded-lg px-6 '
                 : 'text-granate dark:text-white-400'
             ]">
             <component :is="item.icon" class="w-5 h-5 mr-2" />

@@ -47,7 +47,7 @@ const requiredPermissions = computed(() => {
 });
 
 const title = computed(() =>
-    props.role ? `Update role "${props.role?.name}"` : 'Add new role',
+    props.role ? `Update role "${props.role?.name}"` : 'Agregar Nuevo Rol',
 );
 
 const initialFormData = () => {
@@ -194,7 +194,7 @@ const onSubmit = async () => {
 
                         <div
                             v-if="canShowAddAllPermissions"
-                            class="text-xs font-bold cursor-pointer hover:underline w-max-content text-sky-500"
+                            class="text-xs font-bold cursor-pointer hover:underline w-max-content text-sky-500 dark:text-white "
                             @click="onAddAllPermissions"
                         >
                             add all permissions
