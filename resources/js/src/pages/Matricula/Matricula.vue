@@ -43,17 +43,19 @@ onMounted(async () => {
   if (!specialtiesStore.specialties?.length) await specialtiesStore.loadSpecialties();
   if (!planStore.plans?.length) await planStore.loadPlans();
 
-  // Set default values
   selectedPlan.value = planStore.plans[0]?.id_plan || 0;
   selectedSpecialty.value = specialtiesStore.specialties[0]?.id_especialidad || 0;
   selectedGroup.value = groupStore.groups[0]?.id_grupo || 0;
 
-  // Load enrollments
   await loadEnrollments();
 });
 
 const loadEnrollments = async () => {
-  await enrollmentStore.loadEnrollmentBySpecialtiesAndGroup(selectedPlan.value, selectedSpecialty.value,selectedGroup.value);
+  await enrollmentStore.loadEnrollmentBySpecialtiesAndGroup(
+    selectedPlan.value,
+    selectedSpecialty.value,
+    selectedGroup.value
+  );
 };
 
 const onDelete = async (enrollment) => {
@@ -77,23 +79,18 @@ const SeeMore = (id) => {
 
 const onPlanOrSpecialtyChange = () => {
   loadEnrollments();
-  //selectedGroup.value = groupStore.groups[0]?.id_grupo || 0;
 };
-
-
 
 watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
   groupStore?.loadGroups(newPlan, newSpecialty);
-  console.log("matrícula: ",enrollmentStore.EnrollmentGroup)
 });
-
 </script>
 
 <template>
   <AuthorizationFallback :permissions="['enrollmentStudent-all', 'enrollmentStudent-view']">
     <div class="w-full space-y-4 py-6">
-      <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">Enrollments</h2>
+      <div class="flex justify-between">
+        <h2 class="text-black font-bold text-2xl">Enrollments</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
@@ -121,7 +118,7 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
       </div>
 
       <div class="w-full">
-        <Table>
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
             <Tr>
               <Th>Id</Th>
@@ -135,12 +132,14 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
 
           <TBody>
             <Tr v-for="enrollment in enrollmentStore.EnrollmentGroup" :key="enrollment.id_Enrollment">
-              <Td>{{ enrollment?.id_matricula }}</Td>
-              <Td>{{ enrollment.estudiante?.name }}</Td>
-              <Td>{{ enrollment.estudiante?.apellido_paterno }} {{ enrollment.estudiante?.apellido_materno }}</Td>
-              <Td>{{ enrollment.estudiante?.dni }}</Td>
-              <Td>{{ enrollment.grupos?.nombre_grupo}}</Td>
-              <Td>
+              <Td class="py-2 px-4 border-0 text-black">{{ enrollment?.id_matricula }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{ enrollment.estudiante?.name }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">
+                {{ enrollment.estudiante?.apellido_paterno }} {{ enrollment.estudiante?.apellido_materno }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black">{{ enrollment.estudiante?.dni }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{ enrollment.grupos?.nombre_grupo }}</Td>
+              <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(enrollment.id_matricula)" />
                   <EditButton @click="showSlider(true, enrollment)" />
@@ -163,3 +162,7 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
     />
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se requiere CSS adicional, todo está gestionado con Tailwind */
+</style>

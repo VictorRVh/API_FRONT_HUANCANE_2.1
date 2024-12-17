@@ -31,50 +31,47 @@ onMounted(async () => {
 
 watch(() => props.id, async (newId) => {
   await userStore.loadGroupStudent(newId);
- 
 });
 
-const seeNote = () => {
- 
-};
+const seeNote = () => {};
 </script>
 
 <template>
   <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">Estudiantes</h2>
-      </div>
-      <div class="flex justify-between">
-        
+        <h2 class="text-black font-bold text-2xl">Estudiantes</h2>
       </div>
       <div class="w-full">
         <Table>
           <THead>
-            <Tr>
+            <Tr class="border-b">
               <Th>Id</Th>
               <Th>Nombre</Th>
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
               <Th>DNI</Th>
-
             </Tr>
           </THead>
           <TBody>
-            <Tr v-for="user in userStore.student.estudiantes" :key="user.id">
-              <Td>{{ user.estudiante?.id }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.name }}</div>
+            <Tr
+              v-for="user in userStore.student.estudiantes"
+              :key="user.id"
+              class="border-b"
+            >
+              <Td class="text-black border-none">{{ user.estudiante?.id }}</Td>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ user.estudiante?.name }}</div>
                 <div class="text-xsm text-[#aaa]">{{ user.estudiante?.email }}</div>
               </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.apellido_paterno }}</div>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ user.estudiante?.apellido_paterno }}</div>
               </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.apellido_materno }}</div>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ user.estudiante?.apellido_materno }}</div>
               </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.dni }}</div>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ user.estudiante?.dni }}</div>
               </Td>
             </Tr>
           </TBody>

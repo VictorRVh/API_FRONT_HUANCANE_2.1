@@ -1,5 +1,4 @@
 <script setup>
-// Importa useRouter de Vue Router
 import { useRouter } from "vue-router";
 
 import Table from "../../components/table/Table.vue";
@@ -24,22 +23,12 @@ import useRoleStore from "../../store/useRoleStore";
 import useUserStore from "../../store/useUserStore";
 import useAuth from "../../composables/useAuth";
 
-import { ref } from 'vue'; // Asegúrate de incluir ref
+import { ref } from 'vue';
 
-// planStore.plans.plan
-
-
-
-
-const router = useRouter(); // Aquí es donde obtenemos el router
-
+const router = useRouter();
 const userStore = useUserStore();
 const roleStore = useRoleStore();
 const placesStore = usePlaceStore();
-
-
-
-
 
 if (!placesStore.Places.length) await placesStore.loadPlaces();
 
@@ -55,7 +44,6 @@ const onDelete = (Place) => {
     if (!confirmed) return;
 
     const isDeleted = await deleteSpecialy(Place?.id_sede);
-    console.log("pasod eleinar  cosmlas: ", isDeleted);
     if (isDeleted) {
       showToast(`Place "${Place?.nombre_sede}" deleted successfully...`);
       placesStore.loadPlaces();
@@ -66,29 +54,26 @@ const onDelete = (Place) => {
   });
 };
 
-console.log("victoddddddddddd",placesStore.Places.sedes)
-
 const SeeMore = (idr) => {
-
+  console.log(`Viewing details for Place ID: ${idr}`);
 };
 </script>
 
 <template>
-
   <AuthorizationFallback :permissions="['places-all', 'places-view']">
     <div class="w-full space-y-4 py-6">
-      <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">places</h2>
-
+      <div class="flex justify-between">
+        <h2 class="text-black font-bold text-2xl">Places</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="w-full">
-        <Table>
+        <!-- Aplicación de Tailwind para eliminar líneas internas -->
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
             <Tr>
               <Th> Id </Th>
-              <Th> places </Th>
+              <Th> Place </Th>
               <Th> Ubicación </Th>
               <Th> Action </Th>
             </Tr>
@@ -99,19 +84,18 @@ const SeeMore = (idr) => {
               v-for="Place in placesStore.Places.sedes"
               :key="Place.id_sede"
             >
-              <Td>{{ Place?.id_sede }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
+              <Td class="py-2 px-4 border-0 text-black">{{ Place?.id_sede }}</Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="text-black font-medium">
                   {{ Place?.nombre_sede }}
                 </div>
               </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
+              <Td class="py-2 px-4 border-0">
+                <div class="text-black font-medium">
                   {{ Place?.ubicacion }}
                 </div>
               </Td>
-
-              <Td class="align-middle">
+              <Td class="py-2 px-4 border-0">
                 <div class="flex flex-row gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(Place?.id_sede)" />
                   <EditButton @click="showSlider(true, Place)" />
@@ -127,3 +111,7 @@ const SeeMore = (idr) => {
     <PlaceSlider :show="slider" :place="sliderData" @hide="hideSlider" />
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se necesita CSS adicional, se utiliza Tailwind */
+</style>

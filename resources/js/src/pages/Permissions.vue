@@ -80,7 +80,8 @@ const onDelete = (permission) => {
       </div>
 
       <div class="w-full">
-        <Table>
+        <!-- Tabla con eliminación de líneas internas -->
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
             <Tr>
               <Th> Id </Th>
@@ -91,14 +92,14 @@ const onDelete = (permission) => {
 
           <TBody>
             <Tr v-for="permission in paginatedPermissions" :key="permission.id">
-              <Td class="py-1 px-2">{{ permission?.id }}</Td>
-              <Td class="py-1 px-2">
+              <Td class="py-2 px-4 border-0">{{ permission?.id }}</Td>
+              <Td class="py-2 px-4 border-0">
                 <div class="text-granate dark:text-white font-bold">
                   {{ permission?.name }}
                 </div>
               </Td>
-              <Td class="py-1 px-2">
-                <div class="flex gap-1 justify-center"> <!-- Botones en fila -->
+              <Td class="py-2 px-4 border-0">
+                <div class="flex gap-2 justify-center">
                   <EditButton @click="showSlider(true, permission)" />
                   <DeleteButton @click="onDelete(permission)" />
                 </div>
@@ -123,8 +124,5 @@ const onDelete = (permission) => {
 </template>
 
 <style scoped>
-.py-1 {
-  padding: 1rem;
-
-}
+/* No se necesita CSS adicional: todo se realiza con Tailwind */
 </style>

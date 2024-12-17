@@ -1,13 +1,14 @@
 <template>
     <AuthorizationFallback :permissions="['roles-all', 'roles-view']">
-        <div class="w-full space-y-4 py-4"> <!-- Reducido padding vertical -->
+        <div class="w-full space-y-4 py-4">
             <div class="flex justify-between">
-                <h2 class="text-active font-bold text-xl">Roles</h2> <!-- Ajustado tamaño de texto -->
+                <h2 class="text-active font-bold text-xl">Roles</h2>
                 <CreateButton @click="showSlider(true)" />
             </div>
 
             <div class="w-full overflow-auto">
-                <Table>
+                <!-- Aplicación de Tailwind para eliminar líneas internas -->
+                <Table class="border-collapse divide-y divide-transparent">
                     <THead>
                         <Tr>
                             <Th> Id </Th>
@@ -19,14 +20,14 @@
 
                     <TBody>
                         <Tr v-for="role in paginatedRoles" :key="role.id">
-                            <Td class="py-1 px-2  ">{{ role?.id }}</Td>
-                            <Td class="py-1 px-2 ">
-                                <div class="font-bold text-granate dark:text-white  ">
+                            <Td class="py-2 px-4 border-0">{{ role?.id }}</Td>
+                            <Td class="py-2 px-4 border-0">
+                                <div class="font-bold text-granate dark:text-white">
                                     {{ role?.name }}
                                 </div>
                             </Td>
-                            <Td class="py-1 px-2 ">
-                                <div class="max-h-[75px] overflow-y-auto"> <!-- Altura limitada de permisos -->
+                            <Td class="py-2 px-4 border-0">
+                                <div class="max-h-[75px] overflow-y-auto">
                                     <ul class="list-disc pl-4">
                                         <li v-for="permission in role.permissions" :key="permission.id">
                                             {{ permission?.name }}
@@ -34,8 +35,8 @@
                                     </ul>
                                 </div>
                             </Td>
-                            <Td class="py-1 px-2">
-                                <div class="flex gap-1 justify-center"> <!-- Acción en fila con espacio reducido -->
+                            <Td class="py-2 px-4 border-0">
+                                <div class="flex gap-2 justify-center">
                                     <EditButton @click="showSlider(true, role)" />
                                     <DeleteButton @click="onDelete(role)" />
                                 </div>
@@ -45,8 +46,7 @@
                 </Table>
             </div>
 
-            <!-- Paginación -->
-            <div class="flex justify-end mt-2"> <!-- Reducido margen superior -->
+            <div class="flex justify-end mt-2">
                 <Pagination :current-page="currentPage" :total-pages="totalPages" @page-changed="handlePageChange" />
             </div>
         </div>
@@ -121,9 +121,5 @@ const onDelete = (role) => {
 </script>
 
 <style scoped>
-/* Reducir padding para filas */
-.py-1 {
-    padding: 1rem;
-
-}
+/* No se necesita CSS adicional: Todo se realiza con clases de Tailwind */
 </style>

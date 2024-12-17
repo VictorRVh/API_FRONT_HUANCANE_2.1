@@ -8,6 +8,15 @@ export default [
             permissions: [],
         },
     },
+    {
+        path: '/home',
+        name: 'home',
+        component: () => import('../pages/Home/home.vue'),
+        meta: {
+            layout: 'dashboard',
+            permissions: ['users-all', 'users-view'],
+        },
+    },
 
     {
         path: '/users',
@@ -87,7 +96,7 @@ export default [
             layout: 'dashboard',
             permissions: ['indicators-all', 'indicators-view'],
         }
-    },   
+    },
     {
         path: '/Plan',
         name: 'plan',

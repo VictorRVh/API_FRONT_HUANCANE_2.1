@@ -127,7 +127,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'destroy',
     ])->middleware('permission:places-all|places-delete');
 
-        
+
     // RUTAS DE TURNOS
 
     Route::get('turno', [
@@ -157,7 +157,7 @@ Route::middleware('auth:sanctum')->group(function () {
         \App\Http\Controllers\EspecialidadController::class,
         'index',
     ])->middleware('permission:specialties-all|specialties-view');
-    
+
     Route::get('especialidad/{especialidadId}', [
         \App\Http\Controllers\EspecialidadController::class,
         'show',
@@ -178,7 +178,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'destroy',
     ])->middleware('permission:specialties-all|specialties-delete');
 
-    
+
     // RUTA PARA PLANES
 
     Route::get('plan', [
@@ -234,7 +234,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'destroy',
     ])->middleware('permission:program-all|program-delete');
 
-    
+
     // RUTA PARA UNIDADES DIDACTICAS
 
     Route::get('unidad_didactica', [
@@ -337,7 +337,7 @@ Route::middleware('auth:sanctum')->group(function () {
         \App\Http\Controllers\GrupoController::class,
         'getGruposPorUsuarioYPlan',
     ])->middleware('permission:groups-all|groups-view');
-    
+
     //RUTA QUE TRAE TODAS LAS NOTAS DE LAS UNIDADES DIDACTICAS DE LOS ESTUDIANTES
 
     Route::get('grupoDocente/{grupo_id}', [
@@ -350,6 +350,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('grupoDocenteTwo/{grupo_id}', [
         \App\Http\Controllers\GrupoController::class,
         'getEstudiantesYUnidadesPorGrupo',
+    ])->middleware('permission:groups-all|groups-view');
+
+    // RUTA QUE TRAE ESTUDIANTES Y EXPERIENCIAS FORMATIVAS
+
+    Route::get('grupoDocenteThree/{grupo_id}', [
+        \App\Http\Controllers\GrupoController::class,
+        'getExperienciaYEstudiantesPorGrupo',
+    ])->middleware('permission:groups-all|groups-view');
+
+    //RUTA PARA MOSTRAR NOTAS DE EXPERIENCIAS FORMATIVAS
+
+    Route::get('grupoNotasExperiencia/{grupo_id}', [
+        \App\Http\Controllers\GrupoController::class,
+        'getNotasYExperienciasPorGrupo',
     ])->middleware('permission:groups-all|groups-view');
 
     Route::post('grupo', [
@@ -446,6 +460,11 @@ Route::middleware('auth:sanctum')->group(function () {
         'store',
     ])->middleware('permission:permissions-all|permissions-create');
 
+    Route::post('registrar_nota_experiencia', [
+        \App\Http\Controllers\NotaExperienciaFormativaController::class,
+        'registrarNotaExperiencia',
+    ])->middleware('permission:permissions-all|permissions-create');
+
     Route::patch('nota_experiencia_formativa/{notaExperienciaId}', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'update',
@@ -458,10 +477,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('/users-by-role/{role_id}', [UserController::class, 'getUsersByRole']);
-
 });
-
-
-
-
-

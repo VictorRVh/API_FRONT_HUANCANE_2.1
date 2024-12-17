@@ -278,8 +278,6 @@ class GrupoController extends Controller
         return response()->json($response, 200);
     }
 
-
-
     public function getEstudiantesYUnidadesPorGrupo($grupo_id)
     {
         $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
@@ -307,6 +305,89 @@ class GrupoController extends Controller
         $response = [
             'estudiantes' => $alumnos,
             'unidades_didacticas' => $unidadesDidacticas
+        ];
+
+        return response()->json($response, 200);
+    }
+
+    public function getExperienciaYEstudiantesPorGrupo($grupo_id)
+    {
+        $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
+            $query->where('id_grupo', $grupo_id);
+        })
+            ->with('estudiante')
+            ->get();
+
+        $grupo = Grupo::with('programa.experienciasFormativas')
+            ->find($grupo_id);
+
+        $alumnos->each(function ($matricula) {
+            $matricula->makeHidden(['created_at', 'updated_at']);
+            if ($matricula->estudiante) {
+                $matricula->estudiante->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
+            }
+        });
+
+        if ($grupo && $grupo->programa) {
+            $experienciaFormativa = $grupo->programa->experienciasFormativas->makeHidden(['created_at', 'updated_at']);
+        } else {
+            $experienciaFormativa = [];
+        }
+
+        $response = [
+            'estudiantes' => $alumnos,
+            'experiencia_formativa' => $experienciaFormativa
+        ];
+
+        return response()->json($response, 200);
+    }
+
+    public function getNotasYExperienciasPorGrupo($grupo_id)
+    {
+        $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
+            $query->where('id_grupo', $grupo_id);
+        })
+            ->with([
+                'estudiante.notasExperienciaFormativa.experienciaFormativa'
+            ])
+            ->get();
+
+        $grupo = Grupo::with('programa.unidadesDidacticas')->find($grupo_id);
+
+        $alumnos->each(function ($matricula) {
+            $matricula->makeHidden(['created_at', 'updated_at']);
+            if ($matricula->estudiante) {
+                $matricula->estudiante->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
+            }
+        });
+
+        // Preparar la respuesta
+        $response = [
+            'estudiantes' => $alumnos->map(function ($matricula) {
+                return [
+                    'id' => $matricula->id_matricula,
+                    'estudiante' => [
+                        'id' => $matricula->estudiante->id,
+                        'name' => $matricula->estudiante->name,
+                        'apellido_paterno' => $matricula->estudiante->apellido_paterno,
+                        'apellido_materno' => $matricula->estudiante->apellido_materno,
+                        'dni' => $matricula->estudiante->dni,
+                        'sexo' => $matricula->estudiante->sexo,
+                        'celular' => $matricula->estudiante->celular,
+                        'fecha_nacimiento' => $matricula->estudiante->fecha_nacimiento,
+                        'email' => $matricula->estudiante->email,
+                        // Agregar solo las notas de las experiencias formativas
+                        'notas_experiencia_formativa' => $matricula->estudiante->notasExperienciaFormativa->map(function ($notaExperiencia) {
+                            return [
+                                'id_nota_experiencia' => $notaExperiencia->id_nota,
+                                'nota_experiencia' => $notaExperiencia->nota,
+                                'nombre_experiencia' => $notaExperiencia->experienciaFormativa->nombre_experiencia,
+                                'id_grupo' => $notaExperiencia->id_grupo,
+                            ];
+                        }),
+                    ],
+                ];
+            }),
         ];
 
         return response()->json($response, 200);

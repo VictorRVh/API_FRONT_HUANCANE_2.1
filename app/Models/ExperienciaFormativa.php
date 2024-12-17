@@ -27,4 +27,9 @@ class ExperienciaFormativa extends Model
     {
         return $this->hasMany(NotaExperienciaFormativa::class, 'id_experiencia', 'id_experiencia');
     }
+
+    public function notas()
+    {
+        return $this->hasMany(NotaUnidadDidactica::class, 'id_unidad_didactica', 'id_unidad_didactica');
+    }
 }

@@ -48,7 +48,7 @@ const onDelete = (user) => {
 
     const isDeleted = await deleteUser(user?.id);
     if (isDeleted) {
-      showToast(`"${user?.name}" deleted successfully...`);
+      showToast(`"${user?.name}" eliminado correctamente.`);
       userStore.loadStudents(props.id);
     }
   });
@@ -82,55 +82,49 @@ watch(() => props.id, (newId) => {
   <AuthorizationFallback :permissions="['students-all', 'students-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 v-if="props.id === 8" class="text-active font-bold text-2xl">Estudiantes</h2>
-        <h2 v-else="props.id" class="text-active font-bold text-2xl">Estudiantes </h2>
+        <h2 v-if="props.id === 8" class="text-black font-bold text-2xl">Estudiantes</h2>
+        <h2 v-else="props.id" class="text-black font-bold text-2xl">Estudiantes</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="w-full">
         <Table>
           <THead>
-            <Tr>
-              <Th> Id </Th>
-              <Th> Nombre </Th>
-              <Th> Apellido Paterno </Th>
-              <Th> Apellido Materno </Th>
-              <Th> Dni </Th>
-              <Th> Acción </Th>
+            <Tr class="border-b">
+              <Th>Id</Th>
+              <Th>Nombre</Th>
+              <Th>Apellido Paterno</Th>
+              <Th>Apellido Materno</Th>
+              <Th>Dni</Th>
+              <Th>Acción</Th>
             </Tr>
           </THead>
 
           <TBody>
-            <Tr v-for="user in paginatedStudents" :key="user.id">
-              <Td>{{ user?.id }}</Td>
-              <Td>
-                <div class="text-dark-500 dark:text-white-200">
-                  {{ user?.name }}
-                </div>
-                <div class="text-xsm text-[#aaa]">
-                  {{ user?.email }}
-                </div>
+            <Tr
+              v-for="user in paginatedStudents"
+              :key="user.id"
+              class="border-b"
+            >
+              <Td class="text-black border-none">{{ user?.id }}</Td>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ user?.name }}</div>
+                <div class="text-xsm text-[#aaa]">{{ user?.email }}</div>
               </Td>
 
-              <Td>
-                <div class="text-dark-500 dark:text-white-200">
-                  {{ user?.apellido_paterno }}
-                </div>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ user?.apellido_paterno }}</div>
               </Td>
 
-              <Td>
-                <div class="text-dark-500 dark:text-white-200">
-                  {{ user?.apellido_materno }}
-                </div>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ user?.apellido_materno }}</div>
               </Td>
 
-              <Td>
-                <div class="text-black-500 dark:text-black-200">
-                  {{ user?.dni }}
-                </div>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ user?.dni }}</div>
               </Td>
 
-              <Td class="align-middle">
+              <Td class="border-none">
                 <div class="flex flex-row gap-2 justify-center items-center">
                   <ViewButton />
                   <EditButton @click="showSlider(true, user)" />

@@ -25,27 +25,18 @@ import useRoleStore from "../../store/useRoleStore";
 import useUserStore from "../../store/useUserStore";
 import useAuth from "../../composables/useAuth";
 
-// Obtener el objeto de la ruta actual
 const props = defineProps({
   idUnidad: {
     type: Number,
     default: null,
   },
 });
-// Acceder al parámetro de la ruta
 
-// Ahora puedes usar `idUnidad` en tu componente
-console.log("ruta  Unidad", props.idUnidad);
-
-// Cargar la especialidad correspondiente cuando se monta el componente
-
-const router = useRouter(); // Aquí es donde obtenemos el router
+const router = useRouter();
 
 const userStore = useUserStore();
 const roleStore = useRoleStore();
 const IndicatorStore = useIndicatorStore();
-
-// IndicatorStore.Indicators.Indicator
 
 if (!IndicatorStore.Indicators.length)
   await IndicatorStore.loadIndicators(props.idUnidad);
@@ -62,9 +53,8 @@ const onDelete = (Indicator) => {
     if (!confirmed) return;
 
     const isDeleted = await deleteSpecialy(Indicator?.id_indicador);
-    //console.log("pasod eleinar  cosmlas: ", isDeleted);
     if (isDeleted) {
-      showToast(`Indicator "${Indicator?.descripcion}" deleted successfully...`);
+      showToast(`Indicador "${Indicator?.descripcion}" eliminado correctamente.`);
       IndicatorStore.loadIndicators(props.idUnidad);
       userStore.loadUsers();
       roleStore.loadRoles();
@@ -79,46 +69,37 @@ const SeeMore = (id) => {
     params: { idIndicator: id },
   });
 };
-
-console.log(
-  "nuevos Indicatores: ",
-  IndicatorStore.Indicators.unidad_didactica?.indicadores_logro
-);
-//console.log("El nombre de la especialidad: ", specialtyStore.specialty);
 </script>
 
 <template>
   <AuthorizationFallback :permissions="['indicators-all', 'indicators-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">{{}} / Indicator</h2>
+        <h2 class="text-black font-bold text-2xl">Indicadores de Logro</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="w-full">
         <Table>
           <THead>
-            <Tr>
-              <Th> Id </Th>
-              <Th> Indicators </Th>
-              <Th> Action </Th>
+            <Tr class="border-b">
+              <Th>Id</Th>
+              <Th>Indicador</Th>
+              <Th>Acción</Th>
             </Tr>
           </THead>
 
           <TBody>
             <Tr
-              v-for="Indicator in IndicatorStore.Indicators.unidad_didactica
-                ?.indicadores_logro"
+              v-for="Indicator in IndicatorStore.Indicators.unidad_didactica?.indicadores_logro"
               :key="Indicator.id_indicador"
+              class="border-b"
             >
-              <Td>{{ Indicator?.id_indicador }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ Indicator?.descripcion }}
-                </div>
+              <Td class="text-black border-none">{{ Indicator?.id_indicador }}</Td>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ Indicator?.descripcion }}</div>
               </Td>
-
-              <Td class="align-middle">
+              <Td class="border-none">
                 <div class="flex flex-row gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(Indicator?.id_indicador)" />
                   <EditButton @click="showSlider(true, Indicator)" />
