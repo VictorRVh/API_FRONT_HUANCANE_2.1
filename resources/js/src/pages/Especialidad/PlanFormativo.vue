@@ -25,17 +25,11 @@ import useRoleStore from "../../store/useRoleStore";
 import useUserStore from "../../store/useUserStore";
 import useAuth from "../../composables/useAuth";
 
-// Obtener el objeto de la ruta actual
-
-// Cargar la especialidad correspondiente cuando se monta el componente
-
-const router = useRouter(); // Aquí es donde obtenemos el router
+const router = useRouter();
 
 const userStore = useUserStore();
 const roleStore = useRoleStore();
 const planStore = usePlanStore();
-
-// planStore.plans.plan
 
 if (!planStore.plans.length) await planStore.loadPlans();
 
@@ -51,9 +45,8 @@ const onDelete = (plan) => {
     if (!confirmed) return;
 
     const isDeleted = await deleteSpecialy(plan?.id_plan);
-    console.log("pasod eleinar  cosmlas: ", isDeleted);
     if (isDeleted) {
-      showToast(`plan "${plan?.nombre_plan}" deleted successfully...`);
+      showToast(`Plan "${plan?.nombre_plan}" eliminado correctamente.`);
       planStore.loadPlans();
       userStore.loadUsers();
       roleStore.loadRoles();
@@ -62,41 +55,34 @@ const onDelete = (plan) => {
   });
 };
 
-const SeeMore = (id) => {
- 
-};
-
-//console.log("El nombre de la especialidad: ", specialtyStore.specialty);
+const SeeMore = (id) => {};
 </script>
 
 <template>
   <AuthorizationFallback :permissions="['plan-all', 'plan-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">{{}} / Plan</h2>
+        <h2 class="text-black font-bold text-2xl">Planes Formativos</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="w-full">
         <Table>
           <THead>
-            <Tr>
-              <Th> Id </Th>
-              <Th> plans </Th>
-              <Th> Action </Th>
+            <Tr class="border-b">
+              <Th>Id</Th>
+              <Th>Plan</Th>
+              <Th>Acción</Th>
             </Tr>
           </THead>
 
           <TBody>
-            <Tr v-for="plan in planStore.plans" :key="plan.id_plan">
-              <Td>{{ plan?.id_plan }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ plan?.nombre_plan }}
-                </div>
+            <Tr v-for="plan in planStore.plans" :key="plan.id_plan" class="border-b">
+              <Td class="text-black border-none">{{ plan?.id_plan }}</Td>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ plan?.nombre_plan }}</div>
               </Td>
-
-              <Td class="align-middle">
+              <Td class="border-none">
                 <div class="flex flex-row gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(plan?.id_plan)" />
                   <EditButton @click="showSlider(true, plan)" />

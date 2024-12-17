@@ -7,13 +7,13 @@
             </div>
 
             <!-- Contenedor de tabla sin scroll principal -->
-            <div class="w-full ">
-                <Table>
+            <div class="w-full">
+                <Table class="border-collapse divide-y divide-transparent">
                     <THead>
                         <Tr>
                             <Th> Id </Th>
                             <Th> User </Th>
-                            <Th > Roles </Th>
+                            <Th> Roles </Th>
                             <Th> Permissions </Th>
                             <Th> Action </Th>
                         </Tr>
@@ -21,20 +21,19 @@
 
                     <TBody>
                         <Tr v-for="user in paginatedUsers" :key="user.id">
-                            <Td class="table-row-height border-none">{{ user?.id }}</Td>
-                            <Td class="table-row-height border-none">
+                            <Td class="py-4 px-6 border-0">{{ user?.id }}</Td>
+                            <Td class="py-4 px-6 border-0">
                                 <div class="font-bold text-granate dark:text-white">{{ user?.name }}</div>
-                                <div class="text-xsm text-[#aaa]">{{ user?.email }}</div>
+                                <div class="text-sm text-gray-500">{{ user?.email }}</div>
                             </Td>
-                            <Td class="table-row-height border-none">
+                            <Td class="py-4 px-6 border-0">
                                 <ul class="list-disc pl-3 max-h-[75px] overflow-y-auto">
                                     <li v-for="role in user.roles" :key="role.id" class="text-black dark:text-white">
                                         {{ role?.name }}
                                     </li>
                                 </ul>
                             </Td>
-                            <!-- Columna de Permisos con altura limitada -->
-                            <Td class="table-row-height border-none">
+                            <Td class="py-4 px-6 border-0">
                                 <div class="max-h-[75px] overflow-y-auto">
                                     <ul class="w-max mx-auto list-disc">
                                         <li v-for="permission in user.permissions" :key="permission.id" class="text-left">
@@ -43,8 +42,8 @@
                                     </ul>
                                 </div>
                             </Td>
-                            <Td class="table-row-height border-none">
-                                <div class="flex gap-1 justify-center"> <!-- Acción en fila con espacio reducido -->
+                            <Td class="py-4 px-6 border-0">
+                                <div class="flex gap-2 justify-center"> <!-- Acción en fila con espacio reducido -->
                                     <EditButton @click="showSlider(true, user)" />
                                     <DeleteButton @click="onDelete(user)" />
                                 </div>
@@ -125,8 +124,5 @@ const onDelete = (user) => {
 </script>
 
 <style scoped>
-.table-row-height {
-    padding: 1rem; /* Reducido para disminuir la altura de las filas */
-    vertical-align: middle;
-}
+/* No es necesario agregar estilos adicionales porque usamos solo Tailwind */
 </style>

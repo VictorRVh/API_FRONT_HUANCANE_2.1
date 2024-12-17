@@ -25,7 +25,6 @@ import useRoleStore from "../../store/useRoleStore";
 import useUserStore from "../../store/useUserStore";
 import useAuth from "../../composables/useAuth";
 
-// Obtener el objeto de la ruta actual
 const props = defineProps({
   idEspecialidad: {
     type: Number,
@@ -36,20 +35,12 @@ const props = defineProps({
     default: null,
   },
 });
-// Acceder al parámetro de la ruta
 
-// Ahora puedes usar `idEspecialidad` en tu componente
-//console.log("ruta s", props.idEspecialidad);
-
-// Cargar la especialidad correspondiente cuando se monta el componente
-
-const router = useRouter(); // Aquí es donde obtenemos el router
+const router = useRouter();
 
 const userStore = useUserStore();
 const roleStore = useRoleStore();
 const ProgramStore = useProgramStore();
-
-// ProgramStore.Programs.Program
 
 if (!ProgramStore.Programs.length)
   await ProgramStore.loadPrograms(props.idEspecialidad, props.idPlan);
@@ -66,9 +57,8 @@ const onDelete = (Program) => {
     if (!confirmed) return;
 
     const isDeleted = await deleteSpecialy(Program?.id_programa);
-    console.log("pasod eleinar  cosmlas: ", isDeleted);
     if (isDeleted) {
-      showToast(`Program "${Program?.nombre_programa}" deleted successfully...`);
+      showToast(`Programa "${Program?.nombre_programa}" eliminado correctamente.`);
       ProgramStore.loadPrograms(props.idEspecialidad, props.idPlan);
       userStore.loadUsers();
       roleStore.loadRoles();
@@ -90,27 +80,23 @@ const SeeMoreExperiencia = (id) => {
     params: { idPrograma: id },
   });
 };
-
-console.log("nuievos Programes: ", ProgramStore.Programs.programas);
-
-//console.log("El nombre de la especialidad: ", specialtyStore.specialty);
 </script>
 
 <template>
   <AuthorizationFallback :permissions="['program-all', 'program-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">{{}} / Program</h2>
+        <h2 class="text-black font-bold text-2xl">Programas</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="w-full">
         <Table>
           <THead>
-            <Tr>
-              <Th> Id </Th>
-              <Th> Programs </Th>
-              <Th> Action </Th>
+            <Tr class="border-b">
+              <Th>Id</Th>
+              <Th>Programa</Th>
+              <Th>Acción</Th>
             </Tr>
           </THead>
 
@@ -118,15 +104,13 @@ console.log("nuievos Programes: ", ProgramStore.Programs.programas);
             <Tr
               v-for="Program in ProgramStore.Programs.programas"
               :key="Program.id_programa"
+              class="border-b"
             >
-              <Td>{{ Program?.id_programa }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ Program?.nombre_programa }}
-                </div>
+              <Td class="text-black border-none">{{ Program?.id_programa }}</Td>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ Program?.nombre_programa }}</div>
               </Td>
-
-              <Td class="align-middle">
+              <Td class="border-none">
                 <div class="flex flex-row gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(Program?.id_programa)" />
                   <ViewButton @click="SeeMoreExperiencia(Program?.id_programa)" />

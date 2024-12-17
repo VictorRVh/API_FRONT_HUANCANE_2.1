@@ -1,7 +1,5 @@
 <script setup>
-// Importa useRouter de Vue Router
 import { useRouter } from "vue-router";
-
 import Table from "../../components/table/Table.vue";
 import THead from "../../components/table/THead.vue";
 import TBody from "../../components/table/TBody.vue";
@@ -19,20 +17,13 @@ import useSpecialtyStore from "../../store/Especialidad/useEspecialidadStore";
 import useSlider from "../../composables/useSlider";
 import useModalToast from "../../composables/useModalToast";
 import useHttpRequest from "../../composables/useHttpRequest";
-
 import useRoleStore from "../../store/useRoleStore";
 import useUserStore from "../../store/useUserStore";
 import useAuth from "../../composables/useAuth";
-
 import usePlanStore from "../../store/Especialidad/usePlanFormativoStore";
-import { ref } from 'vue'; // Asegúrate de incluir ref
+import { ref } from "vue";
 
-// planStore.plans.plan
-
-
-
-
-const router = useRouter(); // Aquí es donde obtenemos el router
+const router = useRouter();
 
 const userStore = useUserStore();
 const roleStore = useRoleStore();
@@ -40,8 +31,6 @@ const specialtiesStore = useSpecialtyStore();
 
 const planStore = usePlanStore();
 const selectedPlan = ref(0);
-
-// specialtyStore.specialties.especialidades
 
 if (!specialtiesStore.specialties.length) await specialtiesStore.loadSpecialties();
 
@@ -57,9 +46,8 @@ const onDelete = (specialty) => {
     if (!confirmed) return;
 
     const isDeleted = await deleteSpecialy(specialty?.id_especialidad);
-    console.log("pasod eleinar  cosmlas: ", isDeleted);
     if (isDeleted) {
-      showToast(`Specialty "${specialty?.nombre_especialidad}" deleted successfully...`);
+      showToast(`Especialidad "${specialty?.nombre_especialidad}" eliminada correctamente.`);
       specialtiesStore.loadSpecialties();
       userStore.loadUsers();
       roleStore.loadRoles();
@@ -71,19 +59,17 @@ const onDelete = (specialty) => {
 if (!planStore.plans.length) await planStore.loadPlans();
 
 if (planStore.plans.length > 0) {
-    selectedPlan.value = planStore.plans[planStore.plans.length - 1].id_plan;
-    console.log("Plan seleccionado por defecto:", selectedPlan.value);
-  }
+  selectedPlan.value = planStore.plans[planStore.plans.length - 1].id_plan;
+}
 
 const SeeMore = (idr) => {
-  console.log("id:", idr, "selectedPlan:", selectedPlan.value);
   if (!selectedPlan.value) {
-    showToast("Please select a plan first.");
+    showToast("Por favor, selecciona un plan primero.");
     return;
   }
   router.push({
     name: "programaFormativo",
-    params: { idEspecialidad: idr, idPlan: selectedPlan.value }, // Asegúrate de que estos nombres coincidan
+    params: { idEspecialidad: idr, idPlan: selectedPlan.value },
   });
 };
 </script>
@@ -92,15 +78,13 @@ const SeeMore = (idr) => {
   <AuthorizationFallback :permissions="['specialties-all', 'specialties-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">Especialidades</h2>
-
+        <h2 class="text-black font-bold text-2xl">Especialidades</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="flex justify-between">
-
         <select id="plan-select" v-model="selectedPlan" class="border rounded-md p-2">
-          <option value="" disabled>Select a plan</option>
+          <option value="" disabled>Seleccionar un plan</option>
           <option
             v-for="plan in planStore.plans"
             :key="plan.id_plan"
@@ -114,10 +98,10 @@ const SeeMore = (idr) => {
       <div class="w-full">
         <Table>
           <THead>
-            <Tr>
-              <Th> Id </Th>
-              <Th> Especialidades </Th>
-              <Th> Accion </Th>
+            <Tr class="border-b">
+              <Th>Id</Th>
+              <Th>Especialidad</Th>
+              <Th>Acción</Th>
             </Tr>
           </THead>
 
@@ -125,15 +109,13 @@ const SeeMore = (idr) => {
             <Tr
               v-for="specialty in specialtiesStore.specialties"
               :key="specialty.id_especialidad"
+              class="border-b"
             >
-              <Td>{{ specialty?.id_especialidad }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ specialty?.nombre_especialidad }}
-                </div>
+              <Td class="text-black border-none">{{ specialty?.id_especialidad }}</Td>
+              <Td class="text-black border-none">
+                <div class="text-black">{{ specialty?.nombre_especialidad }}</div>
               </Td>
-
-              <Td class="align-middle">
+              <Td class="border-none">
                 <div class="flex flex-row gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(specialty?.id_especialidad)" />
                   <EditButton @click="showSlider(true, specialty)" />

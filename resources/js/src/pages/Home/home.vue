@@ -16,7 +16,7 @@
               Gestiona las especialidades, docentes, estudiantes y procesos académicos de manera eficiente y organizada.
             </p>
             <button class="bg-granate text-blancoPuro px-8 py-3 text-lg font-bold uppercase rounded-full hover:bg-opacity-90">
-              Iniciar Tutorial
+              Iniciar Recorrido
             </button>
           </div>
         </div>

@@ -29,23 +29,20 @@ onMounted(async () => {
     await userStore.loadGroupStudentNote(props.id);
   }
   listUnit.value = userStore.student?.unidades_didacticas || [];
-  lengthUnit = userStore.student?.total_unidades
-  // Seleccionar la primera unidad por defecto si existe
+  lengthUnit = userStore.student?.total_unidades;
+
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
-  //console.log("unidades cada: ",userStore.student?.unidades_didacticas)
-  console.log("unidades lonfiugtus: ",lengthUnit)
 });
 
 watch(() => props.id, async (newId) => {
   await userStore.loadGroupStudentNote(newId);
   listUnit.value = userStore.student?.unidades_didacticas || [];
-  
+
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
- 
 });
 
 const seeNote = () => {
@@ -58,25 +55,22 @@ const seeNote = () => {
     console.error("Por favor, seleccione una unidad antes de continuar.");
   }
 };
-
-
-
-
 </script>
 
 <template>
   <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
     <div class="w-full space-y-4 py-6">
-      <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">Estudiantes</h2>
+      <div class="flex justify-between">
+        <h2 class="text-black font-bold text-2xl">Estudiantes</h2>
       </div>
+
       <div class="flex justify-between">
         <select
           id="plan-select"
           v-model="selectUnit"
           class="border rounded-md p-2"
         >
-          <option value="" disabled>Select a specialty</option>
+          <option value="" disabled>Seleccione una especialidad</option>
           <option
             v-for="unit in listUnit"
             :key="unit?.id_unidad_didactica"
@@ -85,10 +79,12 @@ const seeNote = () => {
             {{ unit.nombre_unidad }}
           </option>
         </select>
-        <CreateButton @click="seeNote" value="Hazlo" />
+        <CreateButton @click="seeNote" value="Ver Notas" />
       </div>
+
       <div class="w-full">
-        <Table>
+        <!-- Tabla con eliminación de líneas internas -->
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
             <Tr>
               <Th>Id</Th>
@@ -96,27 +92,25 @@ const seeNote = () => {
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
               <Th>DNI</Th>
-              <Th v-for="i in 4" :key="i"> unid</Th>
+              <Th v-for="i in 4" :key="i">Unidad</Th>
             </Tr>
           </THead>
           <TBody>
             <Tr v-for="user in userStore.student.estudiantes" :key="user.id">
-              <Td>{{ user.estudiante?.id }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.name }}</div>
-                <div class="text-xsm text-[#aaa]">{{ user.estudiante?.email }}</div>
+              <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.id }}</Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="text-black font-medium">{{ user.estudiante?.name }}</div>
+                <div class="text-sm text-gray-500">{{ user.estudiante?.email }}</div>
               </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.apellido_paterno }}</div>
-              </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.apellido_materno }}</div>
-              </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.dni }}</div>
-              </Td>
-              <Td class="text-emerald-500 dark:text-emerald-200" v-for="note in user.estudiante?.notas" :key="note.id_nota">
-                    {{ note.nota  }}
+              <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.apellido_paterno }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.apellido_materno }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.dni }}</Td>
+              <Td
+                class="py-2 px-4 border-0 text-black"
+                v-for="note in user.estudiante?.notas"
+                :key="note.id_nota"
+              >
+                {{ note.nota }}
               </Td>
             </Tr>
           </TBody>
@@ -125,3 +119,7 @@ const seeNote = () => {
     </div>
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se requiere CSS adicional, todo está gestionado con Tailwind */
+</style>

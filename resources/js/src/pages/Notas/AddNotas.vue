@@ -33,7 +33,6 @@ const { store: createUnit, saving, update: updateUnit, updating } = useHttpReque
 );
 const { showToast } = useModalToast();
 
-
 const userStore = useStudentsStore();
 const listNotes = ref([]);
 
@@ -57,49 +56,41 @@ const loadGroupData = async () => {
   });
 };
 
-console.log(listNotes);
-
 // Llamar a la función en la carga inicial del componente
 onMounted(() => {
   loadGroupData();
 });
-//const onSubmit = async () => 
-async function submitNote () {
+
+async function submitNote() {
   // Validación de notas
   listNotes.value.forEach((note) => {
     if (note.nota !== null) {
       const parsedNote = parseFloat(note.nota);
       if (isNaN(parsedNote) || parsedNote < 0 || parsedNote > 20) {
         showToast(
-      `La nota para ${note.fullName} debe ser un número entre 0 y 20.`,"error"
-    )
+          `La nota para ${note.fullName} debe ser un número entre 0 y 20.`,
+          "error"
+        );
         return;
       }
     }
   });
 
   const response = await createUnit({
-    "notas":listNotes.value
+    "notas": listNotes.value
   });
 
-  // Si la respuesta es exitosa
-
-  console.log("response: ", response);
-  
   if (response.status === 201) {
-    showToast(
-      `Notas guardadas exitosamente`
-    );
+    showToast(`Notas guardadas exitosamente`);
   } else {
-    showToast("Error al guardar la unidad_didactica. Inténtalo de nuevo.", "error");
+    showToast("Error al guardar la unidad didáctica. Inténtalo de nuevo.", "error");
   }
-  
 }
 
 // Observar cambios en props.idgroup y recargar estudiantes
 watch(
   () => props.idgroup,
-  (newId) => {
+  () => {
     loadGroupData();
   }
 );
@@ -108,11 +99,13 @@ watch(
 <template>
   <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
     <div class="w-full space-y-4 py-6">
-      <div class="flex-between">
-        <h2 class="text-active font-bold text-2xl">Estudiantes</h2>
+      <div class="flex justify-between">
+        <h2 class="text-black font-bold text-2xl">Estudiantes</h2>
       </div>
+
       <div class="w-full">
-        <Table>
+        <!-- Tabla sin líneas internas -->
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
             <Tr>
               <Th>Id</Th>
@@ -123,13 +116,13 @@ watch(
 
           <TBody>
             <Tr v-for="user in listNotes" :key="user.id_estudiante">
-              <Td>{{ user?.id_estudiante }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
+              <Td class="py-2 px-4 border-0 text-black">{{ user?.id_estudiante }}</Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="text-black font-medium">
                   {{ user?.fullName }}
                 </div>
               </Td>
-              <Td>
+              <Td class="py-2 px-4 border-0">
                 <CustomInput
                   v-model="user.nota"
                   label=""
@@ -140,17 +133,21 @@ watch(
                     color:
                       user.nota !== null && parseFloat(user.nota) <= 10
                         ? 'red'
-                        : 'inherit',
+                        : 'black',
                   }"
                 />
               </Td>
             </Tr>
           </TBody>
         </Table>
-        <div class="flex justify-end bg-red w-full">
+        <div class="flex justify-end w-full">
           <SaveButton @click="submitNote()" class="w-[150px] m-5 p-5" />
         </div>
       </div>
     </div>
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se necesita CSS adicional, todo está manejado con Tailwind */
+</style>
