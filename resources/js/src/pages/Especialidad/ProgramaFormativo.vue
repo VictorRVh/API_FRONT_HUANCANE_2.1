@@ -93,18 +93,11 @@ const SeeMoreExperiencia = (id) => {
       <div class="w-full">
         <Table>
           <THead>
-<<<<<<< HEAD
-            <Tr>
-              <Th> Id </Th>
-              <Th> Programs </Th>
-              <Th> Items </Th>
-              <Th> Action </Th>
-=======
             <Tr class="border-b">
               <Th>Id</Th>
               <Th>Programa</Th>
+              <Th>Items</Th>
               <Th>Acción</Th>
->>>>>>> c10a7e60f17b05ed1a4643dfe74577221f620b3f
             </Tr>
           </THead>
 
@@ -118,25 +111,24 @@ const SeeMoreExperiencia = (id) => {
               <Td class="text-black border-none">
                 <div class="text-black">{{ Program?.nombre_programa }}</div>
               </Td>
-<<<<<<< HEAD
+              
               <Td class="px-4 py-2 text-center">
                 <div class="flex items-center justify-center space-x-2">
                   <div @click="SeeMoreExperiencia(Program?.id_programa)"
-                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
+                   
+                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
+                  >
                     Experiencia
-                </div>
+                  </div>
                   <span>|</span>
                   <div @click="SeeMore(Program?.id_programa)"
-                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
+                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
+                  >
                     Unidades
-                </div>
+                  </div>
                 </div>
               </Td>
-               
-              <Td class="align-middle">
-=======
               <Td class="border-none">
->>>>>>> c10a7e60f17b05ed1a4643dfe74577221f620b3f
                 <div class="flex flex-row gap-2 justify-center items-center">
                   <ViewButton  />
                   <EditButton @click="showSlider(true, Program)" />

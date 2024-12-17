@@ -16,7 +16,7 @@ const props = defineProps({
   id: {
     type: Number,
     default: 0,
-  },
+  }
 });
 
 const userStore = useStudentsStore();

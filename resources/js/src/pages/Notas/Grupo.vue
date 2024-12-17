@@ -44,8 +44,9 @@ if (roleStore.role[0].id != 7) {
 
   if (specialtiesStore.specialties.length > 0) {
     selectSpecialties.value =
-      specialtiesStore.specialties[specialtiesStore.specialties.length - 1]
-        .id_especialidad;
+      specialtiesStore.specialties[
+        specialtiesStore.specialties.length - 1
+      ].id_especialidad;
   }
 }
 
@@ -101,7 +102,6 @@ const noteExp = (id) => {
 const changePlan = () => {
   groupStore.loadGroups(selectedPlan.value, selectSpecialties.value);
 };
-
 </script>
 
 <template>
@@ -153,16 +153,6 @@ const changePlan = () => {
         <Table class="border-collapse divide-y divide-transparent">
           <THead>
             <Tr>
-<<<<<<< HEAD
-              <Th> Id </Th>
-              <Th> Grupos </Th>
-              <Th> Sede </Th>
-              <Th> Plan </Th>
-              <Th> Especialidad </Th>
-              <Th> Turno </Th>
-              <Th> Docente </Th>
-              <Th> Notas </Th>
-=======
               <Th>Id</Th>
               <Th>Grupos</Th>
               <Th>Sede</Th>
@@ -170,74 +160,50 @@ const changePlan = () => {
               <Th>Especialidad</Th>
               <Th>Turno</Th>
               <Th>Docente</Th>
+              <Th>Notas</Th>
               <Th>Acciones</Th>
->>>>>>> c10a7e60f17b05ed1a4643dfe74577221f620b3f
             </Tr>
           </THead>
 
           <TBody>
             <Tr v-for="grupo in groupStore.groups" :key="grupo.id_grupo">
-<<<<<<< HEAD
-              <Td>{{ grupo?.id_grupo }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ grupo?.nombre_grupo }}
-                </div>
-              </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ grupo?.sede.nombre_sede }}
-                </div>
-              </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ grupo?.plan.nombre_plan }}
-                </div>
-              </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ grupo?.especialidad.nombre_especialidad }}
-                </div>
-              </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ grupo?.turno.nombre_turno }}
-                </div>
-              </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">
-                  {{ grupo?.docente.name }}
-                </div>
-              </Td>
-              <Td class="px-4 py-2 text-center">
-                <div class="flex items-center justify-center space-x-2">
-                  <div @click="noteExp(grupo?.id_grupo)"
-                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
-                    Experiencia
-                </div>
-                  <span>|</span>
-                  <div @click="noteUnid(grupo?.id_grupo)"
-                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
-                    Unidades
-                </div>
-=======
               <Td class="py-2 px-4 border-0 text-black">{{ grupo?.id_grupo }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ grupo?.nombre_grupo }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ grupo?.sede.nombre_sede }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ grupo?.plan.nombre_plan }}</Td>
-              <Td class="py-2 px-4 border-0 text-black">{{ grupo?.especialidad.nombre_especialidad }}</Td>
-              <Td class="py-2 px-4 border-0 text-black">{{ grupo?.turno.nombre_turno }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{
+                grupo?.especialidad.nombre_especialidad
+              }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{
+                grupo?.turno.nombre_turno
+              }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ grupo?.docente.name }}</Td>
+
+              <Td class="px-4 py-2 text-center">
+                <div class="flex items-center justify-center space-x-2">
+                  <div @click="noteExp(grupo?.id_grupo)"
+                   
+                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
+                  >
+                    Experiencia
+                  </div>
+                  <span>|</span>
+                  <div @click="noteUnid(grupo?.id_grupo)"
+    
+                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
+                  >
+                    Unidades
+                  </div>
+                </div>
+              </Td>
+
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center">
                   <ViewButton @click="SeeMore(grupo?.id_grupo)" />
                   <EditButton @click="showSlider(true, grupo)" />
                   <DeleteButton @click="onDelete(grupo)" />
->>>>>>> c10a7e60f17b05ed1a4643dfe74577221f620b3f
                 </div>
               </Td>
-
-             
             </Tr>
           </TBody>
         </Table>
