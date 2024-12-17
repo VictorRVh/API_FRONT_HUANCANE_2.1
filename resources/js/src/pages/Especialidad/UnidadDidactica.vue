@@ -98,6 +98,7 @@ console.log("nuievos Unitses: ", UnitsStore.Units.unidades_didacticas);
             <Tr>
               <Th> Id </Th>
               <Th> Unitss </Th>
+              <Th> Items </Th>
               <Th> Action </Th>
             </Tr>
           </THead>
@@ -113,10 +114,18 @@ console.log("nuievos Unitses: ", UnitsStore.Units.unidades_didacticas);
                   {{ Units?.nombre_unidad }}
                 </div>
               </Td>
+              <Td class="px-4 py-2 text-center">
+                <div class="flex items-center justify-center space-x-2">
+                  <div @click="SeeMore(Units?.id_unidad_didactica)"
+                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
+                    Indicadores
+                </div>
+                </div>
+              </Td>
 
               <Td class="align-middle">
                 <div class="flex flex-row gap-2 justify-center items-center">
-                  <ViewButton @click="SeeMore(Units?.id_unidad_didactica)" />
+                  <ViewButton />
                   <EditButton @click="showSlider(true, Units)" />
                   <DeleteButton @click="onDelete(Units)" />
                 </div>

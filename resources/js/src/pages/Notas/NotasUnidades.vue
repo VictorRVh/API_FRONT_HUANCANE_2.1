@@ -51,7 +51,7 @@ watch(() => props.id, async (newId) => {
 const seeNote = () => {
   if (selectUnit.value) {
     router.push({
-      name: "notasEst",
+      name: "notasEstUnidad",
       params: { idgroup: props.id, idunit: selectUnit.value },
     });
   } else {

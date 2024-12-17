@@ -105,9 +105,16 @@ const onDelete = (group) => {
   });
 };
 
-const SeeMore = (id) => {
+const noteUnid = (id) => {
   router.push({
-    name: "notasGroupEst",
+    name: "notasUnits",
+    params: { id: id },
+  });
+};
+
+const noteExp = (id) => {
+  router.push({
+    name: "notasExperience",
     params: { id: id },
   });
 };
@@ -121,6 +128,7 @@ const changePlan = () => {
   groupStore.loadGroups(selectedPlan.value, selectSpecialties.value);
   //console.log("usuario rol : ", userStoreOne.user.roles[0].id);
 };
+
 </script>
 
 <template>
@@ -180,7 +188,7 @@ const changePlan = () => {
               <Th> Especialidad </Th>
               <Th> Turno </Th>
               <Th> Docente </Th>
-              <Th> Action </Th>
+              <Th> Notas </Th>
             </Tr>
           </THead>
 
@@ -217,14 +225,21 @@ const changePlan = () => {
                   {{ grupo?.docente.name }}
                 </div>
               </Td>
-
-              <Td class="align-middle">
-                <div class="flex flex-row gap-2 justify-center items-center">
-                  <ViewButton @click="SeeMore(grupo?.id_grupo)" />
-                  <EditButton @click="showSlider(true, grupo)" />
-                  <DeleteButton @click="onDelete(grupo)" />
+              <Td class="px-4 py-2 text-center">
+                <div class="flex items-center justify-center space-x-2">
+                  <div @click="noteExp(grupo?.id_grupo)"
+                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
+                    Experiencia
+                </div>
+                  <span>|</span>
+                  <div @click="noteUnid(grupo?.id_grupo)"
+                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
+                    Unidades
+                </div>
                 </div>
               </Td>
+
+             
             </Tr>
           </TBody>
         </Table>

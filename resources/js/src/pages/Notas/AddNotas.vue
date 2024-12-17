@@ -26,13 +26,20 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  id: {
+    type: String,
+    default: null,
+  },
 });
 
-const { store: createUnit, saving, update: updateUnit, updating } = useHttpRequest(
-  "/registrar_notas_unidades"
-);
+let url = "";
+if (props.id == "657870657269656e636961"){
+  console.log("consulta a experiencia")
+} else {
+  url = "/registrar_notas_unidades";
+}
+const { store: createUnit, saving, update: updateUnit, updating } = useHttpRequest(url);
 const { showToast } = useModalToast();
-
 
 const userStore = useStudentsStore();
 const listNotes = ref([]);
@@ -43,16 +50,16 @@ const loadGroupData = async () => {
 
   userStore.student.estudiantes.forEach((element) => {
     listNotes.value.push({
-      "fullName":
+      fullName:
         element.estudiante?.name +
         " " +
         element.estudiante?.apellido_paterno +
         " " +
         element.estudiante?.apellido_materno,
-      "nota": null,
-      "id_unidad_didactica": props.idunit,
-      "id_estudiante": element.estudiante?.id,
-      "id_grupo": props.idgroup,
+      nota: null,
+      id_unidad_didactica: props.idunit,
+      id_estudiante: element.estudiante?.id,
+      id_grupo: props.idgroup,
     });
   });
 };
@@ -63,37 +70,35 @@ console.log(listNotes);
 onMounted(() => {
   loadGroupData();
 });
-//const onSubmit = async () => 
-async function submitNote () {
+//const onSubmit = async () =>
+async function submitNote() {
   // Validación de notas
   listNotes.value.forEach((note) => {
     if (note.nota !== null) {
       const parsedNote = parseFloat(note.nota);
       if (isNaN(parsedNote) || parsedNote < 0 || parsedNote > 20) {
         showToast(
-      `La nota para ${note.fullName} debe ser un número entre 0 y 20.`,"error"
-    )
+          `La nota para ${note.fullName} debe ser un número entre 0 y 20.`,
+          "error"
+        );
         return;
       }
     }
   });
 
   const response = await createUnit({
-    "notas":listNotes.value
+    notas: listNotes.value,
   });
 
   // Si la respuesta es exitosa
 
   console.log("response: ", response);
-  
+
   if (response.status === 201) {
-    showToast(
-      `Notas guardadas exitosamente`
-    );
+    showToast(`Notas guardadas exitosamente`);
   } else {
     showToast("Error al guardar la unidad_didactica. Inténtalo de nuevo.", "error");
   }
-  
 }
 
 // Observar cambios en props.idgroup y recargar estudiantes

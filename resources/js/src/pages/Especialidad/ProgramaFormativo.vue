@@ -110,6 +110,7 @@ console.log("nuievos Programes: ", ProgramStore.Programs.programas);
             <Tr>
               <Th> Id </Th>
               <Th> Programs </Th>
+              <Th> Items </Th>
               <Th> Action </Th>
             </Tr>
           </THead>
@@ -125,11 +126,23 @@ console.log("nuievos Programes: ", ProgramStore.Programs.programas);
                   {{ Program?.nombre_programa }}
                 </div>
               </Td>
-
+              <Td class="px-4 py-2 text-center">
+                <div class="flex items-center justify-center space-x-2">
+                  <div @click="SeeMoreExperiencia(Program?.id_programa)"
+                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
+                    Experiencia
+                </div>
+                  <span>|</span>
+                  <div @click="SeeMore(Program?.id_programa)"
+                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
+                    Unidades
+                </div>
+                </div>
+              </Td>
+               
               <Td class="align-middle">
                 <div class="flex flex-row gap-2 justify-center items-center">
-                  <ViewButton @click="SeeMore(Program?.id_programa)" />
-                  <ViewButton @click="SeeMoreExperiencia(Program?.id_programa)" />
+                  <ViewButton  />
                   <EditButton @click="showSlider(true, Program)" />
                   <DeleteButton @click="onDelete(Program)" />
                 </div>
