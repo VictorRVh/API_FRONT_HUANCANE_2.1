@@ -15,7 +15,13 @@ class ExperienciaFormativa extends Model
 
     protected $fillable = [
         'nombre_experiencia',
+        'fecha_inicio', 
+        'fecha_fin', 
+        'creditos', 
+        'dias', 
+        'horas',
         'id_programa',
+
     ];
 
     public function programa()

@@ -14,7 +14,7 @@ class UnidadDidactica extends Model
     // public $incrementing = true;
     // protected $keyType = 'bigInteger';
 
-    protected $fillable = ['nombre_unidad', 'id_programa'];
+    protected $fillable = ['nombre_unidad', 'fecha_inicio', 'fecha_fin', 'creditos', 'dias', 'horas', 'capacidad', 'id_programa', ];
 
     public function programa()
     {

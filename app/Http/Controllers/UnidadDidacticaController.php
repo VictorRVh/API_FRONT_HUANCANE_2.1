@@ -24,6 +24,12 @@ class UnidadDidacticaController extends Controller
         // Validación
         $validator = Validator::make($request->all(), [
             'nombre_unidad' => 'required|string|max:255',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required',
+            'creditos' => 'required|integer',
+            'dias' => 'required|integer',
+            'horas' => 'required|integer',
+            'capacidad' => 'required',
             'id_programa' => 'required|exists:programas,id_programa',
         ]);
 
@@ -80,6 +86,11 @@ class UnidadDidacticaController extends Controller
         // Validación
         $validator = Validator::make($request->all(), [
             'nombre_unidad' => 'string|max:255',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required',
+            'creditos' => 'required|integer',
+            'dias' => 'required|integer',
+            'horas' => 'required|integer',
             'id_programa' => 'exists:programas,id_programa',
         ]);
 
@@ -139,7 +150,12 @@ class UnidadDidacticaController extends Controller
             'unidades_didacticas' => $programa->unidadesDidacticas->map(function ($unidad) {
                 return [
                     'id_unidad_didactica' => $unidad->id_unidad_didactica,
-                    'nombre_unidad' => $unidad->nombre_unidad
+                    'nombre_unidad' => $unidad->nombre_unidad,
+                    'fecha_inicio' => $unidad->fecha_inicio,
+                    'fecha_fin' => $unidad->fecha_fin,
+                    'creditos' => $unidad->creditos,
+                    'dias' => $unidad->dias,
+                    'horas' => $unidad->horas,
                 ];
             })
         ], 200);

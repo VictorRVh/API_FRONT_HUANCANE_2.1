@@ -346,6 +346,7 @@ class GrupoController extends Controller
 
     public function getNotasYExperienciasPorGrupo($grupo_id)
     {
+        // Obtener los alumnos que pertenecen al grupo
         $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
             $query->where('id_grupo', $grupo_id);
         })
@@ -354,8 +355,10 @@ class GrupoController extends Controller
             ])
             ->get();
 
+        // Obtener el grupo y sus experiencias formativas
         $grupo = Grupo::with('programa.experienciasFormativas')->find($grupo_id);
 
+        // Hacer algunos ajustes en las propiedades de los estudiantes
         $alumnos->each(function ($matricula) {
             $matricula->makeHidden(['created_at', 'updated_at']);
             if ($matricula->estudiante) {
@@ -363,13 +366,29 @@ class GrupoController extends Controller
             }
         });
 
+        // Si el grupo existe y tiene un programa, obtener las experiencias formativas
         if ($grupo && $grupo->programa) {
             $experienciaFormativa = $grupo->programa->experienciasFormativas->makeHidden(['created_at', 'updated_at']);
         } else {
             $experienciaFormativa = [];
         }
 
-        // Preparar la respuesta
+        // Mapeo de experiencias formativas con la bandera 'nota_asignada' fuera de los estudiantes
+        $experienciasConBandera = $grupo->programa->experienciasFormativas->map(function ($experiencia) use ($alumnos) {
+            // Verificar si al menos un estudiante tiene una nota asignada para esta experiencia
+            $notaAsignada = $alumnos->some(function ($matricula) use ($experiencia) {
+                return $matricula->estudiante->notasExperienciaFormativa->contains(function ($nota) use ($experiencia) {
+                    return $nota->experienciaFormativa->id_experiencia == $experiencia->id_experiencia;
+                });
+            });
+
+            return [
+                'id_experiencia' => $experiencia->id_experiencia,
+                'nombre_experiencia' => $experiencia->nombre_experiencia,
+                'nota_asignada' => $notaAsignada ? true : false, 
+            ];
+        });
+
         $response = [
             'estudiantes' => $alumnos->map(function ($matricula) {
                 return [
@@ -396,7 +415,7 @@ class GrupoController extends Controller
                     ],
                 ];
             }),
-            'experiencia_formativa' => $experienciaFormativa
+            'experiencia_formativa' => $experienciasConBandera
         ];
 
         return response()->json($response, 200);

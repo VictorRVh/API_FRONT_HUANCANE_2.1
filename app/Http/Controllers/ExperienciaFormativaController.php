@@ -24,6 +24,11 @@ class ExperienciaFormativaController extends Controller
         // Validación
         $validator = Validator::make($request->all(), [
             'nombre_experiencia' => 'required|string|max:255',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required',
+            'creditos' => 'required|integer',
+            'dias' => 'required|integer',
+            'horas' => 'required|integer',
             'id_programa' => 'required|exists:programas,id_programa',
         ]);
 
@@ -80,6 +85,11 @@ class ExperienciaFormativaController extends Controller
         // Validación
         $validator = Validator::make($request->all(), [
             'nombre_experiencia' => 'string|max:255',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required',
+            'creditos' => 'required|integer',
+            'dias' => 'required|integer',
+            'horas' => 'required|integer',
             'id_programa' => 'exists:programas,id_programa',
         ]);
 
@@ -140,7 +150,12 @@ class ExperienciaFormativaController extends Controller
             'experiencias_formativas' => $programa->experienciasFormativas->map(function ($experiencia) {
                 return [
                     'id_experiencia_formativa' => $experiencia->id_experiencia,
-                    'nombre_experiencia' => $experiencia->nombre_experiencia
+                    'nombre_experiencia' => $experiencia->nombre_experiencia,
+                    'fecha_inicio' => $experiencia->fecha_inicio,
+                    'fecha_fin' => $experiencia->fecha_fin,
+                    'creditos' => $experiencia->creditos,
+                    'dias' => $experiencia->dias,
+                    'horas' => $experiencia->horas,
                 ];
             })
         ], 200);
