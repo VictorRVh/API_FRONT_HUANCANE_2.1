@@ -108,21 +108,23 @@ const SeeMoreExperiencia = (id) => {
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Program?.nombre_programa }}
               </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
               <div class="flex items-center justify-center space-x-2">
-                  <div @click="SeeMoreExperiencia(grupo?.id_grupo)"
+                  <div @click="SeeMoreExperiencia(Program?.id_programa)"
                    
                     class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
                   >
                     Experiencia
                   </div>
                   <span>|</span>
-                  <div @click="SeeMore(grupo?.id_grupo)"
+                  <div @click="SeeMore(Program?.id_programa)"
     
                     class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
                   >
                     Unidades
                   </div>
                 </div>
+              </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
                   <ViewButton />
