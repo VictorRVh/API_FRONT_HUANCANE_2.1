@@ -26,11 +26,19 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  id: {
+    type: String,
+    default: null,
+  },
 });
 
-const { store: createUnit, saving, update: updateUnit, updating } = useHttpRequest(
-  "/registrar_notas_unidades"
-);
+let url = "";
+if (props.id == "657870657269656e636961"){
+  console.log("consulta a experiencia")
+} else {
+  url = "/registrar_notas_unidades";
+}
+const { store: createUnit, saving, update: updateUnit, updating } = useHttpRequest(url);
 const { showToast } = useModalToast();
 
 const userStore = useStudentsStore();
@@ -42,16 +50,16 @@ const loadGroupData = async () => {
 
   userStore.student.estudiantes.forEach((element) => {
     listNotes.value.push({
-      "fullName":
+      fullName:
         element.estudiante?.name +
         " " +
         element.estudiante?.apellido_paterno +
         " " +
         element.estudiante?.apellido_materno,
-      "nota": null,
-      "id_unidad_didactica": props.idunit,
-      "id_estudiante": element.estudiante?.id,
-      "id_grupo": props.idgroup,
+      nota: null,
+      id_unidad_didactica: props.idunit,
+      id_estudiante: element.estudiante?.id,
+      id_grupo: props.idgroup,
     });
   });
 };
@@ -60,7 +68,11 @@ const loadGroupData = async () => {
 onMounted(() => {
   loadGroupData();
 });
+<<<<<<< HEAD
+//const onSubmit = async () =>
+=======
 
+>>>>>>> c10a7e60f17b05ed1a4643dfe74577221f620b3f
 async function submitNote() {
   // Validación de notas
   listNotes.value.forEach((note) => {
@@ -77,9 +89,19 @@ async function submitNote() {
   });
 
   const response = await createUnit({
+<<<<<<< HEAD
+    notas: listNotes.value,
+  });
+
+  // Si la respuesta es exitosa
+
+  console.log("response: ", response);
+
+=======
     "notas": listNotes.value
   });
 
+>>>>>>> c10a7e60f17b05ed1a4643dfe74577221f620b3f
   if (response.status === 201) {
     showToast(`Notas guardadas exitosamente`);
   } else {

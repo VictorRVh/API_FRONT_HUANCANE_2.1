@@ -44,8 +44,9 @@ if (roleStore.role[0].id != 7) {
 
   if (specialtiesStore.specialties.length > 0) {
     selectSpecialties.value =
-      specialtiesStore.specialties[specialtiesStore.specialties.length - 1]
-        .id_especialidad;
+      specialtiesStore.specialties[
+        specialtiesStore.specialties.length - 1
+      ].id_especialidad;
   }
 }
 
@@ -84,9 +85,16 @@ const onDelete = (group) => {
   });
 };
 
-const SeeMore = (id) => {
+const noteUnid = (id) => {
   router.push({
-    name: "notasGroupEst",
+    name: "notasUnits",
+    params: { id: id },
+  });
+};
+
+const noteExp = (id) => {
+  router.push({
+    name: "notasExperience",
     params: { id: id },
   });
 };
@@ -152,6 +160,7 @@ const changePlan = () => {
               <Th>Especialidad</Th>
               <Th>Turno</Th>
               <Th>Docente</Th>
+              <Th>Notas</Th>
               <Th>Acciones</Th>
             </Tr>
           </THead>
@@ -162,9 +171,32 @@ const changePlan = () => {
               <Td class="py-2 px-4 border-0 text-black">{{ grupo?.nombre_grupo }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ grupo?.sede.nombre_sede }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ grupo?.plan.nombre_plan }}</Td>
-              <Td class="py-2 px-4 border-0 text-black">{{ grupo?.especialidad.nombre_especialidad }}</Td>
-              <Td class="py-2 px-4 border-0 text-black">{{ grupo?.turno.nombre_turno }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{
+                grupo?.especialidad.nombre_especialidad
+              }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{
+                grupo?.turno.nombre_turno
+              }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ grupo?.docente.name }}</Td>
+
+              <Td class="px-4 py-2 text-center">
+                <div class="flex items-center justify-center space-x-2">
+                  <div @click="noteExp(grupo?.id_grupo)"
+                   
+                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
+                  >
+                    Experiencia
+                  </div>
+                  <span>|</span>
+                  <div @click="noteUnid(grupo?.id_grupo)"
+    
+                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
+                  >
+                    Unidades
+                  </div>
+                </div>
+              </Td>
+
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center">
                   <ViewButton @click="SeeMore(grupo?.id_grupo)" />

@@ -180,8 +180,18 @@ export default [
     },
     {
         path: '/notas/:id',
-        name: 'notasGroupEst',
-        component: () => import('../pages/Notas/Estudiantes.vue'),
+        name: 'notasExperience',
+        component: () => import('../pages/Notas/NotasExperiencia.vue'),
+        props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        meta: {
+            layout: 'dashboard',
+            permissions: ['notas-all', 'notas-view'],
+        },
+    },
+    {
+        path: '/notas/:id',
+        name: 'notasUnits',
+        component: () => import('../pages/Notas/NotasUnidades.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
@@ -190,6 +200,16 @@ export default [
     },
     {
         path: '/notas/unidad/:idgroup/:idunit',
+        name: 'notasEstUnidad',
+        component: () => import('../pages/Notas/AddNotas.vue'),
+        props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        meta: {
+            layout: 'dashboard',
+            permissions: ['notas-all', 'notas-view'],
+        },
+    },
+    {
+        path: '/notas/unidad/:idgroup/:idexp/:id',
         name: 'notasEst',
         component: () => import('../pages/Notas/AddNotas.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
@@ -198,5 +218,6 @@ export default [
             permissions: ['notas-all', 'notas-view'],
         },
     },
+    
     /* todlos que se aumento */
 ];
