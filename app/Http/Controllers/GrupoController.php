@@ -378,18 +378,24 @@ class GrupoController extends Controller
                         'celular' => $matricula->estudiante->celular,
                         'fecha_nacimiento' => $matricula->estudiante->fecha_nacimiento,
                         'email' => $matricula->estudiante->email,
-                        // Agregar solo las notas de las experiencias formativas
                         'notas_experiencia_formativa' => $matricula->estudiante->notasExperienciaFormativa->map(function ($notaExperiencia) {
                             return [
                                 'id_nota_experiencia' => $notaExperiencia->id_nota,
                                 'nota_experiencia' => $notaExperiencia->nota,
-                                'nombre_experiencia' => $notaExperiencia->experienciaFormativa->nombre_experiencia,
                                 'id_grupo' => $notaExperiencia->id_grupo,
                             ];
                         }),
                     ],
                 ];
             }),
+            'experiencia_formativa' => $alumnos->flatMap(function ($matricula) {
+                return $matricula->estudiante->notasExperienciaFormativa->map(function ($notaExperiencia) {
+                    return [
+                        'id' => $notaExperiencia->experienciaFormativa->id_experiencia,
+                        'nombre' => $notaExperiencia->experienciaFormativa->nombre_experiencia,
+                    ];
+                });
+            })->unique('id')->values(), 
         ];
 
         return response()->json($response, 200);
