@@ -109,7 +109,7 @@ const SeeMoreExperiencia = (id) => {
                 {{ Program?.nombre_programa }}
               </Td>
               <div class="flex items-center justify-center space-x-2">
-                  <div @click="SeeMoreExperiencia(grupo?.id_grupo)"
+                  <div @click="SeeMoreExperiencia(Program?.id_programa)"
                    
                     class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
                   >
