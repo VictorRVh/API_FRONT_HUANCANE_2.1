@@ -218,7 +218,12 @@ class GrupoController extends Controller
         $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {
             $query->where('id_grupo', $grupo_id);
         })
-            ->with(['estudiante.notas.unidadDidactica']) // Relación anidada
+            ->with([
+                'estudiante.notas' => function ($query) use ($grupo_id) {
+                    $query->where('id_grupo', $grupo_id); // Filtrar notas por el grupo actual
+                },
+                'estudiante.notas.unidadDidactica'
+            ])
             ->get();
 
         $grupo = Grupo::with('programa.unidadesDidacticas')->find($grupo_id);
@@ -231,11 +236,7 @@ class GrupoController extends Controller
         });
 
         // Obtener las unidades didácticas del grupo
-        if ($grupo && $grupo->programa) {
-            $unidadesDidacticas = $grupo->programa->unidadesDidacticas;
-        } else {
-            $unidadesDidacticas = collect(); // Colección vacía
-        }
+        $unidadesDidacticas = $grupo && $grupo->programa ? $grupo->programa->unidadesDidacticas : collect();
 
         // Filtrar unidades didácticas que no tienen notas registradas
         $unidadesConNotas = $alumnos->pluck('estudiante.notas.*.id_unidad_didactica')->flatten()->unique();
@@ -277,6 +278,7 @@ class GrupoController extends Controller
 
         return response()->json($response, 200);
     }
+
 
     public function getEstudiantesYUnidadesPorGrupo($grupo_id)
     {
