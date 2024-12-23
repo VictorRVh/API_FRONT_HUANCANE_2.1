@@ -108,10 +108,24 @@ const SeeMoreExperiencia = (id) => {
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Program?.nombre_programa }}
               </Td>
+              <div class="flex items-center justify-center space-x-2">
+                  <div @click="SeeMoreExperiencia(grupo?.id_grupo)"
+                   
+                    class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
+                  >
+                    Experiencia
+                  </div>
+                  <span>|</span>
+                  <div @click="SeeMore(grupo?.id_grupo)"
+    
+                    class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
+                  >
+                    Unidades
+                  </div>
+                </div>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <ViewButton @click="SeeMore(Program?.id_programa)" />
-                  <ViewButton @click="SeeMoreExperiencia(Program?.id_programa)" />
+                  <ViewButton />
                   <EditButton @click="showSlider(true, Program)" />
                   <DeleteButton @click="onDelete(Program)" />
                 </div>
