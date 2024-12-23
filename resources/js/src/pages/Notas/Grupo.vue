@@ -183,14 +183,14 @@ const changePlan = () => {
                 <div class="flex items-center justify-center space-x-2">
                   <div @click="noteExp(grupo?.id_grupo)"
                    
-                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
+                    class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
                   >
                     Experiencia
                   </div>
                   <span>|</span>
                   <div @click="noteUnid(grupo?.id_grupo)"
     
-                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
+                    class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
                   >
                     Unidades
                   </div>

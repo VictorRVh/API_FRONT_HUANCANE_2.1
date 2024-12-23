@@ -35,7 +35,7 @@ onMounted(async () => {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
   //console.log("unidades cada: ",userStore.student?.unidades_didacticas)
-  console.log("unidades lonfiugtus: ",lengthUnit)
+  console.log("unidades lonfi: ",lengthUnit)
 });
 
 watch(() => props.id, async (newId) => {

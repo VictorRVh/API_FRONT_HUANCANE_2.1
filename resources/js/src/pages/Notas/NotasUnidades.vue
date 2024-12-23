@@ -21,7 +21,7 @@ const props = defineProps({
 
 const userStore = useStudentsStore();
 const listUnit = ref([]);
-let lengthUnit = 0;
+const lengthUnit = ref(0);
 const selectUnit = ref(null);
 
 onMounted(async () => {
@@ -29,12 +29,17 @@ onMounted(async () => {
     await userStore.loadGroupStudentNote(props.id);
   }
   listUnit.value = userStore.student?.unidades_didacticas || [];
-  lengthUnit = userStore.student?.total_unidades;
+  lengthUnit.value = userStore.student?.total_unidades;
 
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
+  console.log("victor hola",lengthUnit)
+  
 });
+
+console.log("victor hola fuera",lengthUnit)
+
 
 watch(() => props.id, async (newId) => {
   await userStore.loadGroupStudentNote(newId);
@@ -43,6 +48,7 @@ watch(() => props.id, async (newId) => {
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
+ 
 });
 
 const seeNote = () => {
@@ -92,7 +98,7 @@ const seeNote = () => {
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
               <Th>DNI</Th>
-              <Th v-for="i in 4" :key="i">Unidad</Th>
+              <Th v-for="i in lengthUnit" :key="i">Unidad</Th>
             </Tr>
           </THead>
           <TBody>

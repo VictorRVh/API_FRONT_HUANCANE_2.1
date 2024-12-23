@@ -179,7 +179,7 @@ export default [
         },
     },
     {
-        path: '/notas/:id',
+        path: '/notasExperience/:id',
         name: 'notasExperience',
         component: () => import('../pages/Notas/NotasExperiencia.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
@@ -189,7 +189,7 @@ export default [
         },
     },
     {
-        path: '/notas/:id',
+        path: '/notasUnit/:id',
         name: 'notasUnits',
         component: () => import('../pages/Notas/NotasUnidades.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
