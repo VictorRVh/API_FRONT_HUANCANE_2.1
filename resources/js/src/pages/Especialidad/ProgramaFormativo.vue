@@ -105,7 +105,6 @@ const SeeMoreExperiencia = (id) => {
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Program?.id_programa }}
               </Td>
-<<<<<<< HEAD
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Program?.nombre_programa }}
               </Td>
@@ -113,28 +112,6 @@ const SeeMoreExperiencia = (id) => {
                 <div class="flex gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(Program?.id_programa)" />
                   <ViewButton @click="SeeMoreExperiencia(Program?.id_programa)" />
-=======
-              
-              <Td class="px-4 py-2 text-center">
-                <div class="flex items-center justify-center space-x-2">
-                  <div @click="SeeMoreExperiencia(Program?.id_programa)"
-                   
-                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
-                  >
-                    Experiencia
-                  </div>
-                  <span>|</span>
-                  <div @click="SeeMore(Program?.id_programa)"
-                    class="text-blue-500 hover:text-blue-700 font-semibold border-b-2 border-transparent hover:border-blue-500"
-                  >
-                    Unidades
-                  </div>
-                </div>
-              </Td>
-              <Td class="border-none">
-                <div class="flex flex-row gap-2 justify-center items-center">
-                  <ViewButton  />
->>>>>>> c8906d2be6775402744948349c44216de4ab3b66
                   <EditButton @click="showSlider(true, Program)" />
                   <DeleteButton @click="onDelete(Program)" />
                 </div>

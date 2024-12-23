@@ -81,16 +81,9 @@ const SeeMore = (id) => {
         <Table class="border-collapse divide-y divide-transparent">
           <THead>
             <Tr>
-<<<<<<< HEAD
               <Th>Id</Th>
               <Th>Unidad</Th>
               <Th>Acción</Th>
-=======
-              <Th> Id </Th>
-              <Th> Unitss </Th>
-              <Th> Items </Th>
-              <Th> Action </Th>
->>>>>>> c8906d2be6775402744948349c44216de4ab3b66
             </Tr>
           </THead>
 
@@ -102,27 +95,12 @@ const SeeMore = (id) => {
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Units?.id_unidad_didactica }}
               </Td>
-<<<<<<< HEAD
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Units?.nombre_unidad }}
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(Units?.id_unidad_didactica)" />
-=======
-              <Td class="px-4 py-2 text-center">
-                <div class="flex items-center justify-center space-x-2">
-                  <div @click="SeeMore(Units?.id_unidad_didactica)"
-                     class="cursor-pointer text-blue-500 hover:text-blue-400 font-semibold border-b-2 border-transparent hover:border-blue-500">
-                    Indicadores
-                </div>
-                </div>
-              </Td>
-
-              <Td class="align-middle">
-                <div class="flex flex-row gap-2 justify-center items-center">
-                  <ViewButton />
->>>>>>> c8906d2be6775402744948349c44216de4ab3b66
                   <EditButton @click="showSlider(true, Units)" />
                   <DeleteButton @click="onDelete(Units)" />
                 </div>

@@ -68,11 +68,7 @@ const loadGroupData = async () => {
 onMounted(() => {
   loadGroupData();
 });
-<<<<<<< HEAD
 //const onSubmit = async () =>
-=======
-
->>>>>>> c10a7e60f17b05ed1a4643dfe74577221f620b3f
 async function submitNote() {
   // Validación de notas
   listNotes.value.forEach((note) => {
@@ -89,7 +85,6 @@ async function submitNote() {
   });
 
   const response = await createUnit({
-<<<<<<< HEAD
     notas: listNotes.value,
   });
 
@@ -97,11 +92,6 @@ async function submitNote() {
 
   console.log("response: ", response);
 
-=======
-    "notas": listNotes.value
-  });
-
->>>>>>> c10a7e60f17b05ed1a4643dfe74577221f620b3f
   if (response.status === 201) {
     showToast(`Notas guardadas exitosamente`);
   } else {
