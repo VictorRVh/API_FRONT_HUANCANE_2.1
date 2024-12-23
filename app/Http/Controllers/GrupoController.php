@@ -354,7 +354,7 @@ class GrupoController extends Controller
             ])
             ->get();
 
-        $grupo = Grupo::with('programa.unidadesDidacticas')->find($grupo_id);
+        $grupo = Grupo::with('programa.experienciasFormativas')->find($grupo_id);
 
         $alumnos->each(function ($matricula) {
             $matricula->makeHidden(['created_at', 'updated_at']);
@@ -362,6 +362,12 @@ class GrupoController extends Controller
                 $matricula->estudiante->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
             }
         });
+
+        if ($grupo && $grupo->programa) {
+            $experienciaFormativa = $grupo->programa->experienciasFormativas->makeHidden(['created_at', 'updated_at']);
+        } else {
+            $experienciaFormativa = [];
+        }
 
         // Preparar la respuesta
         $response = [
@@ -378,24 +384,19 @@ class GrupoController extends Controller
                         'celular' => $matricula->estudiante->celular,
                         'fecha_nacimiento' => $matricula->estudiante->fecha_nacimiento,
                         'email' => $matricula->estudiante->email,
+                        // Agregar solo las notas de las experiencias formativas
                         'notas_experiencia_formativa' => $matricula->estudiante->notasExperienciaFormativa->map(function ($notaExperiencia) {
                             return [
                                 'id_nota_experiencia' => $notaExperiencia->id_nota,
                                 'nota_experiencia' => $notaExperiencia->nota,
+                                'nombre_experiencia' => $notaExperiencia->experienciaFormativa->nombre_experiencia,
                                 'id_grupo' => $notaExperiencia->id_grupo,
                             ];
                         }),
                     ],
                 ];
             }),
-            'experiencia_formativa' => $alumnos->flatMap(function ($matricula) {
-                return $matricula->estudiante->notasExperienciaFormativa->map(function ($notaExperiencia) {
-                    return [
-                        'id' => $notaExperiencia->experienciaFormativa->id_experiencia,
-                        'nombre' => $notaExperiencia->experienciaFormativa->nombre_experiencia,
-                    ];
-                });
-            })->unique('id')->values(), 
+            'experiencia_formativa' => $experienciaFormativa
         ];
 
         return response()->json($response, 200);
