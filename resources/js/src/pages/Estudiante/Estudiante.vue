@@ -21,7 +21,7 @@ import useSlider from "../../composables/useSlider";
 import useModalToast from "../../composables/useModalToast";
 import useHttpRequest from "../../composables/useHttpRequest";
 
-import Page from "../../components/pagination/page.vue"; // Importa el componente de paginación
+import Page from "../../components/pagination/page.vue";
 
 const props = defineProps({
   id: {
@@ -82,50 +82,45 @@ watch(() => props.id, (newId) => {
   <AuthorizationFallback :permissions="['students-all', 'students-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 v-if="props.id === 8" class="text-black font-bold text-2xl">Estudiantes</h2>
-        <h2 v-else="props.id" class="text-black font-bold text-2xl">Estudiantes</h2>
+        <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="w-full">
-        <Table>
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
-            <Tr class="border-b">
+            <Tr>
               <Th>Id</Th>
               <Th>Nombre</Th>
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
-              <Th>Dni</Th>
+              <Th>DNI</Th>
               <Th>Acción</Th>
             </Tr>
           </THead>
 
           <TBody>
-            <Tr
-              v-for="user in paginatedStudents"
-              :key="user.id"
-              class="border-b"
-            >
-              <Td class="text-black border-none">{{ user?.id }}</Td>
-              <Td class="text-black border-none">
-                <div class="text-black">{{ user?.name }}</div>
-                <div class="text-xsm text-[#aaa]">{{ user?.email }}</div>
+            <Tr v-for="user in paginatedStudents" :key="user.id">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user?.id }}
               </Td>
-
-              <Td class="text-black border-none">
-                <div class="text-black">{{ user?.apellido_paterno }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                <div>{{ user?.name }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                  {{ user?.email }}
+                </div>
               </Td>
-
-              <Td class="text-black border-none">
-                <div class="text-black">{{ user?.apellido_materno }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user?.apellido_paterno }}
               </Td>
-
-              <Td class="text-black border-none">
-                <div class="text-black">{{ user?.dni }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user?.apellido_materno }}
               </Td>
-
-              <Td class="border-none">
-                <div class="flex flex-row gap-2 justify-center items-center">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user?.dni }}
+              </Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="flex gap-2 justify-center items-center">
                   <ViewButton />
                   <EditButton @click="showSlider(true, user)" />
                   <DeleteButton @click="onDelete(user)" />
@@ -146,6 +141,15 @@ watch(() => props.id, (newId) => {
       </div>
     </div>
 
-    <EstudianteSlider :idUser="props.id" :show="slider" :user="sliderData" @hide="hideSlider" />
+    <EstudianteSlider
+      :idUser="props.id"
+      :show="slider"
+      :user="sliderData"
+      @hide="hideSlider"
+    />
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se necesita CSS adicional, todo está gestionado con Tailwind */
+</style>

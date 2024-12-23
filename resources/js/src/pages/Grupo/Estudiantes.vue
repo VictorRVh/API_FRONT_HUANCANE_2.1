@@ -40,12 +40,12 @@ const seeNote = () => {};
   <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-black font-bold text-2xl">Estudiantes</h2>
+        <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
       </div>
       <div class="w-full">
-        <Table>
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
-            <Tr class="border-b">
+            <Tr>
               <Th>Id</Th>
               <Th>Nombre</Th>
               <Th>Apellido Paterno</Th>
@@ -57,21 +57,24 @@ const seeNote = () => {};
             <Tr
               v-for="user in userStore.student.estudiantes"
               :key="user.id"
-              class="border-b"
             >
-              <Td class="text-black border-none">{{ user.estudiante?.id }}</Td>
-              <Td class="text-black border-none">
-                <div class="text-black">{{ user.estudiante?.name }}</div>
-                <div class="text-xsm text-[#aaa]">{{ user.estudiante?.email }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user.estudiante?.id }}
               </Td>
-              <Td class="text-black border-none">
-                <div class="text-black">{{ user.estudiante?.apellido_paterno }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                <div>{{ user.estudiante?.name }}</div>
+                <div class="text-sm text-gray-500 dark:text-white">
+                  {{ user.estudiante?.email }}
+                </div>
               </Td>
-              <Td class="text-black border-none">
-                <div class="text-black">{{ user.estudiante?.apellido_materno }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user.estudiante?.apellido_paterno }}
               </Td>
-              <Td class="text-black border-none">
-                <div class="text-black">{{ user.estudiante?.dni }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user.estudiante?.apellido_materno }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user.estudiante?.dni }}
               </Td>
             </Tr>
           </TBody>
@@ -80,3 +83,7 @@ const seeNote = () => {};
     </div>
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se necesita CSS adicional, todo está gestionado con Tailwind */
+</style>

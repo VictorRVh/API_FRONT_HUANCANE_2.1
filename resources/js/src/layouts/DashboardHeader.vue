@@ -57,7 +57,7 @@ const hasPermission = (itemPermissions) =>
 
 <template>
   <div
-    class="flex flex-col min-h-screen bg-blancoPuro dark:bg-gray-800 text-granate dark:text-gray-400 font-inter w-12/12 max-w-3xl"
+    class="flex flex-col min-h-screen bg-blancoPuro dark:bg-gray-800 dark:text-gray-400 font-inter w-12/12 max-w-3xl"
   >
     <!-- Título "HERRAMIENTAS" -->
     <h2 class="text-lg font-semibold text-negroClaro dark:text-gray-400 mt-4 mb-2 pl-4">
@@ -73,15 +73,15 @@ const hasPermission = (itemPermissions) =>
         :key="item.name"
         v-show="hasPermission(item.permissions)"
         :to="{ name: item.route, params: { id: item.id } }"
-        class="w-full flex items-center pl-4 py-2 rounded-md hover:bg-granate dark:hover:bg-granate-dark group transition-all duration-200"
+        class="text-white w-full flex items-center pl-4 py-2 rounded-md hover:bg-granate dark:hover:bg-granate-dark  group transition-all duration-200"
       >
         <template v-slot="{ isActive }">
           <span
-            class="text-sm font-normal flex items-center justify-start w-full h-full group-hover:text-white relative"
+            class="text-sm font-normal flex items-center justify-start w-full h-full group-hover:text-white "
             :class="[
               isActive
                 ? ' bg-granate text-white dark:text-white transition-all duration-300 rounded-lg px-6 '
-                : 'text-granate dark:text-white-400'
+                : 'text-granate dark:text-white'
             ]"
           >
             <component :is="item.icon" class="w-5 h-5 mr-2" />

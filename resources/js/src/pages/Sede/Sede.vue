@@ -63,7 +63,7 @@ const SeeMore = (idr) => {
   <AuthorizationFallback :permissions="['places-all', 'places-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex justify-between">
-        <h2 class="text-black font-bold text-2xl">Places</h2>
+        <h2 class="text-black font-bold text-2xl dark:text-white">Sede</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
@@ -86,17 +86,17 @@ const SeeMore = (idr) => {
             >
               <Td class="py-2 px-4 border-0 text-black">{{ Place?.id_sede }}</Td>
               <Td class="py-2 px-4 border-0">
-                <div class="text-black font-medium">
+                <div class="text-black font-medium dark:text-white">
                   {{ Place?.nombre_sede }}
                 </div>
               </Td>
               <Td class="py-2 px-4 border-0">
-                <div class="text-black font-medium">
+                <div class="text-black font-medium dark:text-white">
                   {{ Place?.ubicacion }}
                 </div>
               </Td>
               <Td class="py-2 px-4 border-0">
-                <div class="flex flex-row gap-2 justify-center items-center">
+                <div class="flex flex-row gap-2 justify-center items-center ">
                   <ViewButton @click="SeeMore(Place?.id_sede)" />
                   <EditButton @click="showSlider(true, Place)" />
                   <DeleteButton @click="onDelete(Place)" />

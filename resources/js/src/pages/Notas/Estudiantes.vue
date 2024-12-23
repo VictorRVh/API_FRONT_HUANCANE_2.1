@@ -61,7 +61,7 @@ const seeNote = () => {
   <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex justify-between">
-        <h2 class="text-black font-bold text-2xl">Estudiantes</h2>
+        <h2 class="text-black font-bold text-2xl dark:text-white">Estudiantes</h2>
       </div>
 
       <div class="flex justify-between">
@@ -97,10 +97,10 @@ const seeNote = () => {
           </THead>
           <TBody>
             <Tr v-for="user in userStore.student.estudiantes" :key="user.id">
-              <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.id }}</Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">{{ user.estudiante?.id }}</Td>
               <Td class="py-2 px-4 border-0">
-                <div class="text-black font-medium">{{ user.estudiante?.name }}</div>
-                <div class="text-sm text-gray-500">{{ user.estudiante?.email }}</div>
+                <div class="text-black font-medium dark:text-white">{{ user.estudiante?.name }}</div>
+                <div class="text-sm text-gray-500 dark:text-white">{{ user.estudiante?.email }}</div>
               </Td>
               <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.apellido_paterno }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.apellido_materno }}</Td>

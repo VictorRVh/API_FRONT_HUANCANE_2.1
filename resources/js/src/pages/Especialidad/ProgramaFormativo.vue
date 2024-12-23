@@ -1,5 +1,4 @@
 <script setup>
-// Importa useRouter de Vue Router
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 import Table from "../../components/table/Table.vue";
@@ -85,15 +84,15 @@ const SeeMoreExperiencia = (id) => {
 <template>
   <AuthorizationFallback :permissions="['program-all', 'program-view']">
     <div class="w-full space-y-4 py-6">
-      <div class="flex-between">
-        <h2 class="text-black font-bold text-2xl">Programas</h2>
+      <div class="flex justify-between">
+        <h2 class="text-black dark:text-white font-bold text-2xl">Programas</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="w-full">
-        <Table>
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
-            <Tr class="border-b">
+            <Tr>
               <Th>Id</Th>
               <Th>Programa</Th>
               <Th>Acción</Th>
@@ -101,17 +100,15 @@ const SeeMoreExperiencia = (id) => {
           </THead>
 
           <TBody>
-            <Tr
-              v-for="Program in ProgramStore.Programs.programas"
-              :key="Program.id_programa"
-              class="border-b"
-            >
-              <Td class="text-black border-none">{{ Program?.id_programa }}</Td>
-              <Td class="text-black border-none">
-                <div class="text-black">{{ Program?.nombre_programa }}</div>
+            <Tr v-for="Program in ProgramStore.Programs.programas" :key="Program.id_programa">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Program?.id_programa }}
               </Td>
-              <Td class="border-none">
-                <div class="flex flex-row gap-2 justify-center items-center">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Program?.nombre_programa }}
+              </Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="flex gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(Program?.id_programa)" />
                   <ViewButton @click="SeeMoreExperiencia(Program?.id_programa)" />
                   <EditButton @click="showSlider(true, Program)" />
@@ -133,3 +130,7 @@ const SeeMoreExperiencia = (id) => {
     />
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se necesita CSS adicional, todo está gestionado con Tailwind */
+</style>

@@ -1,5 +1,4 @@
 <script setup>
-// Importa useRouter de Vue Router
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 import Table from "../../components/table/Table.vue";
@@ -73,15 +72,15 @@ const SeeMore = (id) => {
 <template>
   <AuthorizationFallback :permissions="['units-all', 'units-view']">
     <div class="w-full space-y-4 py-6">
-      <div class="flex-between">
-        <h2 class="text-black font-bold text-2xl">Unidades</h2>
+      <div class="flex justify-between">
+        <h2 class="text-black dark:text-white font-bold text-2xl">Unidades</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="w-full">
-        <Table>
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
-            <Tr class="border-b">
+            <Tr>
               <Th>Id</Th>
               <Th>Unidad</Th>
               <Th>Acción</Th>
@@ -92,14 +91,15 @@ const SeeMore = (id) => {
             <Tr
               v-for="Units in UnitsStore.Units.unidades_didacticas"
               :key="Units.id_unidad_didactica"
-              class="border-b"
             >
-              <Td class="text-black border-none">{{ Units?.id_unidad_didactica }}</Td>
-              <Td class="text-black border-none">
-                <div class="text-black">{{ Units?.nombre_unidad }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Units?.id_unidad_didactica }}
               </Td>
-              <Td class="border-none">
-                <div class="flex flex-row gap-2 justify-center items-center">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Units?.nombre_unidad }}
+              </Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="flex gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(Units?.id_unidad_didactica)" />
                   <EditButton @click="showSlider(true, Units)" />
                   <DeleteButton @click="onDelete(Units)" />
@@ -119,3 +119,7 @@ const SeeMore = (id) => {
     />
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se necesita CSS adicional, todo está gestionado con Tailwind */
+</style>

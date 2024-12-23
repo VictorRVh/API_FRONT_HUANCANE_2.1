@@ -77,8 +77,8 @@ const SeeMore = (idr) => {
 <template>
   <AuthorizationFallback :permissions="['specialties-all', 'specialties-view']">
     <div class="w-full space-y-4 py-6">
-      <div class="flex-between">
-        <h2 class="text-black font-bold text-2xl">Especialidades</h2>
+      <div class="flex justify-between">
+        <h2 class="text-black dark:text-white font-bold text-2xl">Especialidades</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
@@ -96,9 +96,9 @@ const SeeMore = (idr) => {
       </div>
 
       <div class="w-full">
-        <Table>
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
-            <Tr class="border-b">
+            <Tr>
               <Th>Id</Th>
               <Th>Especialidad</Th>
               <Th>Acción</Th>
@@ -106,17 +106,15 @@ const SeeMore = (idr) => {
           </THead>
 
           <TBody>
-            <Tr
-              v-for="specialty in specialtiesStore.specialties"
-              :key="specialty.id_especialidad"
-              class="border-b"
-            >
-              <Td class="text-black border-none">{{ specialty?.id_especialidad }}</Td>
-              <Td class="text-black border-none">
-                <div class="text-black">{{ specialty?.nombre_especialidad }}</div>
+            <Tr v-for="specialty in specialtiesStore.specialties" :key="specialty.id_especialidad">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ specialty?.id_especialidad }}
               </Td>
-              <Td class="border-none">
-                <div class="flex flex-row gap-2 justify-center items-center">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ specialty?.nombre_especialidad }}
+              </Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="flex gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(specialty?.id_especialidad)" />
                   <EditButton @click="showSlider(true, specialty)" />
                   <DeleteButton @click="onDelete(specialty)" />
@@ -131,3 +129,7 @@ const SeeMore = (idr) => {
     <SpecialtySlider :show="slider" :specialty="sliderData" @hide="hideSlider" />
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se necesita CSS adicional, todo está gestionado con Tailwind */
+</style>

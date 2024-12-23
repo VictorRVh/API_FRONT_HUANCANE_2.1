@@ -1,5 +1,4 @@
 <script setup>
-// Importa useRouter de Vue Router
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 import Table from "../../components/table/Table.vue";
@@ -65,15 +64,17 @@ const onDelete = (experiencias) => {
 <template>
   <AuthorizationFallback :permissions="['units-all', 'units-view']">
     <div class="w-full space-y-4 py-6">
-      <div class="flex-between">
-        <h2 class="text-black font-bold text-2xl">Experiencias Formativas</h2>
+      <div class="flex justify-between">
+        <h2 class="text-black dark:text-white font-bold text-2xl">
+          Experiencias Formativas
+        </h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
       <div class="w-full">
-        <Table>
+        <Table class="border-collapse divide-y divide-transparent">
           <THead>
-            <Tr class="border-b">
+            <Tr>
               <Th>Id</Th>
               <Th>Experiencia</Th>
               <Th>Acción</Th>
@@ -84,14 +85,15 @@ const onDelete = (experiencias) => {
             <Tr
               v-for="experiencias in experienciasStore.experiencias.experiencias_formativas"
               :key="experiencias.id_experiencia_formativa"
-              class="border-b"
             >
-              <Td class="text-black border-none">{{ experiencias?.id_experiencia_formativa }}</Td>
-              <Td class="text-black border-none">
-                <div class="text-black">{{ experiencias?.nombre_experiencia }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ experiencias?.id_experiencia_formativa }}
               </Td>
-              <Td class="border-none">
-                <div class="flex flex-row gap-2 justify-center items-center">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ experiencias?.nombre_experiencia }}
+              </Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="flex gap-2 justify-center items-center">
                   <EditButton @click="showSlider(true, experiencias)" />
                   <DeleteButton @click="onDelete(experiencias)" />
                 </div>
@@ -110,3 +112,7 @@ const onDelete = (experiencias) => {
     />
   </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se necesita CSS adicional, todo está gestionado con Tailwind */
+</style>
