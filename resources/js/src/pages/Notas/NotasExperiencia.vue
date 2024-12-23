@@ -19,40 +19,24 @@ const props = defineProps({
   }
 });
 
-const userStore = useStudentsStore();
-const listUnit = ref([]);
-let lengthUnit = 0;
-const selectUnit = ref(null);
+const userStore = useStudentsStore()
+const idExp = ref(null);
+
 
 onMounted(async () => {
   if (!userStore.student?.length) {
-    await userStore.loadGroupStudentNote(props.id);
+    await userStore.loadGroupStudentExperience(props.id);
   }
-  listUnit.value = userStore.student?.unidades_didacticas || [];
-  lengthUnit = userStore.student?.total_unidades
-  // Seleccionar la primera unidad por defecto si existe
-  if (listUnit.value.length > 0) {
-    selectUnit.value = listUnit.value[0].id_unidad_didactica;
-  }
-  //console.log("unidades cada: ",userStore.student?.unidades_didacticas)
-  console.log("unidades lonfi: ",lengthUnit)
-});
+ // idExp.value = userStore.experiencia_formativa
+ // console.log( "experiencia",idExp)
 
-watch(() => props.id, async (newId) => {
-  await userStore.loadGroupStudentNote(newId);
-  listUnit.value = userStore.student?.unidades_didacticas || [];
-  
-  if (listUnit.value.length > 0) {
-    selectUnit.value = listUnit.value[0].id_unidad_didactica;
-  }
- 
 });
 
 const seeNote = () => {
   if (selectUnit.value) {
     router.push({
       name: "notasEst",
-      params: { idgroup: props.id, idexp: selectUnit.value,id:"657870657269656e636961" },
+      params: { idgroup: props.id, idexp: 23 ,id:"657870657269656e636961" },
     });
   } else {
     console.error("Por favor, seleccione una unidad antes de continuar.");
@@ -71,20 +55,7 @@ const seeNote = () => {
         <h2 class="text-active font-bold text-2xl">Estudiantes</h2>
       </div>
       <div class="flex justify-between">
-        <select
-          id="plan-select"
-          v-model="selectUnit"
-          class="border rounded-md p-2"
-        >
-          <option value="" disabled>Select a specialty</option>
-          <option
-            v-for="unit in listUnit"
-            :key="unit?.id_unidad_didactica"
-            :value="unit?.id_unidad_didactica"
-          >
-            {{ unit.nombre_unidad }}
-          </option>
-        </select>
+        <div></div> 
         <CreateButton @click="seeNote" value="Hazlo" />
       </div>
       <div class="w-full">
@@ -96,7 +67,7 @@ const seeNote = () => {
               <Th>Apellido Paterno</Th>
               <Th>Apellido Materno</Th>
               <Th>DNI</Th>
-              <Th v-for="i in 4" :key="i"> unid</Th>
+              <Th>Nota</Th>
             </Tr>
           </THead>
           <TBody>
@@ -115,8 +86,8 @@ const seeNote = () => {
               <Td>
                 <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.dni }}</div>
               </Td>
-              <Td class="text-emerald-500 dark:text-emerald-200" v-for="note in user.estudiante?.notas" :key="note.id_nota">
-                    {{ note.nota  }}
+              <Td class="text-emerald-500 dark:text-emerald-200" >
+                    -
               </Td>
             </Tr>
           </TBody>

@@ -32,7 +32,7 @@ const isSubmitting = ref(false); // Estado de envío
 
 // Configuración de la URL según el ID
 const url = props.id === "657870657269656e636961"
-  ? null // URL opcional para casos específicos
+  ? "/registrar_nota_experiencia" // URL opcional para casos específicos
   : "/registrar_notas_unidades";
 
 const { store: createUnit, saving } = useHttpRequest(url);

@@ -24,6 +24,10 @@ const useGroupsStore = defineStore('Groups', () => {
     const {
         show: getGrupoStudent
     } = useHttpRequest('/grupoDocenteTwo');
+
+    const {
+        show: getGrupoStudentExp
+    } = useHttpRequest('/grupoNotasExperiencia');
     
     const {
         showTwo: getGrupoDocente,
@@ -78,6 +82,13 @@ const useGroupsStore = defineStore('Groups', () => {
         student.value = response;
     };
 
+    
+    const loadGroupStudentExperience = async (id) => {
+        const response = await getGrupoStudentExp(id); // Usamos el método show
+        student.value = response;
+    };
+
+
     return {
         group,
         student,
@@ -88,6 +99,7 @@ const useGroupsStore = defineStore('Groups', () => {
         loadGroups,
         loadGroupById, // Retornamos la nueva función para obtener una Groupa por ID
         loadGroupStudentNote,
+        loadGroupStudentExperience,
         loadGroupStudent
     };
 });
