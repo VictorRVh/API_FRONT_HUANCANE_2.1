@@ -21,22 +21,24 @@ const props = defineProps({
 
 const userStore = useStudentsStore()
 const idExp = ref(null);
-
+const showBtn = ref(null);
 
 onMounted(async () => {
   if (!userStore.student?.length) {
     await userStore.loadGroupStudentExperience(props.id);
   }
- // idExp.value = userStore.experiencia_formativa
- // console.log( "experiencia",idExp)
-
+  idExp.value = userStore.student?.experiencia_formativa[0]?.id_experiencia
+  showBtn.value =userStore.student?.experiencia_formativa[0].nota_asignada;
+  //console.log("hola : sacateañl ",userStore.student?.experiencia_formativa[0].nota_asignada  )
+  console.log("hola : sacateañl ",  userStore?.student?.experiencia_formativa  )
+   
 });
 
 const seeNote = () => {
-  if (selectUnit.value) {
+  if (idExp.value) {
     router.push({
       name: "notasEst",
-      params: { idgroup: props.id, idexp: 23 ,id:"657870657269656e636961" },
+      params: { idgroup: props.id, idexp: idExp.value ,id:"657870657269656e636961" },
     });
   } else {
     console.error("Por favor, seleccione una unidad antes de continuar.");
@@ -56,7 +58,7 @@ const seeNote = () => {
       </div>
       <div class="flex justify-between">
         <div></div> 
-        <CreateButton @click="seeNote" value="Hazlo" />
+        <CreateButton v-if="!showBtn" @click="seeNote" value="Hazlo" />
       </div>
       <div class="w-full">
         <Table>
@@ -86,8 +88,12 @@ const seeNote = () => {
               <Td>
                 <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.dni }}</div>
               </Td>
-              <Td class="text-emerald-500 dark:text-emerald-200" >
-                    -
+              <Td
+                class="py-2 px-4 border-0 text-black"
+                v-for="note in user.estudiante?.notas_experiencia_formativa"
+                :key="note.id_nota_experiencia"
+              >
+                {{ note.nota_experiencia }}
               </Td>
             </Tr>
           </TBody>

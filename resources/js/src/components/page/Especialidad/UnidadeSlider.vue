@@ -12,6 +12,8 @@ import useUserStore from "../../../store/useUserStore";
 import useRoleStore from "../../../store/useRoleStore";
 import useUnitsStore from "../../../store/Especialidad/useUnidadesStore";
 
+import CustomTextarea from "../../ui/CustomTextarea.vue";
+
 import useValidation from "../../../composables/useValidation";
 import useHttpRequest from "../../../composables/useHttpRequest";
 import useModalToast from "../../../composables/useModalToast";
@@ -65,6 +67,12 @@ const title = computed(() =>
 const initialFormData = () => ({
   nombre_unidad: null,
   id_programa: props.ProgramId,
+  fecha_inicio:null,
+  fecha_fin:null,
+  creditos:null,
+  dias:null,
+  horas:null,
+  capacidad:null,
 });
 
 // Variables reactivas para los datos del formulario y los errores
@@ -95,6 +103,30 @@ const schema = yup.object().shape({
     .string()
     .nullable()
     .required("El nombre de la unidad_didactica es obligatorio"),
+  fecha_inicio:yup
+    .date()
+    .nullable()
+    .required("La fecha de incio es obligatorio"),
+  fecha_fin:yup
+    .date()
+    .nullable()
+    .required("La fecha final es obligatorio"),
+  creditos:yup
+    .number()
+    .nullable()
+    .required("Los creditos es obligatorio"), 
+  dias:yup
+    .number()
+    .nullable()
+    .required("Los días es obligatorio"),
+  horas:yup
+    .number()
+    .nullable()
+    .required("Las horas es obligatorio"),
+  capacidad:yup
+    .string()
+    .nullable()
+    .required("La capacidad es obligatorio"),
 });
 
 // Función para manejar el envío del formulario
@@ -147,11 +179,62 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.nombre_unidad"
           :focus="show"
-          label="Nombre de la unidad_didactica"
+          label="Nombre de la unidad didactica"
           :error="formErrors?.nombre_unidad"
           required
         />
-
+       
+        <FormInput
+          v-model="formData.fecha_inicio"
+          type="date"
+          :focus="show"
+          label="Fecha Inicio"
+          :error="formErrors?.fecha_inicio"
+          required
+        />
+        <FormInput
+          v-model="formData.fecha_fin"
+          type="date"
+          :focus="show"
+          label="Fecha Final"
+          :error="formErrors?.fecha_fin"
+          required
+        />
+        <FormInput
+          v-model="formData.creditos"
+          type="number"
+          :focus="show"
+          label="Créditos"
+          :error="formErrors?.creditos"
+          required
+        />
+        <FormInput
+          v-model="formData.dias"
+          type="number"
+          :focus="show"
+          label="Días"
+          :error="formErrors?.dias"
+          required
+        />
+        <FormInput
+          v-model="formData.horas"
+          type="number"
+          :focus="show"
+          label="Horas"
+          :error="formErrors?.horas"
+          required
+        />
+        <CustomTextarea
+          v-model="formData.capacidad"
+          label="Capacidad de unidad didáctica"
+          placeholder="Escribe algo aquí..."
+          :rows="5"
+          :cols="50"
+          :error="formErrors?.capacidad"
+          required
+          @blur="validateInput"
+        />
+        
         <Button
           :title="Unit?.id_unidad_didactica ? 'Save' : 'Create'"
           :loading-title="Unit?.id_unidad_didactica ? 'Saving...' : 'Creating...'"

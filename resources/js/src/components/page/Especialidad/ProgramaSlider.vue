@@ -6,6 +6,7 @@ import FormInput from "../../ui/FormInput.vue";
 import FormLabelError from "../../ui/FormLabelError.vue";
 import VSelect from "vue-select";
 import Button from "../../ui/Button.vue";
+import CustomTextarea from "../../ui/CustomTextarea.vue";
 import AuthorizationFallback from "../../../components/page/AuthorizationFallback.vue";
 
 import useUserStore from "../../../store/useUserStore";
@@ -71,6 +72,8 @@ const initialFormData = () => ({
   nombre_programa: null,
   id_plan: props.planId,
   id_especialidad: props.specialtyId,
+  horas_semanales:null,
+  unidades_competencia:null
 });
 
 // Variables reactivas para los datos del formulario y los errores
@@ -100,7 +103,17 @@ const schema = yup.object().shape({
   nombre_programa: yup
     .string()
     .nullable()
-    .required("El nombre de la program es obligatorio"),
+    .required("El nombre del programa es obligatorio"),
+  
+  horas_semanales: yup
+    .number()
+    .nullable()
+    .required("Las horas semanales son obligatorias"),
+  
+  unidades_competencia: yup
+    .string()
+    .nullable()
+    .required("Las unidades de competencia son obligatorias"),
 });
 
 // Función para manejar el envío del formulario
@@ -157,6 +170,25 @@ const onSubmit = async () => {
           :error="formErrors?.nombre_programa"
           required
         />
+        <FormInput
+          v-model="formData.horas_semanales"
+          :focus="show"
+          label="Horas Semanales"
+          :error="formErrors?.horas_semanales"
+          required
+        />
+
+        <CustomTextarea
+          v-model="formData.unidades_competencia"
+          label="Unidades de competencia"
+          placeholder="Escribe algo aquí..."
+          :rows="5"
+          :cols="50"
+          :error="formErrors?.unidades_competencia"
+          required
+          @blur="validateInput"
+        />
+        
 
         <Button
           :title="program?.id_programa ? 'Save' : 'Create'"

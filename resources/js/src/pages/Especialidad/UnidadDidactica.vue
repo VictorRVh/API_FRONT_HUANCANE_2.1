@@ -83,6 +83,11 @@ const SeeMore = (id) => {
             <Tr>
               <Th>Id</Th>
               <Th>Unidad</Th>
+              <Th>Fecha Inicio</Th>
+              <Th>Fecha Final</Th>
+              <Th>Créditos</Th>
+              <Th>Días</Th>
+              <Th>Horas</Th>
               <Th>Acción</Th>
             </Tr>
           </THead>
@@ -97,6 +102,21 @@ const SeeMore = (id) => {
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Units?.nombre_unidad }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Units?.fecha_inicio }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Units?.fecha_fin }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Units?.creditos }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Units?.dias }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Units?.horas }}
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">

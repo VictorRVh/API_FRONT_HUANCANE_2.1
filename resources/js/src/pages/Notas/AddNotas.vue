@@ -21,6 +21,7 @@ import useStudentsStore from "../../store/Grupo/useGrupoStore";
 // Definir propiedades
 const props = defineProps({
   idgroup: { type: Number, default: null },
+  idexp: { type: Number, default: null },
   idunit: { type: Number, default: null },
   id: { type: String, default: null },
 });
@@ -32,7 +33,7 @@ const isSubmitting = ref(false); // Estado de envío
 
 // Configuración de la URL según el ID
 const url = props.id === "657870657269656e636961"
-  ? "/registrar_nota_experiencia" // URL opcional para casos específicos
+  ? "/registrar_nota_experiencia"
   : "/registrar_notas_unidades";
 
 const { store: createUnit, saving } = useHttpRequest(url);
@@ -45,7 +46,7 @@ const loadGroupData = async () => {
   listNotes.value = userStore.student.estudiantes.map((element) => ({
     fullName: `${element.estudiante?.name} ${element.estudiante?.apellido_paterno} ${element.estudiante?.apellido_materno}`,
     nota: null,
-    id_unidad_didactica: props.idunit,
+    [props.id === "657870657269656e636961" ? "id_experiencia" : "id_unidad_didactica"]: props.id === "657870657269656e636961" ? props.idexp : props.idunit ,
     id_estudiante: element.estudiante?.id,
     id_grupo: props.idgroup,
   }));
@@ -74,7 +75,7 @@ const submitNote = async () => {
     const response = await createUnit({ notas: listNotes.value });
     if (response.status === 201) {
       showToast("Notas guardadas exitosamente", "success");
-      router.push({ name: "notasUnits", params: { id: props.idgroup } });
+      router.push({ name: props.id === "657870657269656e636961"? "notasExperience": "notasUnits", params: { id: props.idgroup } });
     } else {
       throw new Error("Error al guardar");
     }

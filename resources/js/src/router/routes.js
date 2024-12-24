@@ -58,7 +58,7 @@ export default [
         },
     },
     {
-        path: '/especialidad/:idEspecialidad/:idPlan',
+        path: '/especialidad/:idEspecialidad',
         name: 'programaFormativo',
         component: ()=>import('../pages/Especialidad/ProgramaFormativo.vue'),
         props: true, // Esto pasa los parámetros de ruta como props al componente

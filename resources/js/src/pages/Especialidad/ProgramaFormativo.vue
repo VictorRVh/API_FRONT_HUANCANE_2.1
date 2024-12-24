@@ -20,29 +20,37 @@ import useSlider from "../../composables/useSlider";
 import useModalToast from "../../composables/useModalToast";
 import useHttpRequest from "../../composables/useHttpRequest";
 
-import useRoleStore from "../../store/useRoleStore";
-import useUserStore from "../../store/useUserStore";
 import useAuth from "../../composables/useAuth";
+
+import usePlanStore from "../../store/Especialidad/usePlanFormativoStore";
+
+import { ref } from "vue";
 
 const props = defineProps({
   idEspecialidad: {
     type: Number,
     default: null,
-  },
-  idPlan: {
-    typeof: Number,
-    default: null,
-  },
+  }
 });
 
 const router = useRouter();
 
-const userStore = useUserStore();
-const roleStore = useRoleStore();
+
 const ProgramStore = useProgramStore();
 
+const planStore = usePlanStore();
+
+const selectedPlan = ref(0);
+
+if (!planStore.plans.length) await planStore.loadPlans();
+
+if (planStore.plans.length > 0) {
+  selectedPlan.value = planStore.plans[planStore.plans.length - 1].id_plan;
+}
+
+
 if (!ProgramStore.Programs.length)
-  await ProgramStore.loadPrograms(props.idEspecialidad, props.idPlan);
+  await ProgramStore.loadPrograms(props.idEspecialidad, selectedPlan.value);
 
 const { slider, sliderData, showSlider, hideSlider } = useSlider("program-crud");
 const { showConfirmModal, showToast } = useModalToast();
@@ -58,15 +66,16 @@ const onDelete = (Program) => {
     const isDeleted = await deleteSpecialy(Program?.id_programa);
     if (isDeleted) {
       showToast(`Programa "${Program?.nombre_programa}" eliminado correctamente.`);
-      ProgramStore.loadPrograms(props.idEspecialidad, props.idPlan);
-      userStore.loadUsers();
-      roleStore.loadRoles();
+      ProgramStore.loadPrograms(props.idEspecialidad, selectedPlan.value);
       isUserAuthenticated();
     }
   });
 };
 
+
+
 const SeeMore = (id) => {
+
   router.push({
     name: "UnidadDidactica",
     params: { idPrograma: id },
@@ -79,6 +88,13 @@ const SeeMoreExperiencia = (id) => {
     params: { idPrograma: id },
   });
 };
+
+const changePlan = () => {
+
+  ProgramStore.loadPrograms(props.idEspecialidad, selectedPlan.value);
+
+};
+
 </script>
 
 <template>
@@ -89,12 +105,28 @@ const SeeMoreExperiencia = (id) => {
         <CreateButton @click="showSlider(true)" />
       </div>
 
+      <div class="flex justify-between">
+        <select id="plan-select"  @change="changePlan()" v-model="selectedPlan" class="border rounded-md p-2">
+          <option value="" disabled>Seleccionar un plan</option>
+          <option
+            v-for="plan in planStore.plans"
+            
+            :key="plan.id_plan"
+            :value="plan.id_plan"
+          >
+            {{ plan.nombre_plan }}
+          </option>
+        </select>
+      </div>
+
       <div class="w-full">
         <Table class="border-collapse divide-y divide-transparent">
           <THead>
             <Tr>
               <Th>Id</Th>
               <Th>Programa</Th>
+              <Th>Horas senanal</Th>
+<Th>Unidades de competencia</Th>
               <Th>Items</Th>
               <Th>Acción</Th>
             </Tr>
@@ -107,6 +139,12 @@ const SeeMoreExperiencia = (id) => {
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Program?.nombre_programa }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Program?.horas_semanales }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ Program?.unidades_competencia }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
               <div class="flex items-center justify-center space-x-2">
@@ -140,7 +178,7 @@ const SeeMoreExperiencia = (id) => {
 
     <ProgramSlider
       :specialtyId="props.idEspecialidad"
-      :planId="props.idPlan"
+      :planId="selectedPlan"
       :show="slider"
       :program="sliderData"
       @hide="hideSlider"

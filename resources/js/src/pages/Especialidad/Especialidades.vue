@@ -20,17 +20,16 @@ import useHttpRequest from "../../composables/useHttpRequest";
 import useRoleStore from "../../store/useRoleStore";
 import useUserStore from "../../store/useUserStore";
 import useAuth from "../../composables/useAuth";
-import usePlanStore from "../../store/Especialidad/usePlanFormativoStore";
-import { ref } from "vue";
+
+
+
 
 const router = useRouter();
 
-const userStore = useUserStore();
-const roleStore = useRoleStore();
 const specialtiesStore = useSpecialtyStore();
 
-const planStore = usePlanStore();
-const selectedPlan = ref(0);
+
+
 
 if (!specialtiesStore.specialties.length) await specialtiesStore.loadSpecialties();
 
@@ -49,27 +48,19 @@ const onDelete = (specialty) => {
     if (isDeleted) {
       showToast(`Especialidad "${specialty?.nombre_especialidad}" eliminada correctamente.`);
       specialtiesStore.loadSpecialties();
-      userStore.loadUsers();
-      roleStore.loadRoles();
+
       isUserAuthenticated();
     }
   });
 };
 
-if (!planStore.plans.length) await planStore.loadPlans();
 
-if (planStore.plans.length > 0) {
-  selectedPlan.value = planStore.plans[planStore.plans.length - 1].id_plan;
-}
 
 const SeeMore = (idr) => {
-  if (!selectedPlan.value) {
-    showToast("Por favor, selecciona un plan primero.");
-    return;
-  }
+ 
   router.push({
     name: "programaFormativo",
-    params: { idEspecialidad: idr, idPlan: selectedPlan.value },
+    params: { idEspecialidad: idr},
   });
 };
 </script>
@@ -82,18 +73,7 @@ const SeeMore = (idr) => {
         <CreateButton @click="showSlider(true)" />
       </div>
 
-      <div class="flex justify-between">
-        <select id="plan-select" v-model="selectedPlan" class="border rounded-md p-2">
-          <option value="" disabled>Seleccionar un plan</option>
-          <option
-            v-for="plan in planStore.plans"
-            :key="plan.id_plan"
-            :value="plan.id_plan"
-          >
-            {{ plan.nombre_plan }}
-          </option>
-        </select>
-      </div>
+      
 
       <div class="w-full">
         <Table class="border-collapse divide-y divide-transparent">

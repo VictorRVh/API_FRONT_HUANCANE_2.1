@@ -18,7 +18,7 @@ router.beforeEach(async (to, from, next) => {
 
     if (isUserLoggedIn) {
         if (to.name === 'login') {
-            return next({ name: 'users' });
+            return next({ name: 'home' });
         }
     } else {
         if (to.name !== 'login') {
