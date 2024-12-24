@@ -23,6 +23,7 @@ import useHttpRequest from "../../composables/useHttpRequest";
 import useAuth from "../../composables/useAuth";
 
 import useGroupsStore from "../../store/Grupo/useGrupoStore";
+import { generatePdfMatricula } from "../../components/pdf/generatePdf";
 
 const router = useRouter();
 const enrollmentStore = useEnrollmentStudentsStore();
@@ -76,6 +77,10 @@ const onDelete = async (enrollment) => {
 const SeeMore = (id) => {
   router.push({ name: "UnidadDidactica", params: { idPrograma: id } });
 };
+
+const fichaMatricula = (data = {}) => {
+  generatePdfMatricula(data);
+}
 
 const onPlanOrSpecialtyChange = () => {
   loadEnrollments();
@@ -144,6 +149,7 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
                   <ViewButton @click="SeeMore(enrollment.id_matricula)" />
                   <EditButton @click="showSlider(true, enrollment)" />
                   <DeleteButton @click="onDelete(enrollment)" />
+                  <button @click="fichaMatricula()">PDF</button>
                 </div>
               </Td>
             </Tr>
