@@ -139,6 +139,8 @@ class PlanController extends Controller
                 return [
                     'id_programa' => $programa->id_programa,
                     'nombre_programa' => $programa->nombre_programa,
+                    'horas_semanales' => $programa->horas_semanales,
+                    'unidades_competencia' => $programa->unidades_competencia,
                     'plan' => $programa->plan ? $programa->plan->only(['id_plan', 'nombre_plan']) : null,
                 ];
             })
