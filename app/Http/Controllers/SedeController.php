@@ -27,7 +27,7 @@ class SedeController extends Controller
         // Validación de datos
         $validator = Validator::make($request->all(), [
             'nombre_sede' => 'required|string|max:255',
-            'ubicacion' => 'required|string|max:255',
+            // 'ubicacion' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -86,7 +86,7 @@ class SedeController extends Controller
         // Validación de datos
         $validator = Validator::make($request->all(), [
             'nombre_sede' => 'required|string|max:255',
-            'ubicacion' => 'required|string|max:255',
+            // 'ubicacion' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {

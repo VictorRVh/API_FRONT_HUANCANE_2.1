@@ -14,7 +14,6 @@ return new class extends Migration
         schema::create('sedes', function (Blueprint $table) {
             $table->id('id_sede');  // Crea una columna bigint unsigned auto incremental
             $table->string('nombre_sede');
-            $table->string('ubicacion');
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ class Sede extends Model
     public $incrementing = true;
     // protected $keyType = 'bigInteger';
 
-    protected $fillable = ['nombre_sede', 'ubicacion'];
+    protected $fillable = ['nombre_sede'];
 
     public function sede()
     {

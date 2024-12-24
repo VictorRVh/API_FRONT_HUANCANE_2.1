@@ -14,6 +14,8 @@ return new class extends Migration
         schema::create('programas', function (Blueprint $table) {
             $table->id('id_programa');
             $table->string('nombre_programa');
+            $table->integer('horas_semanales');
+            $table->string('unidades_competencia');
             $table->unsignedBigInteger('id_plan');  // Asegúrate de que el tipo sea bigint
             $table->foreign('id_plan')->references('id_plan')->on('planes')->onDelete('cascade');  // Definir manualmente la relación
             $table->unsignedBigInteger('id_especialidad');

@@ -11,7 +11,7 @@ class Programa extends Model
 
     protected $table = 'programas';
     protected $primaryKey = 'id_programa';
-    protected $fillable = ['nombre_programa', 'id_plan', 'id_especialidad'];
+    protected $fillable = ['nombre_programa', 'horas_semanales', 'unidades_competencia', 'id_plan', 'id_especialidad'];
 
 
     public function especialidad()
