@@ -187,13 +187,13 @@ class MatriculaController extends Controller
         return response()->json($matriculas, 200);
     }
 
-    public function generarReporteMatricula($grupo_id)
+    public function generarReporteMatricula($dni)
     {
         $matricula = Matricula::with([
             'estudiante',
             'grupos.programa.unidadesDidacticas'
-        ])->whereHas('grupos', function ($query) use ($grupo_id) {
-            $query->where('id_grupo', $grupo_id);
+        ])->whereHas('estudiante', function ($query) use ($dni) {
+            $query->where('id_estudiante', $dni);
         })->get();
 
 

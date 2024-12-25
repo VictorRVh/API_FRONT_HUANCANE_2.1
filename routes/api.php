@@ -406,7 +406,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // RUTA PARA REPORTE DE MATRICULA    
 
-    Route::get('fichaMatricula/{grupo_id}', [
+    Route::get('fichaMatricula/{dni}', [
         \App\Http\Controllers\MatriculaController::class,
         'generarReporteMatricula',
     ])->middleware('permission:enrollmentStudent-all|enrollmentStudent-view');

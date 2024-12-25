@@ -167,7 +167,7 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
                   <ViewButton @click="SeeMore(enrollment.id_matricula)" />
                   <EditButton @click="showSlider(true, enrollment)" />
                   <DeleteButton @click="onDelete(enrollment)" />
-                  <button @click="fichaMatricula(enrollment.id_grupo)">PDF</button>
+                  <button @click="fichaMatricula(enrollment.id_estudiante)">PDF</button>
                 </div>
               </Td>
             </Tr>
