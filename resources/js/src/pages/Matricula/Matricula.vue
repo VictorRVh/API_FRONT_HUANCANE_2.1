@@ -78,8 +78,25 @@ const SeeMore = (id) => {
   router.push({ name: "UnidadDidactica", params: { idPrograma: id } });
 };
 
-const fichaMatricula = (data = {}) => {
-  generatePdfMatricula(data);
+const fichaMatricula = async (idGrupo) => {
+
+  console.log('ID DE GRUPO', idGrupo)
+
+  try {
+    const response = await fetch(`/api/fichaMatricula/${idGrupo}`);
+
+    if (!response.ok) {
+      throw new Error('Error al obtener los datos del grupo');
+    }
+
+    const data = await response.json();
+
+    generatePdfMatricula(data);
+
+    console.log(data)
+  } catch (error) {
+    console.error('Error en la consulta de matrícula:', error);
+  }
 }
 
 const onPlanOrSpecialtyChange = () => {
@@ -116,7 +133,8 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
 
         <select v-model="selectedSpecialty" @change="onPlanOrSpecialtyChange" class="border rounded-md p-2">
           <option disabled value="0">Select a specialty</option>
-          <option v-for="specialty in specialtiesStore.specialties" :key="specialty.id_especialidad" :value="specialty.id_especialidad">
+          <option v-for="specialty in specialtiesStore.specialties" :key="specialty.id_especialidad"
+            :value="specialty.id_especialidad">
             {{ specialty.nombre_especialidad }}
           </option>
         </select>
@@ -149,7 +167,7 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
                   <ViewButton @click="SeeMore(enrollment.id_matricula)" />
                   <EditButton @click="showSlider(true, enrollment)" />
                   <DeleteButton @click="onDelete(enrollment)" />
-                  <button @click="fichaMatricula()">PDF</button>
+                  <button @click="fichaMatricula(enrollment.id_grupo)">PDF</button>
                 </div>
               </Td>
             </Tr>
@@ -158,14 +176,8 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
       </div>
     </div>
 
-    <EnrollmentSlider
-      :specialtyId="specialtiesStore.specialties"
-      :planId="planStore.plans"
-      :show="slider"
-      :Enrollment="sliderData"
-      :searchId="[selectedPlan, selectedSpecialty]"
-      @hide="hideSlider"
-    />
+    <EnrollmentSlider :specialtyId="specialtiesStore.specialties" :planId="planStore.plans" :show="slider"
+      :Enrollment="sliderData" :searchId="[selectedPlan, selectedSpecialty]" @hide="hideSlider" />
   </AuthorizationFallback>
 </template>
 

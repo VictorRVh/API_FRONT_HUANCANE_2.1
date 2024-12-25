@@ -186,4 +186,40 @@ class MatriculaController extends Controller
 
         return response()->json($matriculas, 200);
     }
+
+    public function generarReporteMatricula($grupo_id)
+    {
+        $matricula = Matricula::with([
+            'estudiante',
+            'grupos.programa.unidadesDidacticas'
+        ])->whereHas('grupos', function ($query) use ($grupo_id) {
+            $query->where('id_grupo', $grupo_id);
+        })->get();
+
+
+        $response = $matricula->map(function ($registro) {
+            return [
+                'especialidad' => $registro->grupos->especialidad->nombre_especialidad,  // Accede desde grupos
+                'periodo_academico' => $registro->grupos->plan->nombre_plan,
+                'programa' => $registro->grupos->programa->nombre_programa,
+                'periodo_clase' => optional($registro->grupos->programa->unidadesDidacticas->sortBy('fecha_inicio')->first())->fecha_inicio
+                    . ' al ' .
+                    optional($registro->grupos->programa->unidadesDidacticas->sortByDesc('fecha_final')->first())->fecha_fin,
+                'dni' => $registro->estudiante->dni,
+                'apellidos_nombres' => $registro->estudiante->apellido_paterno . ' ' . $registro->estudiante->apellido_materno . ', ' . strtoupper($registro->estudiante->name),
+                'unidades_didacticas' => $registro->grupos->programa->unidadesDidacticas->map(function ($unidad, $index) {
+                    return [
+                        'numero' => str_pad($index + 1, 2, '0', STR_PAD_LEFT),
+                        'nombre_unidad' => $unidad->nombre_unidad,
+                        'credito' => $unidad->creditos,
+                        'hora' => $unidad->horas,
+                        'condicion' => 'G'
+                    ];
+                }),
+            ];
+        });
+
+
+        return response()->json($response, 200);
+    }
 }

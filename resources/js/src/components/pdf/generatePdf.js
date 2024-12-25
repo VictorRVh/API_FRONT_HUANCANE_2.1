@@ -304,9 +304,9 @@ export function generatePdfMatricula(data) {
     body: [
       [
         { content: "Nombre del CETPRO", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        { content: "VICTOR RAÚL HAYA DE LA TORRE", styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
+        { content: "CETPRO HUANCANÉ", styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
         { content: "DRE", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        { content: "LIMA", styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
+        { content: "PUNO", styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
         ""
       ],
       [
@@ -318,55 +318,49 @@ export function generatePdfMatricula(data) {
       ],
       [
         { content: "Departamento", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        { content: "Lima", styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
+        { content: "Puno", styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
         { content: "Provincia", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        { content: "LIMA", styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
+        { content: "Huancané", styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
         ""
       ],
       [
         { content: "Distrito", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        { content: "ATE", styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
+        { content: "Huancané", styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
         { content: "R.D.", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
         { content: "RD N° 07592 - 2024 - UGEL 06", styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
         ""
       ],
       [
         { content: "Programa de estudios", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        // { content: data.especialidad.nombre, styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        { content: 'PRUEBA', styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
+        { content: data[0].especialidad, styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
         { content: "Período Lectivo", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
         { content: "2024", styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
         ""
       ],
       [
         { content: "Módulo Formativo", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        // { content: data.especialidad.modulo_formativo, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
-        { content: "Modulo formativo", styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
+        { content: data[0].programa, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
         { content: "Periódo de Clase", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        // { content: data.unidades_didacticas.fecha_inicio.split('-').reverse().join('-') + " al " + data.unidades_didacticas.fecha_fin.split('-').reverse().join('-'), styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
-        { content: 'UNIDADES DIDACTICAS', styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
+        { content: data[0].periodo_clase, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
         ""
       ],
       [
         { content: "Nivel Formativo", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
         { content: "AUXILIAR TÉCNICO", styles: { lineWidth: 0.25, lineColor: [0, 0, 0] } },
         { content: "Periódo Académico", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        // { content: data.especialidad.periodo_academico, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
-        { content: 'PERIODO ACADEMICO', styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
+        { content: data[0].periodo_academico, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
         ""
       ],
       [
         { content: "Tipo de Plan de estudios", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
         { content: "MODULAR", styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
         { content: "Número de Documento", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        // { content: data.dni, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
-        { content: 'DNI', styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
+        { content: data[0].dni, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
         ""
       ],
       [
         { content: "Nombres y Apellidos", styles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], lineWidth: 0.25, lineColor: [0, 0, 0] } },
-        // { content: data.nombre_completo, colSpan: 3, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
-        { content: 'VICTOR', colSpan: 3, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
+        { content: data[0].apellidos_nombres, colSpan: 3, styles: { lineWidth: 0.25, lineColor: [0, 0, 0], halign: 'center' } },
         ""
       ],
     ],
@@ -401,32 +395,32 @@ export function generatePdfMatricula(data) {
   ];
 
   // 2DA TABLA
-//   doc.autoTable({
-//     startY: doc.lastAutoTable.finalY + 15,
-//     head: [headerUnits],
-//     body: data.unidades_didacticas.detalles.map((unidad, index) => [
-//       { content: (index + 1).toString(), styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } }, // Numeración
-//       { content: unidad.nombre_unidad, styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } },
-//       { content: unidad.credito_unidad.toString(), styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } },
-//       { content: unidad.hora.toString(), styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } },
-//       { content: 'G', styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } },
-//     ]),
-//     theme: 'plain',
-//     styles: {
-//       fontSize: 10,
-//       cellPadding: 2,
-//       halign: 'center',
-//       valign: 'middle',
-//     },
-//     margin: { top: 10, bottom: 10 },
-//     columnStyles: {
-//       0: { cellWidth: 'auto' }, // Configuración de la columna de numeración
-//       1: { cellWidth: 'auto' },
-//       2: { cellWidth: 'auto' },
-//       3: { cellWidth: 'auto' },
-//       4: { cellWidth: 'auto' }
-//     }
-//   });
+  doc.autoTable({
+    startY: doc.lastAutoTable.finalY + 15,
+    head: [headerUnits],
+    body: data[0].unidades_didacticas.map((unidad, index) => [
+      { content: (index + 1).toString(), styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } }, // Numeración
+      { content: unidad.nombre_unidad, styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } },
+      { content: unidad.credito.toString(), styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } },
+      { content: unidad.hora.toString(), styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } },
+      { content: 'G', styles: { halign: 'center', lineWidth: 0.25, lineColor: [0, 0, 0] } },
+    ]),
+    theme: 'plain',
+    styles: {
+      fontSize: 10,
+      cellPadding: 2,
+      halign: 'center',
+      valign: 'middle',
+    },
+    margin: { top: 10, bottom: 10 },
+    columnStyles: {
+      0: { cellWidth: 'auto' }, // Configuración de la columna de numeración
+      1: { cellWidth: 'auto' },
+      2: { cellWidth: 'auto' },
+      3: { cellWidth: 'auto' },
+      4: { cellWidth: 'auto' }
+    }
+  });
 
 
   // Agregar las líneas para las firmas al final del documento

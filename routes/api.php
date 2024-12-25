@@ -404,6 +404,13 @@ Route::middleware('auth:sanctum')->group(function () {
         'getMatriculasPorPlanEspecialidadAndGrupo',
     ])->middleware('permission:enrollmentStudent-all|enrollmentStudent-view');
 
+    // RUTA PARA REPORTE DE MATRICULA    
+
+    Route::get('fichaMatricula/{grupo_id}', [
+        \App\Http\Controllers\MatriculaController::class,
+        'generarReporteMatricula',
+    ])->middleware('permission:enrollmentStudent-all|enrollmentStudent-view');
+
     Route::post('matricula', [
         \App\Http\Controllers\MatriculaController::class,
         'store',
