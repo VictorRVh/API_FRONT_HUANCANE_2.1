@@ -93,7 +93,7 @@ const fichaMatricula = async (idGrupo) => {
 
     generatePdfMatricula(data);
 
-    console.log(data)
+    // console.log(data)
   } catch (error) {
     console.error('Error en la consulta de matrícula:', error);
   }

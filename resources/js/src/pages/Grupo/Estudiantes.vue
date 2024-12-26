@@ -10,6 +10,7 @@ import Td from "../../components/table/Td.vue";
 import CreateButton from "../../components/ui/CreateButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import useStudentsStore from "../../store/Grupo/useGrupoStore";
+import { generateNominaPDF, reporteNominaUgel } from "../../components/pdf/generatePdf";
 
 const router = useRouter();
 const props = defineProps({
@@ -33,7 +34,42 @@ watch(() => props.id, async (newId) => {
   await userStore.loadGroupStudent(newId);
 });
 
-const seeNote = () => {};
+const nominaNormal = async (idGrupo) => {
+  try {
+    const response = await fetch(`/api/grupoDocenteTwo/${idGrupo}`);
+
+    if (!response.ok) {
+      throw new Error('Error al obtener los datos del grupo');
+    }
+
+    const data = await response.json();
+
+    generateNominaPDF(data);
+
+    console.log(data)
+  } catch (error) {
+    console.error('Error en la consulta de matrícula:', error);
+  }
+}
+
+const nominaUgel = async (idGrupo) => {
+  try {
+    const response = await fetch(`/api/grupoDocenteTwo/${idGrupo}`);
+
+    if (!response.ok) {
+      throw new Error('Error al obtener los datos del grupo');
+    }
+
+    const data = await response.json();
+
+    reporteNominaUgel(data);
+
+    // console.log(data)
+  } catch (error) {
+    console.error('Error en la consulta de matrícula:', error);
+  }
+}
+
 </script>
 
 <template>
@@ -41,6 +77,8 @@ const seeNote = () => {};
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
         <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
+        <button @click="nominaNormal(props.id)">PDF</button>
+        <button @click="nominaUgel(props.id)">PDF Ugel</button>
       </div>
       <div class="w-full">
         <Table class="border-collapse divide-y divide-transparent">
@@ -54,10 +92,7 @@ const seeNote = () => {};
             </Tr>
           </THead>
           <TBody>
-            <Tr
-              v-for="user in userStore.student.estudiantes"
-              :key="user.id"
-            >
+            <Tr v-for="user in userStore.student.estudiantes" :key="user.id">
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ user.estudiante?.id }}
               </Td>
