@@ -299,14 +299,24 @@ class GrupoController extends Controller
         });
 
         if ($grupo && $grupo->programa) {
+            $especialidad = $grupo->especialidad->makeHidden(['created_at', 'updated_at']);
+            $programa = $grupo->programa->nombre_programa;
+            $turno = $grupo->turno->nombre_turno;
             $unidadesDidacticas = $grupo->programa->unidadesDidacticas->makeHidden(['created_at', 'updated_at']);
+            $fecha_inicio_unidad = $unidadesDidacticas->min('fecha_inicio');
+            $fecha_final_unidad = $unidadesDidacticas->max('fecha_fin');
         } else {
             $unidadesDidacticas = [];
         }
 
         $response = [
             'estudiantes' => $alumnos,
-            'unidades_didacticas' => $unidadesDidacticas
+            'unidades_didacticas' => $unidadesDidacticas,
+            'especialidad' => $especialidad,
+            'programa' => $programa,
+            'turno' => $turno,
+            'fecha_inicio' => $fecha_inicio_unidad,
+            'fecha_fin' => $fecha_final_unidad,
         ];
 
         return response()->json($response, 200);
@@ -385,7 +395,7 @@ class GrupoController extends Controller
             return [
                 'id_experiencia' => $experiencia->id_experiencia,
                 'nombre_experiencia' => $experiencia->nombre_experiencia,
-                'nota_asignada' => $notaAsignada ? true : false, 
+                'nota_asignada' => $notaAsignada ? true : false,
             ];
         });
 
