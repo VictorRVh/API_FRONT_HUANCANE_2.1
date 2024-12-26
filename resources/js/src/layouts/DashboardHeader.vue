@@ -41,7 +41,7 @@ const menuItems = [
   { name: "Matricula", icon: "BookOpenIcon", route: "matriculas", permissions: ["enrollmentStudent-all", "enrollmentStudent-icon"] },
   { name: "Especialidad", icon: "BuildingOfficeIcon", route: "especialidad", permissions: ["specialties-all", "specialties-icon"] },
   { name: "Reportes", icon: "ChartBarIcon", route: "users", permissions: ["users-all", "users-icon"] },
-  { name: "Certificados", icon: "FolderIcon", route: "users", permissions: ["users-all", "users-icon"] },
+  { name: "Certificados", icon: "FolderIcon", route: "certificado", permissions: ["users-all", "users-icon"] },
   { name: "Users", icon: "UsersIcon", route: "users", permissions: ["users-all", "users-icon"] },
   { name: "Roles", icon: "BookmarkIcon", route: "roles", permissions: ["roles-all", "roles-icon"] },
   { name: "Permissions", icon: "BookmarkSquareIcon", route: "permissions", permissions: ["permissions-all", "permissions-icon"] },

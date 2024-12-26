@@ -11,7 +11,6 @@ import CreateButton from "../../components/ui/CreateButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import useStudentsStore from "../../store/Grupo/useGrupoStore";
 
-import { generateCertificate } from "../../components/pdf/CertificadoPDF";
 
 const router = useRouter();
 const props = defineProps({
@@ -35,18 +34,8 @@ watch(() => props.id, async (newId) => {
   await userStore.loadGroupStudent(newId);
 });
 
-const dataPDF = {
-  logo: "img/logoTwo.png", // Ruta a la imagen del logo
-  photo: "/img/logoTwo.png", // Ruta a la imagen de la foto
-  photoMinisterio: "/img/logoMin.png",
-  name: "ANDRADE MARICHIN, Azucena Lisbeth",
-  module: "CORTE DE CABELLO, DISEÑO DE BARBA, PEINADO",
-  startDate: "18/03/2024",
-  endDate: "19/07/2024",
-  credits: 20,
-  hours: 528,
-  location: "Huancané, 24 de diciembre de 2024"
-}
+
+
 
 const seeNote = () => {};
 </script>
@@ -92,9 +81,7 @@ const seeNote = () => {};
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ user.estudiante?.dni }}
               </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                   <Button @click="generateCertificate(dataPDF)">Certificado</Button>
-              </Td>
+              
             </Tr>
           </TBody>
         </Table>

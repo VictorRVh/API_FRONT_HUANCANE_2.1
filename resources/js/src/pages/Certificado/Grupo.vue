@@ -86,8 +86,8 @@ const onDelete = (group) => {
 
 const SeeMore = (id) => {
   router.push({
-    name: "grupoEst",
-    params: { id: id },
+    name: "certificadoEst",
+    params: { idcer: id },
   });
 };
 
