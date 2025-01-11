@@ -170,7 +170,7 @@ export default [
         },
     },
      {
-        path: '/certificado/:idcer',
+        path: '/certificado/:id',
         name: 'certificadoEst',
         component: () => import('../pages/Certificado/Estudiantes.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente

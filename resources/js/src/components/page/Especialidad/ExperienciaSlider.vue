@@ -64,6 +64,11 @@ const title = computed(() =>
 const initialFormData = () => ({
   nombre_experiencia: null,
   id_programa: props.ProgramId,
+  fecha_inicio:null,
+  fecha_fin:null,
+  creditos:null,
+  dias:null,
+  horas:null,
 });
 
 // Variables reactivas para los datos del formulario y los errores
@@ -77,7 +82,15 @@ watch(
     if (newValue) {
       console.log(props)
       if (props.experiencia?.id_experiencia_formativa) {
-        formData.value = { nombre_experiencia: props.experiencia.nombre_experiencia };
+        formData.value = { 
+          nombre_experiencia: props.experiencia.nombre_experiencia,
+          fecha_inicio:props.experiencia.fecha_inicio,
+          fecha_fin:props.experiencia.fecha_fin,
+          creditos:props.experiencia.creditos,
+          dias:props.experiencia.dias,
+          horas:props.experiencia.horas,
+        
+        };
       } else {
         formData.value = initialFormData();
         formErrors.value = {};
@@ -95,6 +108,26 @@ const schema = yup.object().shape({
     .string()
     .nullable()
     .required("El nombre de la unidad_didactica es obligatorio"),
+    fecha_inicio:yup
+    .date()
+    .nullable()
+    .required("La fecha de incio es obligatorio"),
+  fecha_fin:yup
+    .date()
+    .nullable()
+    .required("La fecha final es obligatorio"),
+  creditos:yup
+    .number()
+    .nullable()
+    .required("Los creditos es obligatorio"), 
+  dias:yup
+    .number()
+    .nullable()
+    .required("Los días es obligatorio"),
+  horas:yup
+    .number()
+    .nullable()
+    .required("Las horas es obligatorio"),
 });
 
 // Función para manejar el envío del formulario
@@ -149,6 +182,46 @@ const onSubmit = async () => {
           :focus="show"
           label="Nombre de la experiencia formativa"
           :error="formErrors?.nombre_experiencia"
+          required
+        />
+        <FormInput
+          v-model="formData.fecha_inicio"
+          type="date"
+          :focus="show"
+          label="Fecha Inicio"
+          :error="formErrors?.fecha_inicio"
+          required
+        />
+        <FormInput
+          v-model="formData.fecha_fin"
+          type="date"
+          :focus="show"
+          label="Fecha Final"
+          :error="formErrors?.fecha_fin"
+          required
+        />
+        <FormInput
+          v-model="formData.creditos"
+          type="number"
+          :focus="show"
+          label="Créditos"
+          :error="formErrors?.creditos"
+          required
+        />
+        <FormInput
+          v-model="formData.dias"
+          type="number"
+          :focus="show"
+          label="Días"
+          :error="formErrors?.dias"
+          required
+        />
+        <FormInput
+          v-model="formData.horas"
+          type="number"
+          :focus="show"
+          label="Horas"
+          :error="formErrors?.horas"
           required
         />
 

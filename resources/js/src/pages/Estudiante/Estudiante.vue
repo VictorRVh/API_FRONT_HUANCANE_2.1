@@ -33,8 +33,15 @@ const props = defineProps({
 const userStore = useStudentsStore();
 const roleStore = useRoleStore();
 
+
+
 if (!userStore.students?.length) await userStore.loadStudents(props.id);
 if (!roleStore.roles?.length) await roleStore.loadRoles();
+
+onMounted(() => {
+  userStore.loadStudents(props.id); 
+});
+
 
 const { slider, sliderData, showSlider, hideSlider } = useSlider("user-crud");
 const { showConfirmModal, showToast } = useModalToast();

@@ -85,7 +85,15 @@ watch(
   (newValue) => {
     if (newValue) {
       if (props.Unit?.id_unidad_didactica) {
-        formData.value = { nombre_unidad: props.Unit.nombre_unidad };
+        formData.value = { 
+          nombre_unidad: props.Unit.nombre_unidad,
+          fecha_inicio:props.Unit.fecha_inicio,
+          fecha_fin:props.Unit.fecha_fin,
+          creditos:props.Unit.creditos,
+          dias:props.Unit.dias,
+          horas:props.Unit.horas,
+          capacidad:props.Unit.capacidad,
+        };
       } else {
         formData.value = initialFormData();
         formErrors.value = {};
