@@ -87,13 +87,17 @@ const onDelete = (group) => {
 const SeeMore = (id) => {
   router.push({
     name: "certificadoEst",
-    params: { idcer: id },
+    params: { id: id },
   });
 };
 
 const changePlan = () => {
   groupStore.loadGroups(selectedPlan.value, selectSpecialties.value);
 };
+
+
+
+
 </script>
 
 <template>
