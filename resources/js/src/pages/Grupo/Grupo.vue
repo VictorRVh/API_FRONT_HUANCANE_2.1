@@ -39,7 +39,7 @@ if (roleStore.role[0].id != 7) {
   placesStore = usePlaceStore();
   if (!placesStore.Places?.length) await placesStore.loadPlaces();
   userStore = useStudentsStore();
-  if (!userStore.students?.length) await userStore.loadStudents(7);
+  if (!userStore.teachers?.length) await userStore.loadTeacher();
 
   if (specialtiesStore.specialties.length > 0) {
     selectSpecialties.value =
@@ -185,7 +185,7 @@ const changePlan = () => {
       :turnoId="['M', 'T', 'N']"
       :specialtyId="specialtiesStore?.specialties"
       :planId="planStore.plans"
-      :docenteId="userStore?.students"
+      :docenteId="userStore?.teachers"
       :show="slider"
       :group="sliderData"
       :searchId="[selectedPlan, selectSpecialties]"

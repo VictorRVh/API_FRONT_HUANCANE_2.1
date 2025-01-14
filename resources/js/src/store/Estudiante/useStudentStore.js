@@ -13,23 +13,31 @@ const useStudentsStore = defineStore('students', () => {
 
     const student = ref(null);
     const students = ref([]);
+    const teachers = ref([]);
 
     const setStudent = (authStudent) => {
         student.value = authStudent;
     };
 
-    const loadStudents = async (id) => {
-        const response = await getStudents(id);
+    const loadStudents = async () => {
+        const response = await getStudents(8);
         students.value = response;
+    };
+
+    const loadTeacher = async () => {
+        const response = await getStudents(7);
+        teachers.value = response;
     };
 
     return {
         student,
         setStudent,
         students,
+        teachers,
         studentsLoading,
         studentsFirstTimeLoading,
         loadStudents,
+        loadTeacher,
     };
 });
 

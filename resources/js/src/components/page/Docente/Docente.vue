@@ -23,11 +23,6 @@ const props = defineProps({
     type: Boolean,
     default: () => false,
   },
-  user: {
-    type: [Object, null],
-    default: () => null,
-  },
-
 });
 const emit = defineEmits(["hide"]);
 
@@ -134,7 +129,7 @@ const onSubmit = async () => {
 
   if (response?.id) {
     showToast(`Student ${props.user?.id ? "updated" : "created"} successfully`);
-    userStore.loadStudents();
+    userStore.loadTeacher();
     emit("hide");
   }
 };

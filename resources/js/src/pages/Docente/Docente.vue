@@ -25,8 +25,9 @@ import Page from "../../components/pagination/page.vue";
 
 const userStore = useStudentsStore();
 
-if (!userStore.students?.length) await userStore.loadStudents();
+if (!userStore.teachers?.length) await userStore.loadTeacher();
 
+//console.log("docentes: ",userStore)
 
 const { slider, sliderData, showSlider, hideSlider } = useSlider("user-crud");
 const { showConfirmModal, showToast } = useModalToast();
@@ -41,7 +42,7 @@ const onDelete = (user) => {
     const isDeleted = await deleteUser(user?.id);
     if (isDeleted) {
       showToast(`"${user?.name}" eliminado correctamente.`);
-      userStore.loadStudents();
+      userStore.loadTeacher();
     }
   });
 };
@@ -50,11 +51,11 @@ const onDelete = (user) => {
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const totalPages = computed(() =>
-  Math.ceil(userStore.students.length / itemsPerPage)
+  Math.ceil(userStore.teachers.length / itemsPerPage)
 );
 
 const paginatedStudents = computed(() =>
-  userStore.students.slice(
+  userStore.teachers.slice(
     (currentPage.value - 1) * itemsPerPage,
     currentPage.value * itemsPerPage
   )

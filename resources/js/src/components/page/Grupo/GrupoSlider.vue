@@ -55,7 +55,7 @@ const props = defineProps({
   },
 });
 
-console.log("legada de los ID: ", props.searchId);
+console.log("llega docente data: ", props.docenteId);
 
 // Emitir eventos
 const emit = defineEmits(["hide"]);

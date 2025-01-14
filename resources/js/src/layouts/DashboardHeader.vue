@@ -35,9 +35,9 @@ const onLogout = async () => {
 // Crear elementos de menú dinámicamente
 const menuItems = [
   { name: "Home", icon: "HomeIcon", route: "home", permissions: ["users-all", "users-icon"] },
-  { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"], id: 7 },
-  { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"], id: 8 },
-  { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"], id: 8 },
+  { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"], /* id: 7*/ },
+  { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"]},
+  { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"]},
   { name: "Matricula", icon: "BookOpenIcon", route: "matriculas", permissions: ["enrollmentStudent-all", "enrollmentStudent-icon"] },
   { name: "Especialidad", icon: "BuildingOfficeIcon", route: "especialidad", permissions: ["specialties-all", "specialties-icon"] },
   { name: "Reportes", icon: "ChartBarIcon", route: "users", permissions: ["users-all", "users-icon"] },
@@ -72,7 +72,7 @@ const hasPermission = (itemPermissions) =>
   v-for="item in menuItems"
   :key="item.name"
   v-show="hasPermission(item.permissions)"
-  :to="{ name: item.route, params: { id: item.id } }"
+  :to="{ name: item.route  /*, params: { id: item.id } */ }"
   class="text-white w-full flex pl-4  items-center rounded-md group transition-all duration-200 hover:bg-granate dark:hover:bg-granate-dark"
 >
   <template v-slot="{ isActive }">
