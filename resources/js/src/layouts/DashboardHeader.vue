@@ -66,29 +66,30 @@ const hasPermission = (itemPermissions) =>
 
     <!-- Menú de elementos con scroll vertical -->
     <div
-      class="flex flex-col items-start w-full mt-2 space-y-2 overflow-y-auto h-[70vh] custom-scrollbar"
+      class="flex flex-col items-start w-full space-y-2 overflow-y-auto h-[70vh] custom-scrollbar"
     >
-      <RouterLink
-        v-for="item in menuItems"
-        :key="item.name"
-        v-show="hasPermission(item.permissions)"
-        :to="{ name: item.route, params: { id: item.id } }"
-        class="text-white w-full flex items-center pl-4 py-2 rounded-md hover:bg-granate dark:hover:bg-granate-dark  group transition-all duration-200"
-      >
-        <template v-slot="{ isActive }">
-          <span
-            class="text-sm font-normal flex items-center justify-start w-full h-full group-hover:text-white "
-            :class="[
-              isActive
-                ? ' bg-granate text-white dark:text-white transition-all duration-300 rounded-lg px-6 '
-                : 'text-granate dark:text-white'
-            ]"
-          >
-            <component :is="item.icon" class="w-5 h-5 mr-2" />
-            <p>{{ item.name }}</p>
-          </span>
-        </template>
-      </RouterLink>
+    <RouterLink
+  v-for="item in menuItems"
+  :key="item.name"
+  v-show="hasPermission(item.permissions)"
+  :to="{ name: item.route, params: { id: item.id } }"
+  class="text-white w-full flex pl-4  items-center rounded-md group transition-all duration-200 hover:bg-granate dark:hover:bg-granate-dark"
+>
+  <template v-slot="{ isActive }">
+    <span
+      class="text-sm font-normal py-2  pl-2 flex items-center justify-start w-full h-full group-hover:text-white transition-all duration-300 rounded-lg"
+      :class="[
+        isActive
+          ? 'bg-granate text-white dark:text-white transition-all ml-5 duration-300 rounded-lg px-6'
+          : 'text-granate dark:text-white'
+      ]"
+    >
+      <component :is="item.icon" class="w-6 h-6 mr-2" />
+      <p>{{ item.name }}</p>
+    </span>
+  </template>
+</RouterLink>
+
     </div>
 
     <!-- Logout y Modo Oscuro -->

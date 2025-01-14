@@ -152,6 +152,7 @@ const onSubmit = async () => {
           v-model="formData.name"
           :focus="show"
           label="Name"
+          type="text"
           :error="formErrors?.name"
           required
         />
@@ -175,6 +176,7 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.dni"
           :focus="show"
+          type="number"
           label="Dni"
           :error="formErrors?.dni"
           required
@@ -191,6 +193,7 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.celular"
           :focus="show"
+          type="number"
           label="Celular"
           :error="formErrors?.celular"
           required
@@ -208,6 +211,7 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.email"
           label="Email"
+          type="email"
           :error="formErrors?.email"
           required
         />

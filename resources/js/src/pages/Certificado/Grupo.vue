@@ -63,26 +63,6 @@ const groupStore = useGroupsStore();
 if (!groupStore.groups?.length)
   await groupStore.loadGroups(selectedPlan.value, selectSpecialties.value);
 
-const { slider, sliderData, showSlider, hideSlider } = useSlider("group-crud");
-const { showConfirmModal, showToast } = useModalToast();
-const { destroy: deleteSpecialy, deleting } = useHttpRequest("/grupo");
-const { isUserAuthenticated } = useAuth();
-
-const onDelete = (group) => {
-  if (deleting.value) return;
-
-  showConfirmModal(null, async (confirmed) => {
-    if (!confirmed) return;
-
-    const isDeleted = await deleteSpecialy(group?.id_grupo);
-    if (isDeleted) {
-      showToast(`Grupo "${group?.nombre_grupo}" eliminado correctamente.`);
-      groupStore.loadGroups(selectedPlan.value, selectSpecialties.value);
-      roleStore.loadRoles();
-      isUserAuthenticated();
-    }
-  });
-};
 
 const SeeMore = (id) => {
   router.push({
@@ -105,7 +85,7 @@ const changePlan = () => {
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
         <h2 class="text-black font-bold text-2xl">Gestión / Grupos</h2>
-        <CreateButton v-if="roleStore.role[0].id !=7" @click="showSlider(true)" />
+   
       </div>
 
       <div class="flex justify-between">
@@ -174,8 +154,8 @@ const changePlan = () => {
               <Td class="border-none">
                 <div class="flex gap-2 justify-center items-center">
                   <ViewButton @click="SeeMore(grupo?.id_grupo)" />
-                  <EditButton @click="showSlider(true, grupo)" />
-                  <DeleteButton @click="onDelete(grupo)" />
+         
+             
                 </div>
               </Td>
             </Tr>
@@ -184,16 +164,6 @@ const changePlan = () => {
       </div>
     </div>
 
-    <GrupoSlider
-      :sedeId="placesStore?.Places?.sedes"
-      :turnoId="['M', 'T', 'N']"
-      :specialtyId="specialtiesStore?.specialties"
-      :planId="planStore.plans"
-      :docenteId="userStore?.students"
-      :show="slider"
-      :group="sliderData"
-      :searchId="[selectedPlan, selectSpecialties]"
-      @hide="hideSlider"
-    />
+
   </AuthorizationFallback>
 </template>

@@ -80,7 +80,7 @@ const submitNote = async () => {
       throw new Error("Error al guardar");
     }
   } catch (error) {
-    showToast("Error al guardar la unidad didáctica. Inténtalo de nuevo.", "error");
+    showToast("Error al guardar notas. Inténtalo de nuevo.", "error");
   } finally {
     isSubmitting.value = false; // Desbloquear después de la solicitud
   }
@@ -126,9 +126,9 @@ watch(() => props.idgroup, loadGroupData);
         </Table>
 
         <!-- Botón para guardar -->
-        <div class="flex justify-end w-[100px] mt-4">
+        <div class="flex justify-end w-[120px] mt-4">
           <Button
-            :title="isSubmitting ? 'Guardando...' : 'Guardar'"
+            :title="isSubmitting ? 'Guardando..' : 'Guardar'"
             :loading="isSubmitting"
             :disabled="isSubmitting"
             class="!w-full"
