@@ -266,6 +266,7 @@ const onSubmit = async () => {
             :options="roleOptions"
             label="name"
             @update:model-value="(role) => onRoleSelect(role)"
+            class=" dark:text-gray-700  "
           />
         </FormLabelError>
 
@@ -276,13 +277,13 @@ const onSubmit = async () => {
             <li
               v-for="role in formData.roles"
               :key="role.id"
-              class="shadow-google rounded-sm"
+              class="shadow-google rounded-sm "
             >
               <div
                 class="p-4 flex-between w-full dark:bg-gray-800/60 rounded-sm border border-[#e6e6e6] dark:border-gray-700"
               >
-                <div class="flex-1">{{ role.name }}</div>
-                <span
+                <div class="flex-1 dark:text-white">{{ role.name }}</div>
+                <span  
                   class="text-sm cursor-pointer text-red-500 dark:text-red-300"
                   @click="onRoleRemove(role)"
                 >
@@ -295,7 +296,7 @@ const onSubmit = async () => {
                     fill="none"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="css-i6dzq1"
+                    class="css-i6dzq1 cursor-pointer"
                   >
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>

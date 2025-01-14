@@ -183,12 +183,13 @@ const onSubmit = async () => {
                         @update:model-value="
                             (permission) => onPermissionSelect(permission)
                         "
+                         class="cursor-pointer dark:text-gray-700 "
                     />
                 </FormLabelError>
 
                 <div class="w-full space-y-3">
                     <div class="flex-between gap-4">
-                        <label class="text-sm font-semibold"
+                        <label class="text-sm font-semibold  dark:text-white"
                             >Role permissions</label
                         >
 
@@ -214,7 +215,7 @@ const onSubmit = async () => {
                             <div
                                 class="p-4 flex-between w-full dark:bg-gray-800/60 rounded-sm border border-[#e6e6e6] dark:border-gray-700"
                             >
-                                <div class="flex-1">{{ permission.name }}</div>
+                                <div class="flex-1 dark:text-white">{{ permission.name }}</div>
                                 <span
                                     class="text-sm cursor-pointer text-red-500 dark:text-red-300"
                                     @click="onPermissionRemove(permission)"
@@ -228,7 +229,7 @@ const onSubmit = async () => {
                                         fill="none"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
-                                        class="css-i6dzq1"
+                                        class="css-i6dzq1 cursor-pointers"
                                     >
                                         <line
                                             x1="18"
@@ -263,3 +264,11 @@ const onSubmit = async () => {
         </AuthorizationFallback>
     </Slider>
 </template>
+<style scoped>
+/* Estilo específico para el modo oscuro */
+.dark .vs__search {
+  color: white;
+  background-color: #333;
+  border: 1px solid #444;
+}
+</style>

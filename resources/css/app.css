@@ -1,0 +1,5 @@
+.dark .vs__search {
+    color: white; /* Cambia el color del texto a blanco */
+    background-color: #333; /* Fondo oscuro para el input */
+    border: 1px solid #444; /* Ajusta el borde */
+  }
