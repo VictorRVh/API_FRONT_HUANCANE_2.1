@@ -222,4 +222,53 @@ class MatriculaController extends Controller
 
         return response()->json($response, 200);
     }
+
+    public function generarReporteCertificado($dni)
+    {
+        $matricula = Matricula::with([
+            'estudiante',
+            'grupos.programa.unidadesDidacticas.notas',
+            'grupos.programa.experienciasFormativas.notas'
+        ])->whereHas('estudiante', function ($query) use ($dni) {
+            $query->where('id_estudiante', $dni);
+        })->get();
+
+        $response = $matricula->map(function ($registro) {
+            return [
+                'especialidad' => $registro->grupos->especialidad->nombre_especialidad,
+                'periodo_academico' => $registro->grupos->plan->nombre_plan,
+                'programa' => $registro->grupos->programa->nombre_programa,
+                'unidad_competencia' => $registro->grupos->programa->unidades_competencia,
+                'periodo_clase' => optional($registro->grupos->programa->unidadesDidacticas->sortBy('fecha_inicio')->first())->fecha_inicio
+                    . ' al ' .
+                    optional($registro->grupos->programa->unidadesDidacticas->sortByDesc('fecha_final')->first())->fecha_fin,
+                'dni' => $registro->estudiante->dni,
+                'apellidos_nombres' => $registro->estudiante->apellido_paterno . ' ' . $registro->estudiante->apellido_materno . ', ' . strtoupper($registro->estudiante->name),
+                'unidades_didacticas' => $registro->grupos->programa->unidadesDidacticas->map(function ($unidad, $index) use ($registro) {
+                    $nota = $unidad->notas->firstWhere('id_estudiante', $registro->estudiante->id);
+                    return [
+                        'numero' => str_pad($index + 1, 2, '0', STR_PAD_LEFT),
+                        'nombre_unidad' => $unidad->nombre_unidad,
+                        'credito' => $unidad->creditos,
+                        'hora' => $unidad->horas,
+                        'condicion' => $nota ? 'Aprobado' : 'Pendiente', // Cambia según tu lógica
+                        'nota' => $nota ? $nota->nota : 'N/A', // Traer la nota registrada
+                        'capacidad' => $unidad->capacidad
+                    ];
+                }),
+                'experiencias_formativas' => $registro->grupos->programa->experienciasFormativas->map(function ($experiencia) use ($registro) {
+                    $nota = $experiencia->notas->firstWhere('id_estudiante', $registro->estudiante->id);
+                    return [
+                        'nombre_experiencia' => $experiencia->nombre_experiencia,
+                        // 'descripcion' => $experiencia->descripcion,
+                        'creditos_exp' => $experiencia->creditos,
+                        'horas_exp' => $experiencia->horas,
+                        'nota' => $nota ? $nota->nota : 'N/A'
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json($response, 200);
+    }
 }

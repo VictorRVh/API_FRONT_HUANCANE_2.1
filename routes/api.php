@@ -482,6 +482,13 @@ Route::middleware('auth:sanctum')->group(function () {
         'destroy',
     ])->middleware('permission:permissions-all|permissions-delete');
 
+    // INFORMACION PARA CERTIFICADO
+
+    Route::get('certificado/{dni}', [
+        \App\Http\Controllers\MatriculaController::class,
+        'generarReporteCertificado',
+    ])->middleware('permission:enrollmentStudent-all|enrollmentStudent-view');
+
 
     Route::get('/users-by-role/{role_id}', [UserController::class, 'getUsersByRole']);
 });
