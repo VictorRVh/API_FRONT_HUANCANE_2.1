@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Grupo;
 use App\Models\Matricula;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -31,6 +32,30 @@ class MatriculaController extends Controller
             ], 400);
         }
 
+        // Obtener el grupo para verificar el plan académico
+        $grupo = Grupo::find($request->id_grupo);
+
+        if (!$grupo) {
+            return response()->json([
+                'message' => 'Grupo no encontrado',
+                'status' => 404
+            ], 404);
+        }
+
+        // Verificar si el estudiante ya está matriculado en el mismo plan académico
+        $isEnrolled = Matricula::where('id_estudiante', $request->id_estudiante)
+            ->whereHas('grupos', function ($query) use ($grupo) {
+                $query->where('id_plan', $grupo->id_plan);
+            })
+            ->exists();
+
+        if ($isEnrolled) {
+            return response()->json([
+                'message' => 'El estudiante ya esta matriculado en este plan academico',
+                'status' => 400
+            ], 400);
+        }
+
         // Crear una nueva matricula
         $matricula = Matricula::create([
             'id_grupo' => $request->id_grupo,
@@ -38,11 +63,12 @@ class MatriculaController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Matricula creada exitosamente',
+            'message' => 'Matrícula creada exitosamente',
             'matricula' => $matricula,
             'status' => 201
         ], 201);
     }
+
 
     public function show($id)
     {
@@ -133,6 +159,7 @@ class MatriculaController extends Controller
         // Retornar el usuario dentro de un array
         return response()->json([$user], 200);
     }
+
 
     public function getMatriculaPorPlanYEspecialidad($id_plan, $id_especialidad)
     {
