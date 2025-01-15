@@ -251,8 +251,8 @@ class MatriculaController extends Controller
                         'nombre_unidad' => $unidad->nombre_unidad,
                         'credito' => $unidad->creditos,
                         'hora' => $unidad->horas,
-                        'condicion' => $nota ? 'Aprobado' : 'Pendiente', // Cambia según tu lógica
-                        'nota' => $nota ? $nota->nota : 'N/A', // Traer la nota registrada
+                        'condicion' => 'G',
+                        'nota' => $nota ? $nota->nota : 'N/A',
                         'capacidad' => $unidad->capacidad
                     ];
                 }),
