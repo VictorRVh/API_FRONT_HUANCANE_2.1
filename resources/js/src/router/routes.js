@@ -148,7 +148,7 @@ export default [
             permissions: ['groups-all', 'groups-view'],
         },
     },
-   
+
     {
         path: '/grupos/:id',
         name: 'grupoEst',
@@ -239,6 +239,16 @@ export default [
             permissions: ['notas-all', 'notas-view'],
         },
     },
-    
+    {
+        path: '/reporte',
+        name: 'reporte',
+        component: () => import('../pages/Reporte/Grafico.vue'),
+        props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        meta: {
+            layout: 'dashboard',
+            permissions: ['report-all', 'report-view'],
+        },
+    }
+
     /* todlos que se aumento */
 ];
