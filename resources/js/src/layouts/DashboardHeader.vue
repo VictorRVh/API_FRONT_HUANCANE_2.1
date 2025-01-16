@@ -34,7 +34,7 @@ const onLogout = async () => {
 
 // Crear elementos de menú dinámicamente
 const menuItems = [
-  { name: "Home", icon: "HomeIcon", route: "home", permissions: ["users-all", "users-icon"] },
+  { name: "Home", icon: "HomeIcon", route: "home", permissions: [] },
   { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"], /* id: 7*/ },
   { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"]},
   { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"]},
@@ -71,7 +71,7 @@ const hasPermission = (itemPermissions) =>
     <RouterLink
   v-for="item in menuItems"
   :key="item.name"
-  v-show="hasPermission(item.permissions)"
+  v-show="item.name === 'Home' || hasPermission(item.permissions)"
   :to="{ name: item.route  /*, params: { id: item.id } */ }"
   class="text-white w-full flex pl-4  items-center rounded-md group transition-all duration-200 hover:bg-granate dark:hover:bg-granate-dark"
 >

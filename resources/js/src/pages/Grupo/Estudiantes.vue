@@ -39,6 +39,33 @@ watch(() => props.id, async (newId) => {
 
 
 const seeNote = () => {};
+const nominaNormal = async (idGrupo) => {
+  try {
+    const response = await fetch(`/api/grupoDocenteTwo/${idGrupo}`);
+    if (!response.ok) {
+      throw new Error('Error al obtener los datos del grupo');
+    }
+    const data = await response.json();
+    generateNominaPDF(data);
+    console.log(data)
+  } catch (error) {
+    console.error('Error en la consulta de matrícula:', error);
+  }
+}
+const nominaUgel = async (idGrupo) => {
+  try {
+    const response = await fetch(`/api/grupoDocenteTwo/${idGrupo}`);
+    if (!response.ok) {
+      throw new Error('Error al obtener los datos del grupo');
+    }
+    const data = await response.json();
+    reporteNominaUgel(data);
+    // console.log(data)
+  } catch (error) {
+    console.error('Error en la consulta de matrícula:', error);
+  }
+}
+
 </script>
 
 <template>
