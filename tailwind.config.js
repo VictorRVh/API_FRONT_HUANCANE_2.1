@@ -25,6 +25,7 @@ export default {
       colors: {
         // Paleta de colores para modo claro
         granate: '#921733',
+        granateLigth: '#CD5772',
         plomoClaro: '#F8F8FA',
         blancoPuro: '#FFFFFF',
         azulado: '#F8F8FA',

@@ -14,7 +14,6 @@ const { runYupValidation } = useValidation();
 const { pushToRoute } = useAppRouter();
 const userStore = useUserStore();
 
-
 import { string, object } from "yup";
 
 const formData = ref({
@@ -43,7 +42,6 @@ const onSignIn = async () => {
 
   if (user?.id) {
     userStore.setUser(user);
-    //console.log("estamosen login: ",user)
     await pushToRoute({ name: "users" });
   }
 };
@@ -77,7 +75,9 @@ const onSignIn = async () => {
           Ingresa tu cuenta para acceder al sistema
         </p>
 
+        <!-- Formulario -->
         <form @submit.prevent="onSignIn" class="mt-8 space-y-6">
+          <!-- Input para Usuario -->
           <div>
             <FormInput
               v-model="formData.email"
@@ -88,10 +88,12 @@ const onSignIn = async () => {
               type="email"
               autocomplete="email"
               required
+              @keyup.enter="onSignIn"
               class="block w-full px-1 rounded-md focus:outline-none focus:ring-0 sm:text-sm"
             />
           </div>
 
+          <!-- Input para Contraseña -->
           <div>
             <FormInput
               v-model="formData.password"
@@ -102,10 +104,12 @@ const onSignIn = async () => {
               type="password"
               autocomplete="current-password"
               required
+              @keyup.enter="onSignIn"
               class="block w-full px-1 rounded-md shadow-sm focus:outline-none sm:text-sm"
             />
           </div>
 
+          <!-- Botón de Ingreso -->
           <div>
             <Button
               title="Ingresar"
@@ -117,6 +121,7 @@ const onSignIn = async () => {
           </div>
         </form>
 
+        <!-- Enlaces de ayuda -->
         <div class="mt-6 text-center">
           <p class="text-sm text-[#49454F]">
             <strong

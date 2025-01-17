@@ -248,6 +248,16 @@ export default [
             layout: 'dashboard',
             permissions: ['report-all', 'report-view'],
         },
+    },
+    {
+        path: '/datopersonal',
+        name: 'datopersonal',
+        component: () => import('../pages/Datos/DatoPersonal.vue'),
+        props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        meta: {
+            layout: 'dashboard',
+            permissions: ['data-all', 'data-view'],
+        },
     }
 
     /* todlos que se aumento */

@@ -4,6 +4,7 @@ import { useRouter, useRoute } from "vue-router";
 import DashboardHeader from "./DashboardHeader.vue";
 import SuspenseFallback from "./SuspenseFallback.vue";
 import useUserStore from "../store/useUserStore";
+import Data from "./Data.vue"; // Importación de Data.vue
 
 const userStore = useUserStore();
 
@@ -16,26 +17,45 @@ const route = useRoute();
 const router = useRouter();
 const previousRoute = ref(null);
 
-const toggleSidebar = () => {
-  sidebarOpen.value = !sidebarOpen.value;
+const mostrarData = ref(false); // Estado para mostrar u ocultar el componente Data.vue
+
+// Función para alternar la visibilidad de Data.vue
+const toggleData = () => {
+  mostrarData.value = !mostrarData.value;
 };
 
+// Función para cerrar el cuadro desplegable
+const closeData = () => {
+  mostrarData.value = false;
+};
+
+// Evento para detectar clics fuera del cuadro
+const handleClickOutside = (event) => {
+  // Verificamos si el clic ocurrió fuera del cuadro desplegable
+  const dropdown = document.querySelector("#data-dropdown");
+  if (dropdown && !dropdown.contains(event.target)) {
+    closeData();
+  }
+};
+
+// Evento para ajustar el tamaño de la pantalla
 const handleResize = () => {
   isLargeScreen.value = window.innerWidth >= 1280;
 };
 
+// Registramos los eventos al montar el componente
 onMounted(() => {
-  window.addEventListener("resize", handleResize);
+  window.addEventListener("resize", handleResize); // Ajustar tamaño de pantalla
+  window.addEventListener("click", handleClickOutside); // Detectar clic fuera del cuadro
 });
 
+// Eliminamos los eventos al desmontar el componente
 onBeforeUnmount(() => {
   window.removeEventListener("resize", handleResize);
+  window.removeEventListener("click", handleClickOutside);
 });
 
-router.afterEach((to, from) => {
-  previousRoute.value = from.fullPath;
-});
-
+// Función para navegar hacia atrás
 const goBack = () => {
   router.back();
 };
@@ -81,13 +101,20 @@ const goBack = () => {
           <p class="text-lg font-regular text-dark-fondo dark:text-white">INTRANET</p>
           <p class="text-xs font-semibold mt-1 text-dark-surface dark:text-gray-300">CEPRO HUANCANÉ</p>
         </div>
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-4 relative">
           <div class="text-right">
-            <p class="text-sm text-dark-fondo dark:text-white">{{ userStore.user?.name }} {{ userStore.user?.apellido_paterno }}</p>
-            <p class="text-xs text-dark-surface dark:text-gray-300">{{ userStore.user.roles[0]?.name }}</p>
+            <p class="text-sm text-dark-fondo dark:text-white">
+              {{ userStore.user?.name }} {{ userStore.user?.apellido_paterno }}
+            </p>
+            <p class="text-xs text-dark-surface dark:text-gray-300">
+              {{ userStore.user.roles[0]?.name }}
+            </p>
           </div>
           <!-- Ícono de usuario -->
-          <div class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-300">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-300 cursor-pointer"
+            @click.stop="toggleData"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -102,6 +129,15 @@ const goBack = () => {
                 d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
               />
             </svg>
+          </div>
+
+          <!-- Mostrar componente Data.vue al hacer clic -->
+          <div
+            v-if="mostrarData"
+            id="data-dropdown"
+            class="absolute top-12 right-0 w-64 bg-white dark:bg-gray-700 rounded-lg shadow-lg p-4 z-50"
+          >
+            <Data />
           </div>
         </div>
       </div>
@@ -152,20 +188,3 @@ const goBack = () => {
     </main>
   </div>
 </template>
-
-<style>
-/* Scrollbar personalizado */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #c1c1c1;
-  border-radius: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-</style>

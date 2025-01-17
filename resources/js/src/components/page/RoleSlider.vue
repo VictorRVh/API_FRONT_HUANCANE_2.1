@@ -166,7 +166,7 @@ const onSubmit = async () => {
         @hide="emit('hide')"
     >
         <AuthorizationFallback :permissions="requiredPermissions">
-            <div class="mt-4 space-y-4">
+            <div class="mt-4 space-y-4 ">
                 <FormInput
                     v-model="formData.name"
                     :focus="show"
