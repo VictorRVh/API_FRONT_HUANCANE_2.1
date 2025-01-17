@@ -250,15 +250,23 @@ class MatriculaController extends Controller
         return response()->json($response, 200);
     }
 
-    public function generarReporteCertificado($dni)
+    public function generarReporteCertificado($dni, $id_grupo = null)
     {
-        $matricula = Matricula::with([
+        $matriculaQuery = Matricula::with([
             'estudiante',
             'grupos.programa.unidadesDidacticas.notas',
-            'grupos.programa.experienciasFormativas.notas'
-        ])->whereHas('estudiante', function ($query) use ($dni) {
-            $query->where('id_estudiante', $dni);
-        })->get();
+            'grupos.programa.experienciasFormativas.notas',
+        ])
+            ->whereHas('estudiante', function ($query) use ($dni) {
+                $query->where('id_estudiante', $dni); // Cambiado para buscar por DNI
+            });
+
+        // Agregar filtro por grupo si se proporciona
+        if ($id_grupo) {
+            $matriculaQuery->where('id_grupo', $id_grupo);
+        }
+
+        $matricula = $matriculaQuery->get();
 
         $response = $matricula->map(function ($registro) {
             return [
@@ -270,7 +278,7 @@ class MatriculaController extends Controller
                     . ' al ' .
                     optional($registro->grupos->programa->unidadesDidacticas->sortByDesc('fecha_final')->first())->fecha_fin,
                 'dni' => $registro->estudiante->dni,
-                'apellidos_nombres' => $registro->estudiante->apellido_paterno . ' ' . $registro->estudiante->apellido_materno . ', ' . strtoupper($registro->estudiante->name),
+                'apellidos_nombres' => strtoupper($registro->estudiante->apellido_paterno) . ' ' . strtoupper($registro->estudiante->apellido_materno) . ', ' . $registro->estudiante->name,
                 'unidades_didacticas' => $registro->grupos->programa->unidadesDidacticas->map(function ($unidad, $index) use ($registro) {
                     $nota = $unidad->notas->firstWhere('id_estudiante', $registro->estudiante->id);
                     return [
@@ -287,7 +295,6 @@ class MatriculaController extends Controller
                     $nota = $experiencia->notas->firstWhere('id_estudiante', $registro->estudiante->id);
                     return [
                         'nombre_experiencia' => $experiencia->nombre_experiencia,
-                        // 'descripcion' => $experiencia->descripcion,
                         'creditos_exp' => $experiencia->creditos,
                         'horas_exp' => $experiencia->horas,
                         'nota' => $nota ? $nota->nota : 'N/A'

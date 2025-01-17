@@ -484,7 +484,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // INFORMACION PARA CERTIFICADO
 
-    Route::get('certificado/{dni}', [
+    Route::get('certificado/{dni}/{id_grupo}', [
         \App\Http\Controllers\MatriculaController::class,
         'generarReporteCertificado',
     ])->middleware('permission:enrollmentStudent-all|enrollmentStudent-view');
