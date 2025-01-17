@@ -33,12 +33,14 @@ const useGroupsStore = defineStore('Groups', () => {
         showTwo: getGrupoDocente,
         show: getGrupoStudentNote
     } = useHttpRequest('/grupoDocente');
- 
+    const {
+        show: certificadoStudent
+    } = useHttpRequest('/certificado');
 
     const group = ref(null); // Para almacenar una sola Groupa
     const groups = ref([]);  // Para almacenar la lista de Groupa es
     const student = ref([]);
-
+    const certificate = ref([]);
 
     // Función para establecer una Groupa específica
     const setGroup = (authGroup) => {
@@ -88,10 +90,16 @@ const useGroupsStore = defineStore('Groups', () => {
         student.value = response;
     };
 
+    const loadCertificate = async (id) => {
+        const response = await certificadoStudent(id);
+        certificate.value = response;
+        //console.log("Store certificado: ", response
+    };
 
     return {
         group,
         student,
+        certificate,
         setGroup,
         groups,
         GroupsLoading,
@@ -100,7 +108,8 @@ const useGroupsStore = defineStore('Groups', () => {
         loadGroupById, // Retornamos la nueva función para obtener una Groupa por ID
         loadGroupStudentNote,
         loadGroupStudentExperience,
-        loadGroupStudent
+        loadGroupStudent,
+        loadCertificate,
     };
 });
 

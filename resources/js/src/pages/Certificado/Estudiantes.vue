@@ -57,6 +57,19 @@ const dataPDF = {
 }
 
 const seeNote = () => {};
+
+
+const exportCerticate = (id) => {
+   
+  console.log("DNI: ",id)
+
+   userStore.loadCertificate(id);
+   const certificateStudent = userStore.certificate;
+
+   console.log("data certificate: ",certificateStudent)
+   //generateCertificate
+}
+
 </script>
 
 <template>
@@ -101,7 +114,7 @@ const seeNote = () => {};
                 {{ user.estudiante?.dni }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                   <Button @click="generateCertificate(dataPDF)">Certificado</Button>
+                   <Button class="border-1 dark:bg-red" @click="exportCerticate(user.estudiante?.id)">Certificado</Button>
               </Td>
             </Tr>
           </TBody>

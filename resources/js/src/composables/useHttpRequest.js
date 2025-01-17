@@ -37,6 +37,8 @@ const useHttpRequest = (path = '') => {
             const response = await axios.get(`${path}/${id}`);
             loading.value = false;
 
+            ///console.log("htttp: ",response)
+
             if (typeof callback === 'function') {
                 callback(null, response);
             }

@@ -6,6 +6,9 @@ import SuspenseFallback from "./SuspenseFallback.vue";
 import useUserStore from "../store/useUserStore";
 
 const userStore = useUserStore();
+
+console.log("datos usuario: ",userStore);
+
 const asyncLoading = ref(false);
 const sidebarOpen = ref(false);
 const isLargeScreen = ref(window.innerWidth >= 1280);
