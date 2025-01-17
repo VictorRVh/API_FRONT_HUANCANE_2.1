@@ -56,7 +56,7 @@ const initialFormData = () => {
     name: null,
     apellido_paterno: null,
     apellido_materno: null,
-    dni: null, 
+    dni: null,
     sexo: null,
     celular: null,
     fecha_nacimiento: null,
@@ -260,7 +260,7 @@ const onSubmit = async () => {
           />
         </template>
 
-        <FormLabelError label="Add role">
+        <FormLabelError label="Add role ">
           <VSelect
             v-model="selectedRole"
             :options="roleOptions"
@@ -270,7 +270,7 @@ const onSubmit = async () => {
           />
         </FormLabelError>
 
-        <div class="w-full space-y-3">
+        <div class="w-full space-y-3 dark:text-white">
           <FormLabelError v-if="formData.roles?.length" label="User roles" />
 
           <TransitionGroup tag="ul" name="edit-list" class="relative space-y-3">
@@ -283,7 +283,7 @@ const onSubmit = async () => {
                 class="p-4 flex-between w-full dark:bg-gray-800/60 rounded-sm border border-[#e6e6e6] dark:border-gray-700"
               >
                 <div class="flex-1 dark:text-white">{{ role.name }}</div>
-                <span  
+                <span
                   class="text-sm cursor-pointer text-red-500 dark:text-red-300"
                   @click="onRoleRemove(role)"
                 >

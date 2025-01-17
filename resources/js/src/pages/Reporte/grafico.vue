@@ -184,6 +184,7 @@ onMounted(() => {
 
 <template>
   <div class="max-w-5xl mx-auto bg-white rounded-lg shadow dark:bg-gray-800 p-6">
+    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Ciclo Formativo  </h2>
     <!-- Selección de sede -->
     <div class="mb-6">
       <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -201,7 +202,7 @@ onMounted(() => {
     </div>
 
     <!-- Gráfico y resultados generales -->
-    <div class="flex gap-6">
+    <div class="flex gap-6 ">
       <!-- Gráfico -->
       <div class="flex-1">
         <div id="grafico-matriculas" class="w-full h-96"></div>

@@ -103,7 +103,7 @@ const disableKeys = (event, keys = ["e", "E", "+", "-"]) => {
       :step="step ? step : type === 'number' ? 'any' : null"
       class="bg-gray-50 border border-gray-300 sm:text-sm rounded-sm block w-full p-2.5
        dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-300
-       dark:text-gray-200 focus:ring-0.5 focus:ring-active focus:border-active
+       dark:text-white focus:ring-0.5 focus:ring-active focus:border-active
        dark:focus:ring-active dark:focus:border-active outline-none"
       :placeholder="placeholder ? placeholder : ''"
       :class="[disabled ? 'cursor-not-allowed' : '', inputClass ? inputClass : '']"
