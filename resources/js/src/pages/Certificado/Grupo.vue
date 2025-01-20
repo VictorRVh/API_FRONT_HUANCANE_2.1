@@ -11,6 +11,7 @@ import CreateButton from "../../components/ui/CreateButton.vue";
 import EditButton from "../../components/ui/EditButton.vue";
 import DeleteButton from "../../components/ui/DeleteButton.vue";
 import ViewButton from "../../components/ui/ViewButton.vue";
+import eyeButton from "../../components/ui/eyeButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import useGroupsStore from "../../store/Grupo/useGrupoStore";
 import useSlider from "../../composables/useSlider";
@@ -85,7 +86,7 @@ const changePlan = () => {
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
         <h2 class="text-black font-bold text-2xl">Gestión / Grupos</h2>
-   
+
       </div>
 
       <div class="flex justify-between">
@@ -153,9 +154,9 @@ const changePlan = () => {
               <Td class="text-black border-none">{{ grupo?.docente.name }}</Td>
               <Td class="border-none">
                 <div class="flex gap-2 justify-center items-center">
-                  <ViewButton @click="SeeMore(grupo?.id_grupo)" />
-         
-             
+                  <eye-button @click="SeeMore(grupo?.id_grupo)" />
+
+
                 </div>
               </Td>
             </Tr>

@@ -1,4 +1,5 @@
 // src/plugins/heroicons.js
+import { PaperClipIcon } from '@heroicons/vue/24/outline';
 import { defineAsyncComponent } from 'vue';
 
 // Importa los íconos en estilo outline
@@ -20,6 +21,7 @@ const icons = {
   TrashIcon: defineAsyncComponent(() => import('@heroicons/vue/24/outline/TrashIcon')),
   CalendarIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/CalendarIcon')),
   ClipboardDocumentListIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/ClipboardDocumentListIcon')),
+  PaperClipIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/PaperClipIcon')),
  // BookOpenIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/BookOpenIcon')),
   // Agrega más íconos aquí según sea necesario
 };

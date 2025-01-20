@@ -11,6 +11,7 @@ import CreateButton from "../../components/ui/CreateButton.vue";
 import EditButton from "../../components/ui/EditButton.vue";
 import DeleteButton from "../../components/ui/DeleteButton.vue";
 import ViewButton from "../../components/ui/ViewButton.vue";
+import eyeButton from "../../components/ui/eyeButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import UnitsSlider from "../../components/page/Especialidad/UnidadeSlider.vue";
 
@@ -120,7 +121,7 @@ const SeeMore = (id) => {
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <ViewButton @click="SeeMore(Units?.id_unidad_didactica)" />
+                  <eye-button @click="SeeMore(Units?.id_unidad_didactica)" />
                   <EditButton @click="showSlider(true, Units)" />
                   <DeleteButton @click="onDelete(Units)" />
                 </div>

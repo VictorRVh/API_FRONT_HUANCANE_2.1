@@ -10,6 +10,7 @@ import CreateButton from "../../components/ui/CreateButton.vue";
 import EditButton from "../../components/ui/EditButton.vue";
 import DeleteButton from "../../components/ui/DeleteButton.vue";
 import ViewButton from "../../components/ui/ViewButton.vue";
+import eyeButton from "../../components/ui/eyeButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import SpecialtySlider from "../../components/page/Especialidad/EspecialidadSlider.vue";
 
@@ -20,6 +21,7 @@ import useHttpRequest from "../../composables/useHttpRequest";
 import useRoleStore from "../../store/useRoleStore";
 import useUserStore from "../../store/useUserStore";
 import useAuth from "../../composables/useAuth";
+import EyeButton from "../../components/ui/eyeButton.vue";
 
 
 
@@ -57,7 +59,7 @@ const onDelete = (specialty) => {
 
 
 const SeeMore = (idr) => {
- 
+
   router.push({
     name: "programaFormativo",
     params: { idEspecialidad: idr},
@@ -73,7 +75,7 @@ const SeeMore = (idr) => {
         <CreateButton @click="showSlider(true)" />
       </div>
 
-      
+
 
       <div class="w-full">
         <Table class="border-collapse divide-y divide-transparent">
@@ -95,7 +97,7 @@ const SeeMore = (idr) => {
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <ViewButton @click="SeeMore(specialty?.id_especialidad)" />
+                  <eyeButton @click="SeeMore(specialty?.id_especialidad)" />
                   <EditButton @click="showSlider(true, specialty)" />
                   <DeleteButton @click="onDelete(specialty)" />
                 </div>
