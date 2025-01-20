@@ -43,7 +43,6 @@ const toggleSelectAll = () => {
   }
 };
 
-<<<<<<< HEAD
 const toggleStudentSelection = (id) => {
   if (selectedStudents.value.includes(id)) {
     selectedStudents.value = selectedStudents.value.filter((studentId) => studentId !== id);
@@ -63,22 +62,6 @@ const generateCertificate = () => {
   console.log("Generando PDF para los estudiantes:", studentsToPrint);
   // Aquí puedes agregar la lógica para generar los certificados.
 };
-=======
-const seeNote = () => {};
-
-
-const exportCerticate = (id) => {
-   
-  console.log("DNI: ",id)
-
-   userStore.loadCertificate(id);
-   const certificateStudent = userStore.certificate;
-
-   console.log("data certificate: ",certificateStudent)
-   //generateCertificate
-}
-
->>>>>>> 3f5fc45339610fa814b4a39b8d2c075489d9d552
 </script>
 
 <template>
@@ -96,52 +79,8 @@ const exportCerticate = (id) => {
           <span class="ms-2 text-sm font-medium text-gray-900">Seleccionar Todo</span>
         </label>
       </div>
-<<<<<<< HEAD
       <div>
         <pdfButton @click="generateCertificate(dataPDF)"/>
-=======
-      <div class="w-full">
-        <Table class="border-collapse divide-y divide-transparent">
-          <THead>
-            <Tr>
-              <Th>Id</Th>
-              <Th>Nombre</Th>
-              <Th>Apellido Paterno</Th>
-              <Th>Apellido Materno</Th>
-              <Th>DNI</Th>
-              <Th>PDF</Th>
-            </Tr>
-          </THead>
-          <TBody>
-            <Tr
-              v-for="user in userStore?.student?.estudiantes"
-              :key="user.id"
-            >
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user.estudiante?.id }}
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                <div>{{ user.estudiante?.name }}</div>
-                <div class="text-sm text-gray-500 dark:text-white">
-                  {{ user.estudiante?.email }}
-                </div>
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user.estudiante?.apellido_paterno }}
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user.estudiante?.apellido_materno }}
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user.estudiante?.dni }}
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                   <Button class="border-1 dark:bg-red" @click="exportCerticate(user.estudiante?.id)">Certificado</Button>
-              </Td>
-            </Tr>
-          </TBody>
-        </Table>
->>>>>>> 3f5fc45339610fa814b4a39b8d2c075489d9d552
       </div>
     </div>
 
