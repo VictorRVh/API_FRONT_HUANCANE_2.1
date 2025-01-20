@@ -7,6 +7,9 @@ import useUserStore from "../store/useUserStore";
 import Data from "./Data.vue"; // Importación de Data.vue
 
 const userStore = useUserStore();
+
+console.log("datos usuario: ",userStore);
+
 const asyncLoading = ref(false);
 const sidebarOpen = ref(false);
 const isLargeScreen = ref(window.innerWidth >= 1280);
