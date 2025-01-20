@@ -34,7 +34,7 @@ const useGroupsStore = defineStore('Groups', () => {
         show: getGrupoStudentNote
     } = useHttpRequest('/grupoDocente');
     const {
-        show: certificadoStudent
+        showTwo: certificadoStudent
     } = useHttpRequest('/certificado');
 
     const group = ref(null); // Para almacenar una sola Groupa
@@ -90,8 +90,8 @@ const useGroupsStore = defineStore('Groups', () => {
         student.value = response;
     };
 
-    const loadCertificate = async (id) => {
-        const response = await certificadoStudent(id);
+    const loadCertificate = async (id,id_group) => {
+        const response = await certificadoStudent(id , id_group);
         certificate.value = response;
         //console.log("Store certificado: ", response
     };

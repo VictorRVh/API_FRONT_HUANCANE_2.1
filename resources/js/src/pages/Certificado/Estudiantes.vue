@@ -59,15 +59,17 @@ const dataPDF = {
 const seeNote = () => {};
 
 
-const exportCerticate = (id) => {
+const exportCerticate = (id , id_group) => {
    
   console.log("DNI: ",id)
 
-   userStore.loadCertificate(id);
-   const certificateStudent = userStore.certificate;
+  userStore.loadCertificate(id,id_group);
 
-   console.log("data certificate: ",certificateStudent)
-   //generateCertificate
+   const certificateStudent = userStore.certificate;
+   console.log("data certificate: ",certificateStudent[0])
+
+   generateCertificate(dataPDF, certificateStudent[0]);
+
 }
 
 </script>
@@ -114,7 +116,7 @@ const exportCerticate = (id) => {
                 {{ user.estudiante?.dni }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                   <Button class="border-1 dark:bg-red" @click="exportCerticate(user.estudiante?.id)">Certificado</Button>
+                   <Button class="border-1 dark:bg-red" @click="exportCerticate(user.estudiante?.id, props.id)">Certificado</Button>
               </Td>
             </Tr>
           </TBody>
