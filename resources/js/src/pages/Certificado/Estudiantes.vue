@@ -1,18 +1,14 @@
 <script setup>
-import { defineProps, watch, ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted, watch } from "vue";
 import Table from "../../components/table/Table.vue";
 import THead from "../../components/table/THead.vue";
 import TBody from "../../components/table/TBody.vue";
 import Tr from "../../components/table/Tr.vue";
 import Th from "../../components/table/Th.vue";
 import Td from "../../components/table/Td.vue";
-import CreateButton from "../../components/ui/CreateButton.vue";
-import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
+import pdfButton from "../../components/ui/pdfButton.vue";
 import useStudentsStore from "../../store/Grupo/useGrupoStore";
-import { generateCertificate } from "../../components/pdf/CertificadoPDF";
 
-const router = useRouter();
 const props = defineProps({
   id: {
     type: Number,
@@ -21,8 +17,8 @@ const props = defineProps({
 });
 
 const userStore = useStudentsStore();
-const listUnit = ref([]);
-const selectUnit = ref(null);
+const selectedStudents = ref([]);
+const selectAll = ref(false);
 
 onMounted(async () => {
   if (!userStore.student?.length) {
@@ -30,102 +26,125 @@ onMounted(async () => {
   }
 });
 
-watch(() => props.id, async (newId) => {
-  await userStore.loadGroupStudent(newId);
-});
+watch(
+  () => props.id,
+  async (newId) => {
+    await userStore.loadGroupStudent(newId);
+  }
+);
 
-const dataPDF = {
-  logo: "/img/logoTwo.png", // Ruta a la imagen del logo
-  photo: "/img/user.png", // Ruta a la imagen de la foto
-  photoMinisterio: "/img/logoMin.png",
-  name: "ANDRADE MARICHIN, Azucena Lisbeth",
-  especialidad: "PELUQUERIA Y BARBERIA",
-  module: "CORTE DE CABELLO, DISEÑO DE BARBA, PEINADO",
-  unidades:[
-    {unidad:"aquietendremos las los zapatos con los mios y otros",capacidad:"en esta partede de uniad veremos las cpasa mas simples de la zapateri con la lo novedoso ya que son mejores pepepe",hora:"6",credito:"17"},
-    {unidad:"aquietendremos las los zapatos con los mios y otros",capacidad:"en esta partede de uniad veremos las cpasa mas simples de la zapateri con la lo novedoso ya que son mejores pepepe",hora:"5",credito:"12"},
-    {unidad:"aquietendremos las los zapatos con los mios y otros",capacidad:"en esta partede de uniad veremos las cpasa mas simples de la zapateri con la lo novedoso ya que son mejores pepepe",hora:"4",credito:"15"},
-    {unidad:"aquietendremos las los zapatos con los mios y otros",capacidad:"en esta partede de uniad veremos las cpasa mas simples de la zapateri con la lo novedoso ya que son mejores pepepe",hora:"7",credito:"12"},
-    {unidad:"aquietendremos las los zapatos con los mios y otros",capacidad:"en esta partede de uniad veremos las cpasa mas simples de la zapateri con la lo novedoso ya que son mejores pepepe",hora:"4",credito:"15"},
-    {unidad:"aquietendremos las los zapatos con los mios y otros",capacidad:"en esta partede de uniad veremos las cpasa mas simples de la zapateri con la lo novedoso ya que son mejores pepepe",hora:"2",credito:"12"},
-  ],
-  startDate: "18/03/2024",
-  endDate: "19/07/2024",
-  credits: 20,
-  hours: 528,
-  location: "Huancané, 24 de diciembre de 2024"
-}
+const toggleSelectAll = () => {
+  if (selectAll.value) {
+    selectedStudents.value = userStore?.student?.estudiantes.map(
+      (student) => student.estudiante.id
+    );
+  } else {
+    selectedStudents.value = [];
+  }
+};
 
-const seeNote = () => {};
+const toggleStudentSelection = (id) => {
+  if (selectedStudents.value.includes(id)) {
+    selectedStudents.value = selectedStudents.value.filter((studentId) => studentId !== id);
+  } else {
+    selectedStudents.value.push(id);
+  }
+};
 
-
-const exportCerticate = (id , id_group) => {
-   
-  console.log("DNI: ",id)
-
-  userStore.loadCertificate(id,id_group);
-
-   const certificateStudent = userStore.certificate;
-   console.log("data certificate: ",certificateStudent[0])
-
-   generateCertificate(dataPDF, certificateStudent[0]);
-
-}
-
+const generateCertificate = () => {
+  const studentsToPrint = userStore?.student?.estudiantes.filter((student) =>
+    selectedStudents.value.includes(student.estudiante.id)
+  );
+  if (studentsToPrint.length === 0) {
+    alert("No hay estudiantes seleccionados.");
+    return;
+  }
+  console.log("Generando PDF para los estudiantes:", studentsToPrint);
+  // Aquí puedes agregar la lógica para generar los certificados.
+};
 </script>
 
 <template>
-  <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
-    <div class="w-full space-y-4 py-6">
-      <div class="flex-between">
-        <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
+  <div class="w-full space-y-4 py-6">
+    <!-- Opciones: Seleccionar Todo y Generar PDF -->
+    <div class="flex items-center justify-end gap-4">
+      <div>
+        <label class="flex items-center">
+          <input
+            type="checkbox"
+            v-model="selectAll"
+            @change="toggleSelectAll"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          />
+          <span class="ms-2 text-sm font-medium text-gray-900">Seleccionar Todo</span>
+        </label>
       </div>
-      <div class="w-full">
-        <Table class="border-collapse divide-y divide-transparent">
-          <THead>
-            <Tr>
-              <Th>Id</Th>
-              <Th>Nombre</Th>
-              <Th>Apellido Paterno</Th>
-              <Th>Apellido Materno</Th>
-              <Th>DNI</Th>
-              <Th>PDF</Th>
-            </Tr>
-          </THead>
-          <TBody>
-            <Tr
-              v-for="user in userStore?.student?.estudiantes"
-              :key="user.id"
-            >
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user.estudiante?.id }}
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                <div>{{ user.estudiante?.name }}</div>
-                <div class="text-sm text-gray-500 dark:text-white">
-                  {{ user.estudiante?.email }}
-                </div>
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user.estudiante?.apellido_paterno }}
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user.estudiante?.apellido_materno }}
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user.estudiante?.dni }}
-              </Td>
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                   <Button class="border-1 dark:bg-red" @click="exportCerticate(user.estudiante?.id, props.id)">Certificado</Button>
-              </Td>
-            </Tr>
-          </TBody>
-        </Table>
+      <div>
+        <pdfButton @click="generateCertificate(dataPDF)"/>
       </div>
     </div>
-  </AuthorizationFallback>
+
+    <!-- Tabla -->
+    <div class="w-full">
+      <Table class="border-collapse divide-y divide-transparent">
+        <THead>
+          <Tr>
+            <Th>Id</Th>
+            <Th>Nombre</Th>
+            <Th>Apellido Paterno</Th>
+            <Th>Apellido Materno</Th>
+            <Th>DNI</Th>
+            <Th>Seleccionar</Th>
+          </Tr>
+        </THead>
+        <TBody>
+          <Tr
+            v-for="user in userStore?.student?.estudiantes"
+            :key="user.estudiante.id"
+          >
+            <Td class="py-2 px-4 border-0 text-black dark:text-white">
+              {{ user.estudiante.id }}
+            </Td>
+            <Td class="py-2 px-4 border-0 text-black dark:text-white">
+              {{ user.estudiante.name }}
+            </Td>
+            <Td class="py-2 px-4 border-0 text-black dark:text-white">
+              {{ user.estudiante.apellido_paterno }}
+            </Td>
+            <Td class="py-2 px-4 border-0 text-black dark:text-white">
+              {{ user.estudiante.apellido_materno }}
+            </Td>
+            <Td class="py-2 px-4 border-0 text-black dark:text-white">
+              {{ user.estudiante.dni }}
+            </Td>
+            <Td class="py-2 px-4 border-0 text-center">
+              <input
+                type="checkbox"
+                :value="user.estudiante.id"
+                v-model="selectedStudents"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              />
+            </Td>
+          </Tr>
+        </TBody>
+      </Table>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-/* No se necesita CSS adicional, todo está gestionado con Tailwind */
+/* Todo está gestionado con Tailwind, no se necesita CSS adicional */
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+

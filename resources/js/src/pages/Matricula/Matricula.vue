@@ -11,6 +11,7 @@ import CreateButton from "../../components/ui/CreateButton.vue";
 import EditButton from "../../components/ui/EditButton.vue";
 import DeleteButton from "../../components/ui/DeleteButton.vue";
 import ViewButton from "../../components/ui/ViewButton.vue";
+import pdfButton from "../../components/ui/pdfButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import EnrollmentSlider from "../../components/page/Matricula/MatriculaSlider.vue";
 
@@ -167,7 +168,7 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
                   <ViewButton @click="SeeMore(enrollment.id_matricula)" />
                   <EditButton @click="showSlider(true, enrollment)" />
                   <DeleteButton @click="onDelete(enrollment)" />
-                  <button @click="fichaMatricula(enrollment.id_estudiante)">PDF</button>
+                  <pdfButton @click="fichaMatricula(enrollment.id_estudiante)"/>
                 </div>
               </Td>
             </Tr>

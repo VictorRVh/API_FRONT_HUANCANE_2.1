@@ -11,6 +11,7 @@ import CreateButton from "../../components/ui/CreateButton.vue";
 import EditButton from "../../components/ui/EditButton.vue";
 import DeleteButton from "../../components/ui/DeleteButton.vue";
 import ViewButton from "../../components/ui/ViewButton.vue";
+import eyeButton from "../../components/ui/eyeButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import PlanSlider from "../../components/page/Especialidad/PlanFormativaSlider.vue";
 
@@ -23,6 +24,7 @@ import useHttpRequest from "../../composables/useHttpRequest";
 import useRoleStore from "../../store/useRoleStore";
 import useUserStore from "../../store/useUserStore";
 import useAuth from "../../composables/useAuth";
+import EyeButton from "../../components/ui/eyeButton.vue";
 
 const router = useRouter();
 
@@ -85,7 +87,7 @@ const SeeMore = (id) => {};
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <ViewButton @click="SeeMore(plan?.id_plan)" />
+                  <eyeButton @click="SeeMore(plan?.id_plan)" />
                   <EditButton @click="showSlider(true, plan)" />
                   <DeleteButton @click="onDelete(plan)" />
                 </div>

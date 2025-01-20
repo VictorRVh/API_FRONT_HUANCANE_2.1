@@ -25,6 +25,7 @@ import useAuth from "../../composables/useAuth";
 import usePlanStore from "../../store/Especialidad/usePlanFormativoStore";
 
 import { ref } from "vue";
+import EyeButton from "../../components/ui/eyeButton.vue";
 
 const props = defineProps({
   idEspecialidad: {
@@ -110,7 +111,7 @@ const changePlan = () => {
           <option value="" disabled>Seleccionar un plan</option>
           <option
             v-for="plan in planStore.plans"
-            
+
             :key="plan.id_plan"
             :value="plan.id_plan"
           >
@@ -149,14 +150,14 @@ const changePlan = () => {
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
               <div class="flex items-center justify-center space-x-2">
                   <div @click="SeeMoreExperiencia(Program?.id_programa)"
-                   
+
                     class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
                   >
                     Experiencia
                   </div>
                   <span>|</span>
                   <div @click="SeeMore(Program?.id_programa)"
-    
+
                     class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
                   >
                     Unidades
@@ -165,7 +166,7 @@ const changePlan = () => {
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <ViewButton />
+                  <EyeButton/>
                   <EditButton @click="showSlider(true, Program)" />
                   <DeleteButton @click="onDelete(Program)" />
                 </div>
