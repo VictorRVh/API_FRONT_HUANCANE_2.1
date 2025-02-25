@@ -40,6 +40,7 @@ const idPlanRef = ref(0);
 const searchQuery = ref("");
 const studentOptions = ref([]);
 
+const selectedStudentName = ref("");
 
 // Define `initialFormData` antes de usarlo
 const initialFormData = () => ({
@@ -101,28 +102,39 @@ const schema = yup.object({
 const searchStudentByDNI = async () => {
   if (searchQuery.value.length === 7 || searchQuery.value.length === 8) {
     try {
+      console.log("Buscando estudiante con DNI:", searchQuery.value);
+
       // Llamar a la función para cargar los datos del estudiante
       await EnrollmentStore.loadEnrollmentById(searchQuery.value);
 
+      console.log("Datos recibidos:", EnrollmentStore?.EnrollmentDni);
+
       // Verificar si se encontraron estudiantes
-      if (EnrollmentStore?.EnrollmentDni && EnrollmentStore.EnrollmentDni?.length > 0) {
-        studentOptions.value = EnrollmentStore?.EnrollmentDni.map(student => ({
+      if (EnrollmentStore?.EnrollmentDni && EnrollmentStore.EnrollmentDni.length > 0) {
+        studentOptions.value = EnrollmentStore.EnrollmentDni.map(student => ({
           id: student.id,
           name: `${student.name} ${student.apellido_paterno}`,
         }));
+
+        formData.value.id_estudiante = studentOptions.value[0].id;
+        selectedStudentName.value = studentOptions.value[0].name;
+
+        // console.log("Estudiante seleccionado:", formData.value.id_estudiante, selectedStudentName.value);
+
         showToast("Estudiante encontrado con éxito!");
       } else {
-        // Si no se encontraron estudiantes
         studentOptions.value = [];
+        formData.value.id_estudiante = null;
+        selectedStudentName.value = "";
         showToast("No se encontraron estudiantes con ese DNI.", "error");
       }
     } catch (error) {
-      // Manejo de errores en caso de fallo de la API
       console.error("Error al buscar estudiantes:", error);
       showToast("Ocurrió un error al buscar el estudiante. Inténtalo de nuevo.", "error");
     }
   }
 };
+
 
 // Envío del formulario
 const onSubmit = async () => {
@@ -171,6 +183,8 @@ watch(searchQuery, () => {
   }
 });
 
+
+
 watch([idPlanRef, idSpecialty], ([newPlan, newSpecialty]) => {
   groupStore?.loadGroups(newPlan, newSpecialty);
 });
@@ -192,6 +206,7 @@ watch([idPlanRef, idSpecialty], ([newPlan, newSpecialty]) => {
             label="name"
             :reduce="(option) => option.id"
             :error="formErrors.id_estudiante"
+            disabled
           />
         </FormLabelError>
 
