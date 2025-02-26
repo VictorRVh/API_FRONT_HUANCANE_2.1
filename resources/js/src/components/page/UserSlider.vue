@@ -48,7 +48,7 @@ const requiredPermissions = computed(() => {
 });
 
 const title = computed(() =>
-  props.user ? `Update user "${props.user?.name}"` : "Add new user"
+  props.user ? `Actualizar "${props.user?.name}"` : "Agregar nuevo usuario"
 );
 
 const initialFormData = () => {
@@ -182,7 +182,7 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.name"
           :focus="show"
-          label="Name"
+          label="Nombres"
           :error="formErrors?.name"
           required
         />
@@ -238,7 +238,7 @@ const onSubmit = async () => {
 
         <FormInput
           v-model="formData.email"
-          label="Email"
+          label="Correo electrónico"
           :error="formErrors?.email"
           required
         />
@@ -246,7 +246,7 @@ const onSubmit = async () => {
         <template v-if="!user?.id">
           <FormInput
             v-model="formData.password"
-            label="Password"
+            label="Contraseña"
             type="password"
             :error="formErrors?.password"
             required
@@ -255,12 +255,12 @@ const onSubmit = async () => {
           <FormInput
             v-model="formData.confirm_password"
             type="password"
-            label="Confirm password"
+            label="Confirmar contraseña"
             required
           />
         </template>
 
-        <FormLabelError label="Add role ">
+        <FormLabelError label="Asignar rol">
           <VSelect
             v-model="selectedRole"
             :options="roleOptions"
@@ -306,7 +306,7 @@ const onSubmit = async () => {
             </li>
 
             <Button
-              :title="user?.id ? 'Save' : 'Update'"
+              :title="user?.id ? 'Actualizar' : 'Guardar'"
               key="submit-btn"
               :loading-title="user?.id ? 'Saving...' : 'Updating...'"
               class="!w-full"

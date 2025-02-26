@@ -46,7 +46,7 @@ const requiredPermissions = computed(() => {
 });
 
 const title = computed(() =>
-  props.user ? `Update user "${props.user?.name}"` : "Add new user"
+  props.user ? `Actualizar "${props.user?.name}"` : "Agregar nuevo usuario"
 );
 
 const initialFormData = () => {
@@ -133,7 +133,7 @@ const onSubmit = async () => {
     : await createUser(data);
 
   if (response?.id) {
-    showToast(`Student ${props.user?.id ? "updated" : "created"} successfully`);
+    showToast(`Student ${props.user?.id ? "updated" : "created"} satisfactoriamente`);
     userStore.loadStudents();
     emit("hide");
   }
@@ -148,7 +148,7 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.name"
           :focus="show"
-          label="Name"
+          label="Nombres"
           type="text"
           :error="formErrors?.name"
           required
@@ -207,7 +207,7 @@ const onSubmit = async () => {
 
         <FormInput
           v-model="formData.email"
-          label="Email"
+          label="Correo electrónico"
           type="email"
           :error="formErrors?.email"
           required
@@ -216,7 +216,7 @@ const onSubmit = async () => {
         <template v-if="!user?.id">
           <FormInput
             v-model="formData.password"
-            label="Password"
+            label="Contraseña"
             type="password"
             :error="formErrors?.password"
             required
@@ -225,7 +225,7 @@ const onSubmit = async () => {
           <FormInput
             v-model="formData.confirm_password"
             type="password"
-            label="Confirm password"
+            label="Confirmar contraseña"
             required
           />
         </template>
@@ -233,9 +233,9 @@ const onSubmit = async () => {
         <div class="w-full space-y-3">
           <TransitionGroup tag="ul" name="edit-list" class="relative space-y-3">
             <Button
-              :title="user?.id ? 'Update' : 'Save'"
+              :title="user?.id ? 'Actualizar' : 'Guardar'"
               key="submit-btn"
-              :loading-title="user?.id ? 'Saving...' : 'Updating...'"
+              :loading-title="user?.id ? 'Guardando...' : 'Actualizando...'"
               class="!w-full"
               :loading="saving || updating"
               @click="onSubmit"
