@@ -164,7 +164,7 @@ const goBack = () => {
           </svg>
         </button>
         <p class="ml-2 bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm dark:bg-gray-700 dark:text-gray-300">
-          {{ route.fullPath }}
+          {{ route.fullPath }} hola
         </p>
       </div>
 

@@ -28,9 +28,6 @@ const onLogout = async () => {
   if (isLoggedOut) {
     // Limpia los datos del usuario
     userStore.setUser(null); // Limpia el usuario del store
-
-
-    // Redirige al login
     router.push({ name: "login" });
   }
 };
