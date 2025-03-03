@@ -30,6 +30,10 @@ const useGroupsStore = defineStore('Groups', () => {
     } = useHttpRequest('/grupoNotasExperiencia');
     
     const {
+        showTwo: getGrupoEstudiante,
+        //show: getGrupoStudentNote
+    } = useHttpRequest('/grupoEstudiante');
+    const {
         showTwo: getGrupoDocente,
         show: getGrupoStudentNote
     } = useHttpRequest('/grupoDocente');
@@ -50,7 +54,7 @@ const useGroupsStore = defineStore('Groups', () => {
     const userStore = useUserStore();
     const user = userStore.user; // Accedemos al valor real del usuario
     const isDocente = user?.roles?.[0]?.name === 'docente';
-
+    const isStudent = user?.roles?.[0]?.name === 'estudiante';
 
     // Función para cargar todas las Groupaes
     const loadGroups = async (plan = 1, especialty) => {
@@ -62,7 +66,13 @@ const useGroupsStore = defineStore('Groups', () => {
             groups.value = response;
           //  console.log('Docentes store en ici: ',user?.roles?.[0].pivot.user_id);
 
-        } else {
+        }
+        else if(isStudent){
+            const response = await getGrupoEstudiante(user?.roles?.[0].pivot.user_id, plan);
+            groups.value = response;
+          //  console.log('Docentes store en ici: ',user?.roles?.[0].pivot.user_id);
+        } 
+        else {
             // Si es administrativo, carga todos los grupos con el método original `getGroups`
             const response = await getGroups(plan, especialty);
             groups.value = response;

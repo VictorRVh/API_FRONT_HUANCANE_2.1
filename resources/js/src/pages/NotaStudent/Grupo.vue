@@ -31,24 +31,7 @@ let specialtiesStore = ref(null);
 let userStore = ref(null);
 let placesStore = ref(null);
 const selectSpecialties = ref(0);
-
-if (roleStore.role[0].id != 7) {
-  specialtiesStore = useSpecialtyStore();
-  if (!specialtiesStore.specialties?.length) await specialtiesStore.loadSpecialties();
-
-  placesStore = usePlaceStore();
-  if (!placesStore.Places?.length) await placesStore.loadPlaces();
-
-  userStore = useStudentsStore();
-  if (!userStore.students?.length) await userStore.loadStudents();
-
-  if (specialtiesStore.specialties.length > 0) {
-    selectSpecialties.value =
-      specialtiesStore.specialties[
-        specialtiesStore.specialties.length - 1
-      ].id_especialidad;
-  }
-}
+//roleStore.role[0].id
 
 const planStore = usePlanStore();
 if (!planStore.plans?.length) await planStore.loadPlans();
