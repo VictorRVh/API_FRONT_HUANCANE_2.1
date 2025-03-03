@@ -124,6 +124,14 @@ class PermissionTableSeeder extends Seeder
             'note-edit',
             'note-delete',
             'note-icon',
+
+            //Permiso para estudiantes
+            'note-student-all',
+            'note-student-view',
+            'note-student-create',
+            'note-student-edit',
+            'note-student-delete',
+            'note-student-icon',
         ];
 
         $permissions = array_map(function ($name) {

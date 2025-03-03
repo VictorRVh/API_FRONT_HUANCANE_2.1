@@ -240,27 +240,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('unidad_didactica', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'index',
-    ])->middleware('permission:units-all|units-view');
+    ])->middleware('permission:units-all|units-view|note-student-all');
 
     Route::get('unidad_didactica/{id_programa}', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'getUnidadDidacticaPrograma',
-    ])->middleware('permission:units-all|units-view');
+    ])->middleware('permission:units-all|units-view|note-student-all');
 
     Route::post('unidad_didactica', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'store',
-    ])->middleware('permission:units-all|units-create');
+    ])->middleware('permission:units-all|units-create|note-student-all');
 
     Route::patch('unidad_didactica/{unidadId}', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'update',
-    ])->middleware('permission:units-all|units-edit');
+    ])->middleware('permission:units-all|units-edit|note-student-all');
 
     Route::delete('unidad_didactica/{unidadId}', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'destroy',
-    ])->middleware('permission:units-all|units-delete');
+    ])->middleware('permission:units-all|units-delete|note-student-all');
 
 
     // RUTA PARA INDICADOR DE LOGRO
