@@ -338,6 +338,13 @@ Route::middleware('auth:sanctum')->group(function () {
         'getGruposPorUsuarioYPlan',
     ])->middleware('permission:groups-all|groups-view');
 
+    //RUTA DE GRUPO POR ESTUDIANTE
+
+    Route::get('grupoEstudiante/{usuario_id}/{plan_id}', [
+        \App\Http\Controllers\GrupoController::class,
+        'getGruposPorEstudianteYPlan',
+    ])->middleware('permission:groups-all|groups-view');
+
     //RUTA QUE TRAE TODAS LAS NOTAS DE LAS UNIDADES DIDACTICAS DE LOS ESTUDIANTES
 
     Route::get('grupoDocente/{grupo_id}', [
