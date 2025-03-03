@@ -248,6 +248,9 @@ class GrupoController extends Controller
             if ($grupo->programa) {
                 $grupo->programa->makeHidden(['created_at', 'updated_at']);
             }
+            if ($grupo->docente) {
+                $grupo->docente->makeHidden(['created_at', 'updated_at']);
+            }
         });
     
         return response()->json($grupos, 200);
