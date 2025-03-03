@@ -128,8 +128,8 @@ const onSubmit = async () => {
         />
 
         <Button
-          :title="permission?.id ? 'Save' : 'Update'"
-          :loading-title="permission?.id ? 'Saving...' : 'Updating...'"
+          :title="permission?.id ? 'Actualizar' : 'Guardar'"
+          :loading-title="permission?.id ? 'actualizando...' : 'Guardando...'"
           class="!w-full"
           :loading="saving || updating"
           key="submit-btn"

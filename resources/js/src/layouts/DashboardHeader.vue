@@ -36,6 +36,7 @@ const menuItems = [
   { name: "Sede", icon: "BookmarkSquareIcon", route: "sedes", permissions: ["places-all", "places-icon"] },
   { name: "Grupos", icon: "UsersIcon", route: "grupos", permissions: ["groups-all", "groups-icon"] },
   { name: "Notas", icon: "ClipboardDocumentListIcon", route: "notas", permissions: ["note-all", "note-icon"] },
+  { name: "Notas", icon: "NewspaperIcon", route: "notaStudent", permissions: ["note-student-all", "note-student-icon"] },
 ];
 
 // Comprobar permisos
