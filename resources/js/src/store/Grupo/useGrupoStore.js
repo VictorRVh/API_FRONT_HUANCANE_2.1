@@ -100,6 +100,12 @@ const useGroupsStore = defineStore('Groups', () => {
         student.value = response;
     };
 
+    const loadNotas = async (id_group) => {
+        const response = await certificadoStudent(user?.roles?.[0].pivot.user_id, id_group);
+        certificate.value = response;
+        //console.log("Store certificado: ", response
+    };
+    
     const loadCertificate = async (id,id_group) => {
         const response = await certificadoStudent(id , id_group);
         certificate.value = response;
@@ -114,6 +120,7 @@ const useGroupsStore = defineStore('Groups', () => {
         groups,
         GroupsLoading,
         GroupsFirstTimeLoading,
+        loadNotas,
         loadGroups,
         loadGroupById, // Retornamos la nueva función para obtener una Groupa por ID
         loadGroupStudentNote,

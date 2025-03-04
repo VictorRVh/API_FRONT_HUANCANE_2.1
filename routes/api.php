@@ -467,27 +467,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('nota_experiencia_formativa', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'index',
-    ])->middleware('permission:permissions-all|permissions-view');
+    ])->middleware('permission:note-experience-all|note-experience-view');
 
     Route::post('nota_experiencia_formativa', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'store',
-    ])->middleware('permission:permissions-all|permissions-create');
+    ])->middleware('permission:note-experience-all|note-experience-create');
 
     Route::post('registrar_nota_experiencia', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'registrarNotaExperiencia',
-    ])->middleware('permission:permissions-all|permissions-create');
+    ])->middleware('permission:note-experience-all|note-experience-create');
 
     Route::patch('nota_experiencia_formativa/{notaExperienciaId}', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'update',
-    ])->middleware('permission:permissions-all|permissions-edit');
+    ])->middleware('permission:note-experience-all|note-experience-edit');
 
     Route::delete('nota_experiencia_formativa/{notaExperienciaId}', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'destroy',
-    ])->middleware('permission:permissions-all|permissions-delete');
+    ])->middleware('permission:note-experience-all|note-experience-delete');
 
     // INFORMACION PARA CERTIFICADO
 
