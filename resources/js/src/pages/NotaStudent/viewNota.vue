@@ -32,7 +32,6 @@ onMounted(async () => {
     showToast("Error al cargar los datos", "error");
     console.error("Error al cargar los certificados:", error);
   }
-
 });
 
 console.log("datos de la vida: ", dataCertificate.value)
