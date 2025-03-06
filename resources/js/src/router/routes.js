@@ -258,7 +258,7 @@ export default [
             layout: 'dashboard',
             permissions: ['data-all', 'data-view'],
         },
-    }
+    },
 
     /* todlos que se aumento */
 ];

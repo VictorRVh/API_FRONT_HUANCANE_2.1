@@ -13,8 +13,8 @@ const { isDarkMode, updateDarkMode } = inject("theme");
 
 // Alternar modo oscuro
 const toggleDarkMode = () => {
-  updateDarkMode(!isDarkMode.value); // Actualiza el estado global
-  document.documentElement.classList.toggle("dark", isDarkMode.value); // Alterna la clase "dark" en <html>
+  updateDarkMode(!isDarkMode.value);
+  document.documentElement.classList.toggle("dark", isDarkMode.value);
 };
 
 // Función para redirigir a "Editar Perfil"
@@ -24,48 +24,42 @@ const goToEditProfile = () => {
 
 // Función para cerrar sesión
 const onLogout = async () => {
-  const isLoggedOut = await logout(); // Llama al endpoint de logout
+  const isLoggedOut = await logout();
   if (isLoggedOut) {
-    // Limpia los datos del usuario
-    userStore.setUser(null); // Limpia el usuario del store
-
-
-    // Redirige al login
+    userStore.setUser(null);
     router.push({ name: "login" });
   }
 };
 </script>
 
 <template>
-  <!-- Contenedor principal -->
   <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md w-64 border border-gray-300 dark:border-gray-600">
-    <!-- Información del Usuario -->
-    <div class="mb-4">
+    <div class="mb-4 border-b pb-2 border-gray-300 dark:border-gray-500">
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
         Información del Usuario
       </h3>
-      <div class="mt-2">
-        <p class="text-sm text-gray-600 dark:text-gray-300">
-          <span class="font-medium">Nombres:</span>
-          {{ userStore.user?.name }}
-        </p>
-        <p class="text-sm text-gray-600 dark:text-gray-300">
-          <span class="font-medium">Apellidos:</span>
-          {{ userStore.user?.apellido_paterno }} {{ userStore.user?.apellido_materno }}
-        </p>
-        <p class="text-sm text-gray-600 dark:text-gray-300">
-          <span class="font-medium">Rol:</span>
-          {{ userStore.user.roles[0]?.name }}
-        </p>
-        <p class="text-sm text-gray-600 dark:text-gray-300">
-          <span class="font-medium">Cuenta:</span>
-          {{ userStore.user?.email }}
-        </p>
-      </div>
     </div>
 
-    <!-- Botón de Editar -->
-    <div class="mb-6 flex items-center">
+    <div class="mb-4 space-y-2">
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        <span class="font-bold">Nombres:</span>
+        {{ userStore.user?.name }}
+      </p>
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        <span class="font-bold">Apellidos:</span>
+        {{ userStore.user?.apellido_paterno }} {{ userStore.user?.apellido_materno }}
+      </p>
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        <span class="font-bold">Rol:</span>
+        {{ userStore.user.roles[0]?.name }}
+      </p>
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        <span class="font-bold">Cuenta:</span>
+        {{ userStore.user?.email }}
+      </p>
+    </div>
+
+    <div class="mb-6 flex items-center border-t pt-3 border-gray-300 dark:border-gray-500">
       <button
         @click="goToEditProfile"
         class="flex items-center space-x-2 text-granate hover:underline dark:text-granateLigth"
@@ -88,9 +82,7 @@ const onLogout = async () => {
       </button>
     </div>
 
-    <!-- Botones de Modo Oscuro y Cerrar Sesión -->
-    <div class="flex justify-between items-center">
-      <!-- Botón de Modo Oscuro -->
+    <div class="flex justify-between items-center border-t pt-3 border-gray-300 dark:border-gray-500">
       <button
         class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
         @click="toggleDarkMode"
@@ -127,7 +119,6 @@ const onLogout = async () => {
         </svg>
       </button>
 
-      <!-- Botón de Cerrar Sesión -->
       <button
         @click="onLogout"
         class="text-dark text-sm px-4 py-2 rounded-lg hover:bg-granate hover:text-white transition-colors dark:text-white dark:hover:bg-granate-dark"
