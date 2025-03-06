@@ -274,9 +274,8 @@ class MatriculaController extends Controller
                 'periodo_academico' => $registro->grupos->plan->nombre_plan,
                 'programa' => $registro->grupos->programa->nombre_programa,
                 'unidad_competencia' => $registro->grupos->programa->unidades_competencia,
-                'periodo_clase' => optional($registro->grupos->programa->unidadesDidacticas->sortBy('fecha_inicio')->first())->fecha_inicio
-                    . ' al ' .
-                    optional($registro->grupos->programa->unidadesDidacticas->sortByDesc('fecha_final')->first())->fecha_fin,
+                'fecha_inicio' => optional($registro->grupos->programa->unidadesDidacticas->sortBy('fecha_inicio')->first())->fecha_inicio,
+                "fecha_fin" => optional($registro->grupos->programa->unidadesDidacticas->sortByDesc('fecha_final')->first())->fecha_fin,
                 'dni' => $registro->estudiante->dni,
                 'apellidos_nombres' => strtoupper($registro->estudiante->apellido_paterno) . ' ' . strtoupper($registro->estudiante->apellido_materno) . ', ' . $registro->estudiante->name,
                 'unidades_didacticas' => $registro->grupos->programa->unidadesDidacticas->map(function ($unidad, $index) use ($registro) {

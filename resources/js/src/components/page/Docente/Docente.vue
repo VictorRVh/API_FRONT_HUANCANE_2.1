@@ -143,7 +143,7 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.name"
           :focus="show"
-          label="Name"
+          label="Nombres"
           type="text"
           :error="formErrors?.name"
           required
@@ -202,7 +202,7 @@ const onSubmit = async () => {
 
         <FormInput
           v-model="formData.email"
-          label="Email"
+          label="Correo electrónico"
           type="email"
           :error="formErrors?.email"
           required
@@ -211,7 +211,7 @@ const onSubmit = async () => {
         <template v-if="!user?.id">
           <FormInput
             v-model="formData.password"
-            label="Password"
+            label="Contraseña"
             type="password"
             :error="formErrors?.password"
             required
@@ -220,7 +220,7 @@ const onSubmit = async () => {
           <FormInput
             v-model="formData.confirm_password"
             type="password"
-            label="Confirm password"
+            label="Confirmar contraseña"
             required
           />
         </template>

@@ -1,14 +1,21 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+
+import { defineProps, watch, ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import Table from "../../components/table/Table.vue";
 import THead from "../../components/table/THead.vue";
 import TBody from "../../components/table/TBody.vue";
 import Tr from "../../components/table/Tr.vue";
 import Th from "../../components/table/Th.vue";
 import Td from "../../components/table/Td.vue";
-import pdfButton from "../../components/ui/pdfButton.vue";
+import CreateButton from "../../components/ui/CreateButton.vue";
+import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import useStudentsStore from "../../store/Grupo/useGrupoStore";
+import { generateCertificate } from "../../components/pdf/CertificadoPDF";
+import pdfButton from "../../components/ui/pdfButton.vue";
 
+import useModalToast from "../../composables/useModalToast";
+const router = useRouter();
 const props = defineProps({
   id: {
     type: Number,
@@ -16,9 +23,11 @@ const props = defineProps({
   },
 });
 
+const { showToast } = useModalToast();
+
 const userStore = useStudentsStore();
-const selectedStudents = ref([]);
-const selectAll = ref(false);
+const selectedStudents = ref([]); // Almacena los IDs de los estudiantes seleccionados
+const selectAll = ref(false); // Controla el estado del checkbox "Seleccionar Todo"
 
 onMounted(async () => {
   if (!userStore.student?.length) {
@@ -26,41 +35,76 @@ onMounted(async () => {
   }
 });
 
-watch(
-  () => props.id,
-  async (newId) => {
-    await userStore.loadGroupStudent(newId);
-  }
-);
+watch(() => props.id, async (newId) => {
+
+  await userStore.loadGroupStudent(newId);
+
+});
+
 
 const toggleSelectAll = () => {
   if (selectAll.value) {
-    selectedStudents.value = userStore?.student?.estudiantes.map(
-      (student) => student.estudiante.id
-    );
+
+    selectedStudents.value = userStore.student?.estudiantes.map((user) => user.estudiante.id); // Solo el ID
+
   } else {
     selectedStudents.value = [];
   }
 };
 
-const toggleStudentSelection = (id) => {
-  if (selectedStudents.value.includes(id)) {
-    selectedStudents.value = selectedStudents.value.filter((studentId) => studentId !== id);
-  } else {
-    selectedStudents.value.push(id);
-  }
+
+
+const dataPDF = {
+  logo: "/img/logoTwo.png",
+  photo: "/img/user.png",
+  photoMinisterio: "/img/logoMin.png",
+  name: "",
+  especialidad: "PELUQUERIA Y BARBERIA",
+  module: "CORTE DE CABELLO, DISEÑO DE BARBA, PEINADO",
+  unidades: [
+    {
+      unidad: "aquietendremos las los zapatos con los mios y otros",
+      capacidad:
+        "en esta parte de unidad veremos las cosas más simples de la zapatería con lo novedoso",
+      hora: "6",
+      credito: "17",
+    },
+  ],
+  startDate: "18/03/2024",
+  endDate: "19/07/2024",
+  credits: 20,
+  hours: 528,
+  location: "Huancané, 24 de diciembre de 2024",
 };
 
-const generateCertificate = () => {
-  const studentsToPrint = userStore?.student?.estudiantes.filter((student) =>
-    selectedStudents.value.includes(student.estudiante.id)
-  );
-  if (studentsToPrint.length === 0) {
-    alert("No hay estudiantes seleccionados.");
+
+
+
+const dataCertificate = ref([]); // Inicializamos como array vacío
+
+const generateSelectedCertificates = async () => {
+  if (selectedStudents.value.length === 0) {
+    showToast("Por favor, selecciona al menos un estudiante.");
     return;
   }
-  console.log("Generando PDF para los estudiantes:", studentsToPrint);
-  // Aquí puedes agregar la lógica para generar los certificados.
+
+  // Carga los certificados de los estudiantes seleccionados
+  const certificates = await Promise.all(
+    selectedStudents.value.map(async (studyId) => {
+      await userStore.loadCertificate(studyId, props.id);
+      return userStore.certificate; // Retorna el certificado cargado
+    })
+  );
+
+  dataCertificate.value = certificates; // Asigna los certificados obtenidos
+
+  console.log("Certificados cargados:", dataCertificate.value[0][0]?.experiencias_formativas[0].nombre_experiencia
+  );
+    // console.log("Primer certificado:", dataCertificate.value[0][0]?.apellidos_nombres);
+  
+  generateCertificate(dataPDF ,dataCertificate.value);
+
+
 };
 </script>
 
@@ -70,17 +114,13 @@ const generateCertificate = () => {
     <div class="flex items-center justify-end gap-4">
       <div>
         <label class="flex items-center">
-          <input
-            type="checkbox"
-            v-model="selectAll"
-            @change="toggleSelectAll"
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          />
+          <input type="checkbox" v-model="selectAll" @change="toggleSelectAll"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
           <span class="ms-2 text-sm font-medium text-gray-900">Seleccionar Todo</span>
         </label>
       </div>
       <div>
-        <pdfButton @click="generateCertificate(dataPDF)"/>
+        <pdfButton @click="generateSelectedCertificates" />
       </div>
     </div>
 
@@ -98,10 +138,7 @@ const generateCertificate = () => {
           </Tr>
         </THead>
         <TBody>
-          <Tr
-            v-for="user in userStore?.student?.estudiantes"
-            :key="user.estudiante.id"
-          >
+          <Tr v-for="user in userStore?.student?.estudiantes" :key="user.estudiante.id">
             <Td class="py-2 px-4 border-0 text-black dark:text-white">
               {{ user.estudiante.id }}
             </Td>
@@ -118,33 +155,17 @@ const generateCertificate = () => {
               {{ user.estudiante.dni }}
             </Td>
             <Td class="py-2 px-4 border-0 text-center">
-              <input
-                type="checkbox"
-                :value="user.estudiante.id"
-                v-model="selectedStudents"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-              />
+              <input type="checkbox" :value="user.estudiante.id" v-model="selectedStudents"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
             </Td>
           </Tr>
         </TBody>
       </Table>
     </div>
   </div>
+
 </template>
 
 <style scoped>
 /* Todo está gestionado con Tailwind, no se necesita CSS adicional */
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-

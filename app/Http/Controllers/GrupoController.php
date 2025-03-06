@@ -213,6 +213,50 @@ class GrupoController extends Controller
         return response()->json($grupos, 200);
     }
 
+    public function getGruposPorEstudianteYPlan($estudiante_id, $plan_id)
+    {
+        // Obtener los ID de los grupos en los que está matriculado el estudiante
+        $gruposIds = Matricula::where('id_estudiante', $estudiante_id)
+            ->pluck('id_grupo'); // Extraer solo los IDs de los grupos
+    
+        // Obtener los grupos con sus relaciones
+        $grupos = Grupo::whereIn('id_grupo', $gruposIds) // Filtrar por los grupos obtenidos
+            ->where('id_plan', $plan_id) // Filtrar por el plan
+            ->with(['sede', 'turno', 'plan', 'especialidad', 'programa']) // Cargar relaciones necesarias
+            ->get();
+    
+        // Ocultar timestamps
+        $grupos->each(function ($grupo) {
+            $grupo->makeHidden(['created_at', 'updated_at']);
+    
+            if ($grupo->sede) {
+                $grupo->sede->makeHidden(['created_at', 'updated_at']);
+            }
+    
+            if ($grupo->turno) {
+                $grupo->turno->makeHidden(['created_at', 'updated_at']);
+            }
+    
+            if ($grupo->plan) {
+                $grupo->plan->makeHidden(['created_at', 'updated_at']);
+            }
+    
+            if ($grupo->especialidad) {
+                $grupo->especialidad->makeHidden(['created_at', 'updated_at']);
+            }
+    
+            if ($grupo->programa) {
+                $grupo->programa->makeHidden(['created_at', 'updated_at']);
+            }
+            if ($grupo->docente) {
+                $grupo->docente->makeHidden(['created_at', 'updated_at']);
+            }
+        });
+    
+        return response()->json($grupos, 200);
+    }
+    
+
     public function getAlumnosYUnidadesPorGrupo($grupo_id)
     {
         $alumnos = Matricula::whereHas('grupos', function ($query) use ($grupo_id) {

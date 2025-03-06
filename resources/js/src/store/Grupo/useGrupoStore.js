@@ -30,11 +30,15 @@ const useGroupsStore = defineStore('Groups', () => {
     } = useHttpRequest('/grupoNotasExperiencia');
     
     const {
+        showTwo: getGrupoEstudiante,
+        //show: getGrupoStudentNote
+    } = useHttpRequest('/grupoEstudiante');
+    const {
         showTwo: getGrupoDocente,
         show: getGrupoStudentNote
     } = useHttpRequest('/grupoDocente');
     const {
-        show: certificadoStudent
+        showTwo: certificadoStudent
     } = useHttpRequest('/certificado');
 
     const group = ref(null); // Para almacenar una sola Groupa
@@ -50,7 +54,7 @@ const useGroupsStore = defineStore('Groups', () => {
     const userStore = useUserStore();
     const user = userStore.user; // Accedemos al valor real del usuario
     const isDocente = user?.roles?.[0]?.name === 'docente';
-
+    const isStudent = user?.roles?.[0]?.name === 'estudiante';
 
     // Función para cargar todas las Groupaes
     const loadGroups = async (plan = 1, especialty) => {
@@ -62,7 +66,13 @@ const useGroupsStore = defineStore('Groups', () => {
             groups.value = response;
           //  console.log('Docentes store en ici: ',user?.roles?.[0].pivot.user_id);
 
-        } else {
+        }
+        else if(isStudent){
+            const response = await getGrupoEstudiante(user?.roles?.[0].pivot.user_id, plan);
+            groups.value = response;
+          //  console.log('Docentes store en ici: ',user?.roles?.[0].pivot.user_id);
+        } 
+        else {
             // Si es administrativo, carga todos los grupos con el método original `getGroups`
             const response = await getGroups(plan, especialty);
             groups.value = response;
@@ -90,8 +100,14 @@ const useGroupsStore = defineStore('Groups', () => {
         student.value = response;
     };
 
-    const loadCertificate = async (id) => {
-        const response = await certificadoStudent(id);
+    const loadNotas = async (id_group) => {
+        const response = await certificadoStudent(user?.roles?.[0].pivot.user_id, id_group);
+        certificate.value = response;
+        //console.log("Store certificado: ", response
+    };
+    
+    const loadCertificate = async (id,id_group) => {
+        const response = await certificadoStudent(id , id_group);
         certificate.value = response;
         //console.log("Store certificado: ", response
     };
@@ -104,6 +120,7 @@ const useGroupsStore = defineStore('Groups', () => {
         groups,
         GroupsLoading,
         GroupsFirstTimeLoading,
+        loadNotas,
         loadGroups,
         loadGroupById, // Retornamos la nueva función para obtener una Groupa por ID
         loadGroupStudentNote,

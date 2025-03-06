@@ -191,6 +191,27 @@ export default [
     },
     {
         path: '/notas',
+        name: 'notaStudent',
+        component: () => import('../pages/NotaStudent/Grupo.vue'),
+        props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        meta: {
+            layout: 'dashboard',
+            permissions: ['note-student-all', 'notas-student-view'],
+        },
+    },
+    
+    {
+        path: '/notas/:id',
+        name: 'noteByStudent',
+        component: () => import('../pages/NotaStudent/viewNota.vue'),
+        props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        meta: {
+            layout: 'dashboard',
+            permissions: ['note-student-all', 'notas-student-view'],
+        },
+    },
+    {
+        path: '/notas',
         name: 'notas',
         component: () => import('../pages/Notas/Grupo.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente

@@ -22,7 +22,8 @@ const icons = {
   CalendarIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/CalendarIcon')),
   ClipboardDocumentListIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/ClipboardDocumentListIcon')),
   PaperClipIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/PaperClipIcon')),
- // BookOpenIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/BookOpenIcon')),
+  NewspaperIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/NewspaperIcon')), 
+  // BookOpenIcon: defineAsyncComponent( () => import('@heroicons/vue/24/outline/BookOpenIcon')),
   // Agrega más íconos aquí según sea necesario
 };
 

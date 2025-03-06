@@ -26,7 +26,12 @@ const goToEditProfile = () => {
 const onLogout = async () => {
   const isLoggedOut = await logout();
   if (isLoggedOut) {
+<<<<<<< HEAD
     userStore.setUser(null);
+=======
+    // Limpia los datos del usuario
+    userStore.setUser(null); // Limpia el usuario del store
+>>>>>>> 11bacde29e10e5766798c253a3fb4423d889f4ff
     router.push({ name: "login" });
   }
 };

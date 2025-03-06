@@ -240,27 +240,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('unidad_didactica', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'index',
-    ])->middleware('permission:units-all|units-view');
+    ])->middleware('permission:units-all|units-view|note-student-all');
 
     Route::get('unidad_didactica/{id_programa}', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'getUnidadDidacticaPrograma',
-    ])->middleware('permission:units-all|units-view');
+    ])->middleware('permission:units-all|units-view|note-student-all');
 
     Route::post('unidad_didactica', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'store',
-    ])->middleware('permission:units-all|units-create');
+    ])->middleware('permission:units-all|units-create|note-student-all');
 
     Route::patch('unidad_didactica/{unidadId}', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'update',
-    ])->middleware('permission:units-all|units-edit');
+    ])->middleware('permission:units-all|units-edit|note-student-all');
 
     Route::delete('unidad_didactica/{unidadId}', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'destroy',
-    ])->middleware('permission:units-all|units-delete');
+    ])->middleware('permission:units-all|units-delete|note-student-all');
 
 
     // RUTA PARA INDICADOR DE LOGRO
@@ -336,6 +336,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('grupoDocente/{usuario_id}/{plan_id}', [
         \App\Http\Controllers\GrupoController::class,
         'getGruposPorUsuarioYPlan',
+    ])->middleware('permission:groups-all|groups-view');
+
+    //RUTA DE GRUPO POR ESTUDIANTE
+
+    Route::get('grupoEstudiante/{usuario_id}/{plan_id}', [
+        \App\Http\Controllers\GrupoController::class,
+        'getGruposPorEstudianteYPlan',
     ])->middleware('permission:groups-all|groups-view');
 
     //RUTA QUE TRAE TODAS LAS NOTAS DE LAS UNIDADES DIDACTICAS DE LOS ESTUDIANTES
@@ -460,27 +467,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('nota_experiencia_formativa', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'index',
-    ])->middleware('permission:permissions-all|permissions-view');
+    ])->middleware('permission:note-experience-all|note-experience-view');
 
     Route::post('nota_experiencia_formativa', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'store',
-    ])->middleware('permission:permissions-all|permissions-create');
+    ])->middleware('permission:note-experience-all|note-experience-create');
 
     Route::post('registrar_nota_experiencia', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'registrarNotaExperiencia',
-    ])->middleware('permission:permissions-all|permissions-create');
+    ])->middleware('permission:note-experience-all|note-experience-create');
 
     Route::patch('nota_experiencia_formativa/{notaExperienciaId}', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'update',
-    ])->middleware('permission:permissions-all|permissions-edit');
+    ])->middleware('permission:note-experience-all|note-experience-edit');
 
     Route::delete('nota_experiencia_formativa/{notaExperienciaId}', [
         \App\Http\Controllers\NotaExperienciaFormativaController::class,
         'destroy',
-    ])->middleware('permission:permissions-all|permissions-delete');
+    ])->middleware('permission:note-experience-all|note-experience-delete');
 
     // INFORMACION PARA CERTIFICADO
 

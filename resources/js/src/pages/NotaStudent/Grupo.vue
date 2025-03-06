@@ -31,24 +31,7 @@ let specialtiesStore = ref(null);
 let userStore = ref(null);
 let placesStore = ref(null);
 const selectSpecialties = ref(0);
-
-if (roleStore.role[0].id != 7) {
-  specialtiesStore = useSpecialtyStore();
-  if (!specialtiesStore.specialties?.length) await specialtiesStore.loadSpecialties();
-
-  placesStore = usePlaceStore();
-  if (!placesStore.Places?.length) await placesStore.loadPlaces();
-
-  userStore = useStudentsStore();
-  if (!userStore.students?.length) await userStore.loadStudents();
-
-  if (specialtiesStore.specialties.length > 0) {
-    selectSpecialties.value =
-      specialtiesStore.specialties[
-        specialtiesStore.specialties.length - 1
-      ].id_especialidad;
-  }
-}
+//roleStore.role[0].id
 
 const planStore = usePlanStore();
 if (!planStore.plans?.length) await planStore.loadPlans();
@@ -65,16 +48,11 @@ if (!groupStore.groups?.length) {
 }
 
 
-const noteUnid = (id) => {
-  router.push({
-    name: "notasUnits",
-    params: { id: id },
-  });
-};
 
-const noteExp = (id) => {
+
+const noteAll = (id) => {
   router.push({
-    name: "notasExperience",
+    name: "noteByStudent",
     params: { id: id },
   });
 };
@@ -110,22 +88,7 @@ const changePlan = () => {
           </option>
         </select>
 
-        <select
-          id="specialty-select"
-          v-if="roleStore.role[0].id != 7"
-          @change="changePlan()"
-          v-model="selectSpecialties"
-          class="border rounded-md p-2"
-        >
-          <option value="" disabled>Seleccione una especialidad</option>
-          <option
-            v-for="specialty in specialtiesStore?.specialties"
-            :key="specialty?.id_especialidad"
-            :value="specialty?.id_especialidad"
-          >
-            {{ specialty.nombre_especialidad }}
-          </option>
-        </select>
+  
       </div>
 
       <!-- Tabla -->
@@ -160,19 +123,14 @@ const changePlan = () => {
 
               <Td class="px-4 py-2 text-center">
                 <div class="flex items-center justify-center space-x-2">
-                  <div @click="noteExp(grupo?.id_grupo)"
+                  <div @click="noteAll(grupo?.id_grupo)"
                    
                     class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
                   >
-                    Experiencia
+                    Nota
                   </div>
-                  <span>|</span>
-                  <div @click="noteUnid(grupo?.id_grupo)"
-    
-                    class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
-                  >
-                    Unidades
-                  </div>
+                
+              
                 </div>
               </Td>
 
