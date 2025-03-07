@@ -138,10 +138,12 @@ cargarDatosUsuario();
             :src="form.imagen || 'https://via.placeholder.com/150'"
             alt="Imagen de perfil"
             class="w-24 h-24 rounded-full border border-gray-300 dark:border-gray-600 object-cover"
+            
           />
+          
           <label
             for="imagen"
-            class="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-blue-700"
+            class="absolute bottom-0 right-0 bg-granate text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer hover:bg-granate"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -207,7 +209,7 @@ cargarDatosUsuario();
           type="button"
           :disabled="loading"
           @click="guardarCambios"
-          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50"
+          class="px-4 py-2 text-sm font-medium text-white bg-granate rounded-md hover:bg-granate-244 disabled:opacity-50"
         >
           Guardar Cambios
         </button>

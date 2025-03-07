@@ -105,7 +105,8 @@ const goBack = () => {
         <p class="ml-2 bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm dark:bg-gray-700 dark:text-gray-300">{{ route.fullPath }}</p>
       </div>
       
-      <div class="container mx-auto max-w-full w-[99%] h-[calc(90%-5rem)] bg-white rounded-md shadow-lg mt-1 pl-4 pr-4 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600 overflow-auto custom-scrollbar">
+      <div class="container mx-auto max-w-full w-[99%] h-[calc(100%-5rem)] bg-white rounded-md shadow-lg mt-1 pl-4 pr-4 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600 overflow-auto custom-scrollbar">
+
         <RouterView v-slot="{ Component }">
           <template v-if="Component">
             <Suspense @pending="asyncLoading = true" @resolve="asyncLoading = false">

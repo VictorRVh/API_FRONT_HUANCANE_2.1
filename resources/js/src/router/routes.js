@@ -280,6 +280,25 @@ export default [
             permissions: ['data-all', 'data-view'],
         },
     },
+    {
+        path: '/politicas'    ,
+        name: 'politicas',                      
+        component: () => import('../pages/Home/politicas.vue'), 
+        meta: {
+            layout: 'full',
+            permissions: [],
+    },
+    },
+    {
+        path: '/terminos'    ,
+        name: 'terminos',       
+        component: () => import('../pages/Home/terminos.vue'),  
+        meta: {
+            layout: 'full',
+            permissions: [],
+
+    }
+}
 
     /* todlos que se aumento */
 ];

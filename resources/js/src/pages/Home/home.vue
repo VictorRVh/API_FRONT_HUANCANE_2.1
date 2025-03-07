@@ -1,84 +1,69 @@
 <template>
-    <div :class="{ 'dark': isDarkMode }" class="flex flex-col min-h-screen bg-blancoPuro dark:bg-gray-800 text-granate dark:text-gray-400 font-inter">
-      <!-- Header -->
-      <header class="bg-granate py-4 rounded-lg mt-4">
-        <div class="max-w-screen-xl mx-auto flex items-center justify-between px-4">
-          <h1 class="text-blancoPuro text-2xl font-bold uppercase">CETPRO Huancané</h1>
-        </div>
-      </header>
+  <div class="flex flex-col min-h-screen w-full bg-brancoPuro dark:bg-gray-800 font-inter">
+    
+    <!-- Contenedor con altura fija para que todo encaje bien -->
+    <div class="flex flex-col w-full bg-white dark:bg-gray-800 px-6 py-10" style="min-height: 85vh;">
+      
+      <!-- Mensaje de Bienvenida con animación en orden -->
+      <div class="flex-grow flex flex-col justify-center items-center text-center">
+        <h1 
+          class="text-5xl font-bold text-granate dark:text-granateLight transition-opacity duration-1000 ease-in-out opacity-0"
+          :class="{ 'opacity-100': showTitle }"
+        >
+          Bienvenido
+        </h1>
+        <h3 
+          class="text-2xl font-semibold text-gray-700 dark:text-gray-300 mt-2 transition-opacity duration-1000 ease-in-out opacity-0"
+          :class="{ 'opacity-100': showSubtitle }"
+        >
+          Sistema de Gestión Académica
+        </h3>
+        <h5 
+          class="text-gray-600 dark:text-gray-400 text-base mt-3 transition-opacity duration-1000 ease-in-out opacity-0"
+          :class="{ 'opacity-100': showText }"
+        >
+          Explora las opciones y funcionalidades disponibles en nuestro sistema.
+        </h5>
+      </div>
 
-      <!-- Hero Section -->
-      <section class="bg-white dark:bg-gray-900 py-16 rounded-lg shadow-md mx-6 mt-8 relative">
-        <div class="max-w-screen-xl mx-auto flex items-center justify-center text-center px-6">
-          <div>
-            <h2 class="text-granate dark:text-granateLight font-black text-4xl mb-4">
-              Bienvenido al Sistema de Gestión Académica
-            </h2>
-            <p class="text-negroClaro dark:text-gray-300 text-lg max-w-2xl mb-8">
-              Gestiona las especialidades, docentes, estudiantes y procesos académicos de manera eficiente y organizada.
-            </p>
-            <button class="bg-granate text-blancoPuro px-8 py-3 text-lg font-bold uppercase rounded-full hover:bg-opacity-90">
-              Iniciar Recorrido
-            </button>
+      <!-- Footer dentro del mismo contenedor con hover minimalista -->
+      <footer class="w-full border-t-2 border-gray-400 dark:border-gray-600 py-3">
+        <div class="flex justify-between items-center px-6 text-gray-700 dark:text-gray-300 text-sm font-medium">
+          <p>&copy; 2024 CETPRO Huancané</p>
+          <div class="flex space-x-3">
+            <a href="/terminos" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="hover:text-gray-900 dark:hover:text-white hover:scale-105 transition-all duration-300">
+              Términos y Condiciones
+            </a>
+            <span>|</span>
+            <a href="/politicas" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="hover:text-gray-900 dark:hover:text-white hover:scale-105 transition-all duration-300">
+              Política de Privacidad
+            </a>
           </div>
-        </div>
-      </section>
-
-      <!-- Features Section -->
-      <section class="bg-plomoClaro dark:bg-gray-700 py-16 rounded-lg shadow-md mx-6 mt-8">
-        <div class="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 px-6">
-          <!-- Feature 1 -->
-          <div class="bg-blancoPuro dark:bg-gray-800 p-6 rounded-lg shadow-md text-center">
-            <h3 class="text-granate dark:text-granateLight font-bold text-2xl mb-4">Gestión de Especialidades</h3>
-            <p class="text-negroClaro dark:text-gray-300 text-base">
-              Administra las especialidades disponibles en el CETPRO con un sistema optimizado y seguro.
-            </p>
-          </div>
-          <!-- Feature 2 -->
-          <div class="bg-blancoPuro dark:bg-gray-800 p-6 rounded-lg shadow-md text-center">
-            <h3 class="text-granate dark:text-granateLight font-bold text-2xl mb-4">Registro de Estudiantes</h3>
-            <p class="text-negroClaro dark:text-gray-300 text-base">
-              Mantén un registro completo y actualizado de los estudiantes matriculados.
-            </p>
-          </div>
-          <!-- Feature 3 -->
-          <div class="bg-blancoPuro dark:bg-gray-800 p-6 rounded-lg shadow-md text-center">
-            <h3 class="text-granate dark:text-granateLight font-bold text-2xl mb-4">Automatización de Procesos</h3>
-            <p class="text-negroClaro dark:text-gray-300 text-base">
-              Optimiza procesos administrativos y académicos con herramientas automatizadas.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Footer -->
-      <footer class="bg-granate dark:bg-gray-800 py-8 rounded-t-lg mt-8">
-        <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center text-blancoPuro px-6">
-          <p class="text-sm text-center md:text-left">&copy; 2024 CETPRO Huancané. Todos los derechos reservados.</p>
-          <ul class="flex space-x-6 mt-4 md:mt-0">
-            <li>
-              <a href="#" class="hover:underline text-blancoPuro dark:text-gray-300">Términos de Servicio</a>
-            </li>
-            <li>|</li>
-            <li>
-              <a href="#" class="hover:underline text-blancoPuro dark:text-gray-300">Políticas de Privacidad</a>
-            </li>
-          </ul>
         </div>
       </footer>
+
     </div>
-  </template>
 
-  <script setup>
-  import { ref } from 'vue';
+  </div>
+</template>
 
-  // Estado para controlar si el modo oscuro está activado
-  const isDarkMode = ref(false);
+<script setup>
+import { ref, onMounted } from 'vue';
 
-  // Función para alternar entre modo claro y oscuro
-  function toggleDarkMode() {
-    isDarkMode.value = !isDarkMode.value;
-  }
+// Controla la animación de los textos en orden
+const showTitle = ref(false);
+const showSubtitle = ref(false);
+const showText = ref(false);
 
-  // Puedes usar esta función para cambiar el tema en tu interfaz de usuario.
-  </script>
+onMounted(() => {
+  setTimeout(() => { showTitle.value = true; }, 200); // Primero el título
+  setTimeout(() => { showSubtitle.value = true; }, 600); // Luego el subtítulo
+  setTimeout(() => { showText.value = true; }, 1000); // Finalmente el texto
+});
+</script>
