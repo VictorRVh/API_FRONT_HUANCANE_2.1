@@ -74,7 +74,7 @@ const hasPermission = (itemPermissions) =>
       ]"
     >
       <component :is="item.icon" class="w-6 h-6 mr-2" />
-      <p>{{ item.name }}</p>
+      <p>{{ item.name }} </p>
     </span>
   </template>
 </RouterLink>
