@@ -157,7 +157,7 @@ Route::middleware('auth:sanctum')->group(function () {
         \App\Http\Controllers\EspecialidadController::class,
         'index',
     ])->middleware('permission:specialties-all|specialties-view');
-
+    //ruta_head
     Route::get('especialidad/{especialidadId}', [
         \App\Http\Controllers\EspecialidadController::class,
         'show',
