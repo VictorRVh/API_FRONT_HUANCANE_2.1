@@ -32,6 +32,7 @@ const props = defineProps({
     type: Number,
     default: null,
   }
+  
 });
 
 const router = useRouter();
@@ -79,7 +80,7 @@ const SeeMore = (id) => {
 
   router.push({
     name: "UnidadDidactica",
-    params: { idPrograma: id },
+    params: { idPrograma: id, idEspecialidad:props.idEspecialidad },
   });
 };
 

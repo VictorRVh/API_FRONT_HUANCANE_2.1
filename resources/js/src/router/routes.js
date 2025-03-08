@@ -78,7 +78,7 @@ export default [
         }
     },
     {
-        path: '/unidadDidactica/:idPrograma',
+        path: '/unidadDidactica/:idEspecialidad/:idPrograma',
         name: 'UnidadDidactica',
         component: ()=>import('../pages/Especialidad/UnidadDidactica.vue'),
         props: true, // Esto pasa los parámetros de ruta como props al componente

@@ -1,8 +1,5 @@
-import { computed, ref, watchEffect } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
-import { defineStore } from 'pinia';
-// useHttpRequest para interactuar con la API
+import { ref, watchEffect } from 'vue';
+import { useRoute } from 'vue-router';
 import useHttpRequest from './useHttpRequest';
 
 export function useBreadcrumb() {
@@ -10,42 +7,48 @@ export function useBreadcrumb() {
   const breadcrumbs = ref([]);
 
   watchEffect(async () => {
-    const matchedRoutes = route.matched;
     const breadcrumbList = [];
 
-    const {
-      index: getSpecialties,
-      show: getSpecialtyById, // Añadimos el método show para obtener una especialidad por ID
-      loading: specialtiesLoading,
-      initialLoading: specialtiesFirstTimeLoading,
-  } = useHttpRequest('/especialidad');
+    // Métodos para obtener datos de la API
+    const { show: getSpecialtyById } = useHttpRequest('/especialidad');
 
-    for (const r of matchedRoutes) {
-      let text = r.meta.breadcrumb;
-      let path = r.path;
-      // Reemplazar los parámetros dinámicos en la URL
-      if (r.name === 'programaFormativo' && route.params.idEspecialidad) {
-        try {
-          const response = await getSpecialtyById(route.params.idEspecialidad); // Usamos el método show
-          console.log(" useBeradCrum ",response.nombre_especialidad)
-          text = response.nombre_especialidad; // Ejemplo: "Ingeniería de Software"
-          path = `/especialidades/${route.params.idEspecialidad}`;
-        } catch (error) {
-          text = 'Especialidad Desconocida';
-        }
+    // Siempre agregamos la primera ruta "Especialidades"
+    breadcrumbList.push({
+      text: 'Especialidades',
+      path: '/especialidad',
+    });
+
+    // Si hay una especialidad seleccionada
+  /*  if (route.params.idEspecialidad) {
+      try {
+        const response = await getSpecialtyById(route.params.idEspecialidad);
+        breadcrumbList.push({
+          text: response.nombre_especialidad,
+          path: `/especialidad/${route.params.idEspecialidad}`,
+        });
+      } catch (error) {
+        breadcrumbList.push({
+          text: 'Especialidad Desconocida',
+          path: '/especialidad',
+        });
       }
+    }
+    */
 
-      if (r.name === 'UnidadDidactica' && route.params.idPrograma) {
-        try {
-          const response = await axios.get(`/api/subespecialidad/${route.params.subid}`);
-          text = response.data.nombre; // Ejemplo: "Desarrollo Web"
-          path = `/especialidades/${route.params.id}/${route.params.subid}`;
-        } catch (error) {
-          text = 'Subespecialidad Desconocida';
-        }
-      }
+    // Si hay un programa formativo dentro de la especialidad
+    if (route.name === 'programaFormativo' && route.params.idEspecialidad) {
+      breadcrumbList.push({
+        text: 'Programa Formativo',
+        path: `/especialidad/${route.params.idEspecialidad}`,
+      });
+    }
 
-      breadcrumbList.push({ text, path });
+    // Si hay una unidad didáctica dentro del programa
+    if (route.name === 'UnidadDidactica' && route.params.idPrograma) {
+      breadcrumbList.push({
+        text: 'Unidad Didáctica',
+        path: `/UnidadDidactica/${route.params.idEspecialidad}/${route.params.idPrograma}`,
+      });
     }
 
     breadcrumbs.value = breadcrumbList;
