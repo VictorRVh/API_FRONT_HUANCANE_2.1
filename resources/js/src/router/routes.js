@@ -8,7 +8,7 @@ export default [
             permissions: [],
             breadcrumb: 'Login'
         },
-        
+
     },
     {
         path: '/home',
@@ -30,7 +30,7 @@ export default [
             permissions: ['users-all', 'users-view'],
             breadcrumb: 'Usuarios'
         },
-         
+
     },
 
     {
@@ -42,7 +42,7 @@ export default [
             permissions: ['roles-all', 'roles-view'],
             breadcrumb: 'Roles'
         },
-         
+
     },
 
     {
@@ -69,7 +69,7 @@ export default [
     {
         path: '/especialidad/:idEspecialidad',
         name: 'programaFormativo',
-        component: ()=>import('../pages/Especialidad/ProgramaFormativo.vue'),
+        component: () => import('../pages/Especialidad/ProgramaFormativo.vue'),
         props: true, // Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
@@ -80,7 +80,7 @@ export default [
     {
         path: '/unidadDidactica/:idEspecialidad/:idPrograma',
         name: 'UnidadDidactica',
-        component: ()=>import('../pages/Especialidad/UnidadDidactica.vue'),
+        component: () => import('../pages/Especialidad/UnidadDidactica.vue'),
         props: true, // Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
@@ -91,7 +91,7 @@ export default [
     {
         path: '/experienciaFormativa/:idEspecialidad/:idPrograma',
         name: 'ExperienciaFormativa',
-        component: ()=>import('../pages/Especialidad/ExperienciaFormativa.vue'),
+        component: () => import('../pages/Especialidad/ExperienciaFormativa.vue'),
         props: true, // Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
@@ -102,7 +102,7 @@ export default [
     {
         path: '/IndicadorLogro/:idEspecialidad/:idPrograma/:idUnidad',
         name: 'IndicadorLogro',
-        component: ()=>import('../pages/Especialidad/IndicadoresLogro.vue'),
+        component: () => import('../pages/Especialidad/IndicadoresLogro.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
@@ -147,7 +147,7 @@ export default [
         path: '/sede',
         name: 'sedes',
         component: () => import('../pages/Sede/Sede.vue'),
-       // props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        // props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['places-all', 'places-view'],
@@ -189,8 +189,8 @@ export default [
             breadcrumb: 'Certificado'
         },
     },
-     {
-        path: '/certificado/:id',
+    {
+        path: '/certificado/:certifyId',
         name: 'certificadoEst',
         component: () => import('../pages/Certificado/Estudiantes.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
@@ -219,12 +219,12 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['note-student-all', 'notas-student-view'],
-            breadcrumb: 'Notas Estudiante'
+            breadcrumb: 'Notas'
         },
     },
-    
+
     {
-        path: '/notas/:id',
+        path: '/notas/:idNoteStudent',
         name: 'noteByStudent',
         component: () => import('../pages/NotaStudent/viewNota.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
@@ -246,7 +246,7 @@ export default [
         },
     },
     {
-        path: '/notasExperience/:id',
+        path: '/notasExperience/:idExperiencie',
         name: 'notasExperience',
         component: () => import('../pages/Notas/NotasExperiencia.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
@@ -257,7 +257,7 @@ export default [
         },
     },
     {
-        path: '/notasUnit/:id',
+        path: '/notasUnit/:idUnitNote',
         name: 'notasUnits',
         component: () => import('../pages/Notas/NotasUnidades.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
@@ -312,24 +312,24 @@ export default [
         },
     },
     {
-        path: '/politicas'    ,
-        name: 'politicas',                      
-        component: () => import('../pages/Home/politicas.vue'), 
+        path: '/politicas',
+        name: 'politicas',
+        component: () => import('../pages/Home/politicas.vue'),
         meta: {
             layout: 'full',
             permissions: [],
-    },
+        },
     },
     {
-        path: '/terminos'    ,
-        name: 'terminos',       
-        component: () => import('../pages/Home/terminos.vue'),  
+        path: '/terminos',
+        name: 'terminos',
+        component: () => import('../pages/Home/terminos.vue'),
         meta: {
             layout: 'full',
             permissions: [],
 
+        }
     }
-}
 
     /* todlos que se aumento */
 ];

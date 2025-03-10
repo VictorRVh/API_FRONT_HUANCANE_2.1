@@ -17,7 +17,7 @@ import pdfButton from "../../components/ui/pdfButton.vue";
 import useModalToast from "../../composables/useModalToast";
 const router = useRouter();
 const props = defineProps({
-  id: {
+  certifyId: {
     type: Number,
     default: 0,
   },
@@ -31,11 +31,11 @@ const selectAll = ref(false); // Controla el estado del checkbox "Seleccionar To
 
 onMounted(async () => {
   if (!userStore.student?.length) {
-    await userStore.loadGroupStudent(props.id);
+    await userStore.loadGroupStudent(props.certifyId);
   }
 });
 
-watch(() => props.id, async (newId) => {
+watch(() => props.certifyId, async (newId) => {
 
   await userStore.loadGroupStudent(newId);
 
@@ -91,7 +91,7 @@ const generateSelectedCertificates = async () => {
   // Carga los certificados de los estudiantes seleccionados
   const certificates = await Promise.all(
     selectedStudents.value.map(async (studyId) => {
-      await userStore.loadCertificate(studyId, props.id);
+      await userStore.loadCertificate(studyId, props.certifyId);
       return userStore.certificate; // Retorna el certificado cargado
     })
   );

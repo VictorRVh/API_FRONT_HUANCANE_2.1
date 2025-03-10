@@ -13,7 +13,7 @@ import useModalToast from "../../composables/useModalToast";
 
 const router = useRouter();
 const props = defineProps({
-  id: {
+  idNoteStudent: {
     type: Number,
     default: 0,
   },
@@ -26,7 +26,7 @@ const dataCertificate = ref([]);
 
 onMounted(async () => {
   try {
-    await userStore.loadNotas(props.id);
+    await userStore.loadNotas(props.idNoteStudent);
     dataCertificate.value = userStore.certificate;
   } catch (error) {
     showToast("Error al cargar los datos", "error");

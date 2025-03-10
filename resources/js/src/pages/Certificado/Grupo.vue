@@ -68,7 +68,7 @@ if (!groupStore.groups?.length)
 const SeeMore = (id) => {
   router.push({
     name: "certificadoEst",
-    params: { id: id },
+    params: { certifyId: id },
   });
 };
 

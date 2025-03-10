@@ -13,7 +13,7 @@ import useStudentsStore from "../../store/Grupo/useGrupoStore";
 
 const router = useRouter();
 const props = defineProps({
-  id: {
+  idExperiencie: {
     type: Number,
     default: 0,
   }
@@ -25,7 +25,7 @@ const showBtn = ref(null);
 
 onMounted(async () => {
   if (!userStore.student?.length) {
-    await userStore.loadGroupStudentExperience(props.id);
+    await userStore.loadGroupStudentExperience(props.idExperiencie);
   }
   idExp.value = userStore.student?.experiencia_formativa[0]?.id_experiencia
   showBtn.value =userStore.student?.experiencia_formativa[0].nota_asignada;
@@ -38,7 +38,7 @@ const seeNote = () => {
   if (idExp.value) {
     router.push({
       name: "notasEst",
-      params: { idgroup: props.id, idexp: idExp.value ,id:"657870657269656e636961" },
+      params: { idgroup: props.idExperiencie, idexp: idExp.value ,id:"657870657269656e636961" },
     });
   } else {
     console.error("Por favor, seleccione una unidad antes de continuar.");

@@ -89,8 +89,58 @@ export function useBreadcrumb() {
       });
     }
 
+    if (route.params.certifyId) {
+      breadcrumbList.push({
+        text: 'Certificados',
+        path: `/certificado`,
+      });
+    }
 
+    if (route.params.certifyId) {
+      //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
+      breadcrumbList.push({
+        text: 'Estudiantes',
+        path: `/certificado/${route.params.certifyId}`,
+      });
+    }
 
+    if (route.params.idExperiencie || route.params.idUnitNote) {
+      breadcrumbList.push({
+        text: 'Notas',
+        path: `/notas`,
+      });
+    }
+
+    if (route.params.idExperiencie) {
+      //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
+      breadcrumbList.push({
+        text: 'Notas de Experiencias',
+        path: `/notasExperience/${route.params.idExperiencie}`,
+      });
+    }
+
+    if (route.params.idUnitNote) {
+      //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
+      breadcrumbList.push({
+        text: 'Notas de Unidades',
+        path: `/notasUnit/${route.params.idUnitNote}`,
+      });
+    }
+    
+    if (route.params.idNoteStudent) {
+      //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
+      breadcrumbList.push({
+        text: 'Notas',
+        path: `/notas_student`,
+      });
+    }
+    if (route.params.idNoteStudent) {
+      //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
+      breadcrumbList.push({
+        text: 'Notas del Periodo',
+        path: `/notas/${route.params.idNoteStudent}`,
+      });
+    }
     //  Actualizar breadcrumbs
     breadcrumbs.value = breadcrumbList;
   });
