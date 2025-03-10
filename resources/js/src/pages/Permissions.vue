@@ -35,7 +35,7 @@ const { isUserAuthenticated } = useAuth();
 
 // Variables para paginación
 const currentPage = ref(1);
-const itemsPerPage = 5; // Número de permisos por página
+const itemsPerPage = 10; // Número de permisos por página
 
 // Calcular el total de páginas basado en la cantidad de permisos
 const totalPages = computed(() => Math.ceil(permissionStore.permissions.length / itemsPerPage));

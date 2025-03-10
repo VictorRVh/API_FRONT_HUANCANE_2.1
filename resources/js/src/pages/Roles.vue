@@ -90,7 +90,7 @@ const { destroy: deleteRole, deleting } = useHttpRequest('/roles');
 
 // Variables para paginación
 const currentPage = ref(1);
-const itemsPerPage = 5;
+const itemsPerPage = 10;
 
 const totalPages = computed(() => Math.ceil(roleStore.roles.length / itemsPerPage));
 

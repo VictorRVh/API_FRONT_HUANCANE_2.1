@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from "vue";
-import FormInput from "../components/ui/FormInput.vue";
 import Button from "../components/ui/Button.vue";
 
 import useHttpRequest from "../composables/useHttpRequest";
@@ -81,72 +80,81 @@ const onSignIn = async () => {
         <form @submit.prevent="onSignIn" class="mt-8 space-y-6">
           <!-- Input para Usuario -->
           <div>
-            <FormInput
+            <label for="email" class="block text-sm font-medium text-[#49454F]">
+              Usuario
+            </label>
+            <input
               v-model="formData.email"
-              label="Usuario"
-              :error="formErrors?.email"
               id="email"
               name="email"
               type="email"
               autocomplete="email"
               required
               @keyup.enter="onSignIn"
-              class="block w-full px-1 rounded-md focus:outline-none focus:ring-0 sm:text-sm"
+              class="block w-full px-1 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-0 sm:text-sm"
             />
+            <p v-if="formErrors?.email" class="mt-1 text-sm text-red-500">
+              {{ formErrors.email }}
+            </p>
           </div>
 
-          <!-- Input para Contraseña con ícono pegado -->
-          <div class="relative">
-            <!-- Input para contraseña -->
-            <FormInput
-              v-model="formData.password"
-              label="Contraseña"
-              :error="formErrors?.password"
-              id="password"
-              name="password"
-              :type="showPassword ? 'text' : 'password'"
-              autocomplete="current-password"
-              required
-              @keyup.enter="onSignIn"
-              class="block w-full px-1 rounded-md shadow-sm focus:outline-none sm:text-sm"
-            />
-            <!-- Ícono de mostrar/ocultar contraseña -->
-            <button
-              type="button"
-              class="absolute inset-y-0 right-2 flex items-center text-gray-500 "
-              @click="showPassword = !showPassword"
-            >
-              <svg
-                v-if="!showPassword"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-5 h-5"
+          <!-- Input para Contraseña con ícono del ojo -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-[#49454F]">
+              Contraseña
+            </label>
+            <div class="relative">
+              <input
+                v-model="formData.password"
+                id="password"
+                name="password"
+                :type="showPassword ? 'text' : 'password'"
+                autocomplete="current-password"
+                required
+                @keyup.enter="onSignIn"
+                class="block w-full px-1 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-0 sm:text-sm"
+              />
+              <!-- Botón para mostrar/ocultar contraseña, centrado verticalmente -->
+              <button
+                type="button"
+                class="absolute top-1/2 -translate-y-1/2 right-2 flex items-center text-gray-500"
+                @click="showPassword = !showPassword"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
-                />
-              </svg>
-              <svg
-                v-else
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21"
-                />
-              </svg>
-            </button>
+                <svg
+                  v-if="!showPassword"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-5 h-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"
+                  />
+                </svg>
+                <svg
+                  v-else
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-5 h-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21"
+                  />
+                </svg>
+              </button>
+            </div>
+            <p v-if="formErrors?.password" class="mt-1 text-sm text-red-500">
+              {{ formErrors.password }}
+            </p>
           </div>
 
           <!-- Botón de Ingreso -->
@@ -164,25 +172,36 @@ const onSignIn = async () => {
         <!-- Enlaces de ayuda -->
         <div class="mt-6 text-center">
           <p class="text-sm text-[#49454F]">
-            <strong
-              >¿Olvidaste Tu Cuenta?
-              <a href="#" class="font-bold text-[#921733]">Recupera Aquí</a></strong
-            >
+            <strong>
+              ¿Olvidaste Tu Cuenta?
+              <a href="#" class="font-bold text-[#921733]">Recupera Aquí</a>
+            </strong>
           </p>
         </div>
 
-        <p class="mt-6 text-center text-sm text-[#49454F]">
-          Al hacer clic, usted acepta nuestros
-          <strong>
-            <a href="#" class="font-bold text-[#921733] underline"
-              >Términos de Servicio</a
+        <!-- Footer centrado con mensaje -->
+        <footer class="mt-6">
+          <p class="text-center text-sm text-[#49454F]">
+            Al hacer uso de nuestro servicio, usted acepta nuestros 
+            <a 
+              href="/terminos" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="font-bold text-[#921733] underline hover:text-gray-900 hover:scale-105 transition-all duration-300"
             >
-            y
-            <a href="#" class="font-bold text-[#921733] underline"
-              >Políticas de Privacidad</a
-            >.
-          </strong>
-        </p>
+              Términos y Condiciones
+            </a> 
+            y 
+            <a 
+              href="/politicas" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="font-bold text-[#921733] underline hover:text-gray-900 hover:scale-105 transition-all duration-300"
+            >
+              Políticas de Privacidad
+            </a>.
+          </p>
+        </footer>
       </div>
     </div>
   </div>

@@ -7,7 +7,7 @@ import usePermissionStore from "../store/usePermissionStore";
 import useAppRouter from "../composables/useAppRouter";
 
 // Inyecta el tema y otras propiedades globales
-const { isDarkMode, updateDarkMode, windowWidth } = inject("theme");
+const { windowWidth } = inject("theme");
 const { index: logout } = useHttpRequest("/logout");
 const { pushToRoute } = useAppRouter();
 
@@ -18,14 +18,15 @@ const permissionStore = usePermissionStore();
 
 // Obtener permisos del usuario
 const userPermissions = computed(
-  () => userStore.user?.permissions.map((p) => p.name) || []
+  () => userStore.user?.permissions.map(p => p.name) || []
 );
-// Crear elementos de menú dinámicamente
+
+// Definición de elementos del menú
 const menuItems = [
   { name: "Home", icon: "HomeIcon", route: "home", permissions: [] },
-  { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"], /* id: 7*/ },
-  { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"]},
-  { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"]},
+  { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"] },
+  { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"] },
+  { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"] },
   { name: "Matricula", icon: "BookOpenIcon", route: "matriculas", permissions: ["enrollmentStudent-all", "enrollmentStudent-icon"] },
   { name: "Especialidad", icon: "BuildingOfficeIcon", route: "especialidad", permissions: ["specialties-all", "specialties-icon"] },
   { name: "Reportes", icon: "ChartBarIcon", route: "reporte", permissions: ["users-all", "users-icon"] },
@@ -39,54 +40,89 @@ const menuItems = [
   { name: "Notas", icon: "NewspaperIcon", route: "notaStudent", permissions: ["note-student-all", "note-student-icon"] },
 ];
 
-// Comprobar permisos
+// Agrupar el menú en secciones (puedes ajustar títulos y agrupación)
+const sections = [
+  { title: "Principal", items: menuItems.filter(item => item.route === "home") },
+  { 
+    title: "Administración Académica", 
+    items: menuItems.filter(item =>
+      ["docentes", "estudiantes", "matriculas", "especialidad", "users", "roles", "permissions", "sedes", "grupos"].includes(item.route)
+    )
+  },
+  { 
+    title: "Planificación y Gestión", 
+    items: menuItems.filter(item =>
+      ["plan", "reporte", "certificado"].includes(item.route)
+    )
+  },
+  { 
+    title: "Seguimiento Educativo", 
+    items: menuItems.filter(item =>
+      ["notas", "notaStudent"].includes(item.route)
+    )
+  }
+];
+
+// Función para verificar permisos
 const hasPermission = (itemPermissions) =>
-  itemPermissions.some((perm) => userPermissions.value.includes(perm));
+  itemPermissions.some(perm => userPermissions.value.includes(perm));
+
+// Modo reducido para resolución entre 1024 y 1280px
+const smallMode = computed(() => windowWidth.value >= 1000 && windowWidth.value < 1280);
 </script>
 
 <template>
-  <div
-    class="flex flex-col min-h-screen bg-blancoPuro dark:bg-gray-800 dark:text-gray-400 font-inter w-12/12 max-w-3xl"
-  >
-    <!-- Título "HERRAMIENTAS" -->
-    <h2 class="text-lg font-semibold text-negroClaro dark:text-gray-400 mt-4 mb-2 pl-4">
+  <div class="flex flex-col min-h-screen bg-blancoPuro dark:bg-gray-800 dark:text-gray-400 font-inter w-full max-w-3xl ">
+    <!-- Título principal -->
+    <h2 class="text-lg font-semibold text-negroClaro dark:text-gray-400 mt-0 mb-2 pl-4">
       Menu
     </h2>
-
-    <!-- Menú de elementos con scroll vertical -->
-    <div
-      class="flex flex-col items-start w-full space-y-2 overflow-y-auto h-[70vh] custom-scrollbar"
-    >
-    <RouterLink
-  v-for="item in menuItems"
-  :key="item.name"
-  v-show="item.name === 'Home' || hasPermission(item.permissions)"
-  :to="{ name: item.route  /*, params: { id: item.id } */ }"
-  class="text-white w-full flex pl-4  items-center rounded-md group transition-all duration-200 hover:bg-granate dark:hover:bg-granate-dark"
->
-  <template v-slot="{ isActive }">
-    <span
-      class="text-sm font-normal py-2  pl-2 flex items-center justify-start w-full h-full group-hover:text-white transition-all duration-300 rounded-lg"
-      :class="[
-        isActive
-          ? 'bg-granate text-white dark:text-white transition-all ml-5 duration-300 rounded-lg px-6'
-          : 'text-granate dark:text-white'
-      ]"
-    >
-      <component :is="item.icon" class="w-6 h-6 mr-2" />
-      <p>{{ item.name }}</p>
-    </span>
-  </template>
-</RouterLink>
-
+    
+    <!-- Iteración por secciones -->
+    <div v-for="section in sections" :key="section.title" class="w-full mb-6">
+      <!-- Subtítulo de sección -->
+      <h3 class="text-md font-medium text-gray-700 dark:text-gray-300 mt-4 mb-1 pl-4 ">
+        {{ section.title }}
+      </h3>
+      
+      <!-- Herramientas de la sección -->
+      <div class="flex flex-col items-start w-full space-y-2 custom-scrollbar text-xsm pl-2">
+        <RouterLink
+          v-for="item in section.items"
+          :key="item.name + item.route"
+          v-show="item.name === 'Home' || hasPermission(item.permissions)"
+          :to="{ name: item.route }"
+          class="w-full text-white flex pl-1 items-center rounded-md group transition-all duration-200 hover:bg-granate dark:hover:bg-granate-dark "
+        >
+          <template v-slot="{ isActive }">
+            <span
+              class="flex items-center justify-start w-full transition-all duration-300 rounded-lg"
+              :class="isActive
+                ? (smallMode.value
+                    ? 'bg-granate text-white px-2 py-1 border-b-2 border-granate dark:border-granate-dark'
+                    : 'bg-granate text-white px-2  border-b-2 border-granate dark:border-granate-dark pl-4')
+                : 'text-granate dark:text-white hover:bg-granate hover:text-white'"
+            >
+              <!-- Ícono siempre en tamaño normal -->
+              <component :is="item.icon" class="w-6 h-6 mr-2" />
+              <!-- Texto siempre visible -->
+              <p :class="smallMode.value ? 'text-[7px] ml-1' : 'text-s ml-2'">
+                {{ item.name }}
+              </p>
+            </span>
+          </template>
+        </RouterLink>
+      </div>
+      
+      <!-- Línea divisoria minimal al final de la sección -->
+      <hr class="border-gray-200 dark:border-gray-600 mt-2 mx-4" />
     </div>
   </div>
 </template>
 
 <style>
-/* Personaliza el scrollbar vertical */
 .custom-scrollbar {
-  overflow-x: hidden; /* Oculta el scroll horizontal */
+  overflow-x: hidden;
 }
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
