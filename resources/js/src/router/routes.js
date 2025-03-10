@@ -331,5 +331,4 @@ export default [
         }
     }
 
-    /* todlos que se aumento */
 ];
