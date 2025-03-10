@@ -13,11 +13,23 @@ export function useBreadcrumb() {
     const { show: getSpecialtyById } = useHttpRequest('/especialidad');
 
     // Agregamos la ruta principal de especialidades
-    breadcrumbList.push({
-      text: 'Especialidades',
-      path: '/especialidad',
-    });
 
+
+    // Para todas la rutas :::::::
+    if (Object.keys(route.params).length === 0) {
+      console.log("Ruta de vic:", route)
+      breadcrumbList.push({
+        text: route.meta.breadcrumb,
+        path: route.path,
+      });
+    }
+    // ESPECIALIDAD
+    if (route.params.idEspecialidad) {
+      breadcrumbList.push({
+        text: 'Especialidad',
+        path: `/especialidad`,
+      });
+    }
     //  Si hay una especialidad seleccionada
     if (route.params.idEspecialidad) {
       try {
@@ -38,7 +50,7 @@ export function useBreadcrumb() {
     }
 
     //  Si hay un programa formativo dentro de la especialidad
-    if (route.name === "UnidadDidactica" ||route.name === "IndicadorLogro" &&route.params.idPrograma) {
+    if (route.name === "UnidadDidactica" || route.name === "IndicadorLogro" && route.params.idPrograma) {
       breadcrumbList.push({
         text: 'Unidad Didáctica',
         path: `/UnidadDidactica/${route.params.idEspecialidad}/${route.params.idPrograma}`,
@@ -61,9 +73,29 @@ export function useBreadcrumb() {
       });
     }
 
+    // GRUPOS
+    if (route.params.idGroupAll) {
+      breadcrumbList.push({
+        text: 'Grupos',
+        path: `/grupos`,
+      });
+    }
+
+    if (route.params.idGroupAll) {
+      breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
+      breadcrumbList.push({
+        text: 'Estudiantes',
+        path: `/grupos/${route.params.idGroupAll}`,
+      });
+    }
+
+
+
     //  Actualizar breadcrumbs
     breadcrumbs.value = breadcrumbList;
   });
+
+
 
   return { breadcrumbs };
 }

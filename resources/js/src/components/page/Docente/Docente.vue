@@ -1,243 +1,145 @@
 <script setup>
-import { computed, ref, watch } from "vue";
-import Slider from "../../ui/Slider.vue";
-import FormInput from "../../ui/FormInput.vue";
-import FormLabelError from "../../ui/FormLabelError.vue";
-import VSelect from "vue-select";
-import Button from "../../ui/Button.vue";
-import AuthorizationFallback from "../../../components/page/AuthorizationFallback.vue";
+import { defineProps, watch, ref, computed } from "vue";
 
-import useRoleStore from "../../../store/useRoleStore";
+import Table from "../../components/table/Table.vue";
+import THead from "../../components/table/THead.vue";
+import TBody from "../../components/table/TBody.vue";
+import Tr from "../../components/table/Tr.vue";
+import Th from "../../components/table/Th.vue";
+import Td from "../../components/table/Td.vue";
+import CreateButton from "../../components/ui/CreateButton.vue";
+import EditButton from "../../components/ui/EditButton.vue";
+import ViewButton from "../../components/ui/ViewButton.vue";
+import DeleteButton from "../../components/ui/DeleteButton.vue";
+import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
+import EstudianteSlider from "../../components/page/Estudiante/EstudianteSlider.vue";
 
-import useStudentsStore from "../../../store/Estudiante/useStudentStore";
+import useStudentsStore from "../../store/Estudiante/useStudentStore";
 
-import useValidation from "../../../composables/useValidation";
-import useHttpRequest from "../../../composables/useHttpRequest";
-import useUtils from "../../../composables/useUtils";
-import useModalToast from "../../../composables/useModalToast";
+import useSlider from "../../composables/useSlider";
+import useModalToast from "../../composables/useModalToast";
+import useHttpRequest from "../../composables/useHttpRequest";
 
-import * as yup from "yup";
+import Page from "../../components/pagination/page.vue";
 
-const props = defineProps({
-  show: {
-    type: Boolean,
-    default: () => false,
-  },
-});
-const emit = defineEmits(["hide"]);
 
 const userStore = useStudentsStore();
-//const roleStore = useRoleStore();
-const { store: createUser, saving, update: updateUser, updating } = useHttpRequest(
-  "/users"
-);
-const { runYupValidation } = useValidation();
-const { omitPropsFromObject } = useUtils();
-const { showToast } = useModalToast();
 
-const requiredPermissions = computed(() => {
-  if (!props.user?.id) return ["students-all", "students-create"];
-  else return ["students-all", "students-edit"];
-});
+if (!userStore.teachers?.length) await userStore.loadTeacher();
 
-const title = computed(() =>
-  props.user ? `Update user "${props.user?.name}"` : "Add new user"
-);
+//console.log("docentes: ",userStore)
 
-const initialFormData = () => {
-  return {
-    name: null,
-    apellido_paterno: null,
-    apellido_materno: null,
-    dni: null,
-    sexo: null,
-    celular: null,
-    fecha_nacimiento: null,
-    email: null,
-    password: null,
-    confirm_password: null,
-    roles: [8],
-  };
-};
+const { slider, sliderData, showSlider, hideSlider } = useSlider("user-crud");
+const { showConfirmModal, showToast } = useModalToast();
+const { destroy: deleteUser, deleting } = useHttpRequest("/users");
 
-const formData = ref(initialFormData());
-const formErrors = ref({});
+const onDelete = (user) => {
+  if (deleting.value) return;
 
-watch(
-  () => props.show,
-  () => {
-    if (props.show) {
-      if (props.user?.id) {
-        formData.value = Object.entries(initialFormData()).reduce((r, [key, val]) => {
-          if (props.user[key]) return { ...r, [key]: props.user[key] };
-          return { ...r, [key]: val };
-        }, {});
-      } else {
-        formData.value = initialFormData();
-        formErrors.value = {};
-      }
+  showConfirmModal(null, async (confirmed) => {
+    if (!confirmed) return;
+
+    const isDeleted = await deleteUser(user?.id);
+    if (isDeleted) {
+      showToast(`"${user?.name}" eliminado correctamente.`);
+      userStore.loadTeacher();
     }
-  }
+  });
+};
+
+// Paginación
+const currentPage = ref(1);
+const itemsPerPage = 10;
+const totalPages = computed(() =>
+  Math.ceil(userStore.teachers.length / itemsPerPage)
 );
 
-const schema = yup.object().shape({
-  name: yup.string().nullable().required(),
-  apellido_paterno: yup.string().nullable().required(),
-  apellido_materno: yup.string().nullable().required(),
-  dni: yup.string().nullable().required(),
-  sexo: yup.string().nullable().required(),
-  celular: yup.string().nullable().required(),
-  fecha_nacimiento: yup.date().nullable().required(),
-  email: yup.string().email().nullable().required(),
-  password: yup
-    .string()
-    .nullable()
-    .test("password-test", "", (value, { createError }) => {
-      if (props.user?.id) return true;
+const paginatedStudents = computed(() =>
+  userStore.teachers.slice(
+    (currentPage.value - 1) * itemsPerPage,
+    currentPage.value * itemsPerPage
+  )
+);
 
-      if (!value) return createError({ message: "Password is a required field" });
-      if (value !== formData.value.confirm_password)
-        return createError({ message: "Password doesn't match" });
-
-      return true;
-    }),
-});
-
-const onSubmit = async () => {
-  //console.log("jaaaaaaaa");
-
-  if (saving.value || updating.value) return;
-
-  let data = {
-    ...formData.value,
-  };
-
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors;
-    return;
-  }
-  formErrors.value = {};
-
-  const fieldsToBeOmitted = ["confirm_password"];
-  if (props.user?.id) fieldsToBeOmitted.push("password");
-  data = omitPropsFromObject(data, fieldsToBeOmitted);
-
-  const response = props.user?.id
-    ? await updateUser(props.user?.id, data)
-    : await createUser(data);
-
-  if (response?.id) {
-    showToast(`Student ${props.user?.id ? "updated" : "created"} successfully`);
-    userStore.loadTeacher();
-    emit("hide");
-  }
+const changePage = (page) => {
+  currentPage.value = page;
 };
+
+
+
 </script>
 
 <template>
-  <!--  -->
-  <Slider :show="show" :title="title" @hide="emit('hide')">
-    <AuthorizationFallback :permissions="requiredPermissions">
-      <div class="mt-4 space-y-4">
-        <FormInput
-          v-model="formData.name"
-          :focus="show"
-          label="Nombres"
-          type="text"
-          :error="formErrors?.name"
-          required
-        />
-
-        <FormInput
-          v-model="formData.apellido_paterno"
-          :focus="show"
-          label="Apellido Paterno"
-          :error="formErrors?.apellido_paterno"
-          required
-        />
-
-        <FormInput
-          v-model="formData.apellido_materno"
-          :focus="show"
-          label="Apellido Materno"
-          :error="formErrors?.apellido_materno"
-          required
-        />
-
-        <FormInput
-          v-model="formData.dni"
-          :focus="show"
-          type="number"
-          label="Dni"
-          :error="formErrors?.dni"
-          required
-        />
-
-        <FormInput
-          v-model="formData.sexo"
-          :focus="show"
-          label="Sexo"
-          :error="formErrors?.sexo"
-          required
-        />
-
-        <FormInput
-          v-model="formData.celular"
-          :focus="show"
-          type="number"
-          label="Celular"
-          :error="formErrors?.celular"
-          required
-        />
-
-        <FormInput
-          v-model="formData.fecha_nacimiento"
-          :focus="show"
-          label="Fecha de Nacimiento"
-          type="date"
-          :error="formErrors?.fecha_nacimiento"
-          required
-        />
-
-        <FormInput
-          v-model="formData.email"
-          label="Correo electrónico"
-          type="email"
-          :error="formErrors?.email"
-          required
-        />
-
-        <template v-if="!user?.id">
-          <FormInput
-            v-model="formData.password"
-            label="Contraseña"
-            type="password"
-            :error="formErrors?.password"
-            required
-          />
-
-          <FormInput
-            v-model="formData.confirm_password"
-            type="password"
-            label="Confirmar contraseña"
-            required
-          />
-        </template>
-
-        <div class="w-full space-y-3">
-          <TransitionGroup tag="ul" name="edit-list" class="relative space-y-3">
-            <Button
-              :title="user?.id ? 'Update' : 'Save'"
-              key="submit-btn"
-              :loading-title="user?.id ? 'Saving...' : 'Updating...'"
-              class="!w-full"
-              :loading="saving || updating"
-              @click="onSubmit"
-            />
-          </TransitionGroup>
-        </div>
+  <AuthorizationFallback :permissions="['students-all', 'students-view']">
+    <div class="w-full space-y-4 py-6">
+      <div class="flex-between">
+        <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
+        <CreateButton @click="showSlider(true)" />
       </div>
-    </AuthorizationFallback>
-  </Slider>
+
+      <div class="w-full">
+        <Table class="border-collapse divide-y divide-transparent">
+          <THead>
+            <Tr>
+              <Th>Id</Th>
+              <Th>Nombre</Th>
+              <Th>Apellido Paterno</Th>
+              <Th>Apellido Materno</Th>
+              <Th>DNI</Th>
+              <Th>Acción</Th>
+            </Tr>
+          </THead>
+
+          <TBody>
+            <Tr v-for="user in paginatedStudents" :key="user.id">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user?.id }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                <div>{{ user?.name }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                  {{ user?.email }}
+                </div>
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user?.apellido_paterno }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user?.apellido_materno }}
+              </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+                {{ user?.dni }}
+              </Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="flex gap-2 justify-center items-center">
+                  <ViewButton />
+                  <EditButton @click="showSlider(true, user)" />
+                  <DeleteButton @click="onDelete(user)" />
+                </div>
+              </Td>
+            </Tr>
+          </TBody>
+        </Table>
+      </div>
+
+      <!-- Componente de paginación -->
+      <div class="flex justify-end mt-4">
+        <Page
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          @page-changed="changePage"
+        />
+      </div>
+    </div>
+
+    <EstudianteSlider
+      :show="slider"
+      :user="sliderData"
+      @hide="hideSlider"
+    />
+  </AuthorizationFallback>
 </template>
+
+<style scoped>
+/* No se necesita CSS adicional, todo está gestionado con Tailwind */
+</style>

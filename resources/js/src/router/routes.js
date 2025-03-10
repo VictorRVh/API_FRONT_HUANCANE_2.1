@@ -168,7 +168,7 @@ export default [
     },
 
     {
-        path: '/grupos/:id',
+        path: '/grupos/:idGroupAll',
         name: 'grupoEst',
         component: () => import('../pages/Grupo/Estudiantes.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente

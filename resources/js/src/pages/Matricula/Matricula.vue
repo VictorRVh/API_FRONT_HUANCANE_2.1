@@ -45,7 +45,7 @@ onMounted(async () => {
   if (!specialtiesStore.specialties?.length) await specialtiesStore.loadSpecialties();
   if (!planStore.plans?.length) await planStore.loadPlans();
 
-  selectedPlan.value = planStore.plans[0]?.id_plan || 0;
+  selectedPlan.value = planStore.plans[planStore.plans.length - 1].id_plan;
   selectedSpecialty.value = specialtiesStore.specialties[0]?.id_especialidad || 0;
   selectedGroup.value = groupStore.groups[0]?.id_grupo || 0;
 
@@ -107,6 +107,7 @@ const onPlanOrSpecialtyChange = () => {
 watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
   groupStore?.loadGroups(newPlan, newSpecialty);
 });
+
 </script>
 
 <template>
