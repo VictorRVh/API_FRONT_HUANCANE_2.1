@@ -82,7 +82,7 @@ const goBack = () => {
       <div class="flex items-center justify-between p-4 bg-blancoPuro dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600 mx-auto rounded-lg w-[99%] mt-2">
         <div class="text-left rounded-lg">
           <p class="text-lg font-regular text-dark-fondo dark:text-white">INTRANET</p>
-          <p class="text-xs font-semibold mt-1 text-dark-surface dark:text-gray-300">CEPRO HUANCANÉ</p>
+          <p class="text-xs font-semibold mt-1 text-dark-surface dark:text-gray-300">CETPRO HUANCANÉ</p>
         </div>
         <div class="flex items-center space-x-4 relative">
           <div class="text-right">

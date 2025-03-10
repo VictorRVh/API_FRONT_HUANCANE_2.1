@@ -10,8 +10,6 @@
           {{ breadcrumb.text }}
         </RouterLink>
         <span v-else class="text-gray-700 font-semibold"> {{ breadcrumb.text }}</span>
-
-        <!-- Agrega un separador excepto en el último elemento -->
         <span v-if="index < breadcrumbs.length - 1" class="mx-2 text-gray-400">/</span>
       </li>
     </ul>
@@ -22,3 +20,4 @@
 import { useBreadcrumb } from '../../composables/useBreadcrumb';
 const { breadcrumbs } = useBreadcrumb();
 </script>
+

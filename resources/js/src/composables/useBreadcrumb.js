@@ -9,48 +9,59 @@ export function useBreadcrumb() {
   watchEffect(async () => {
     const breadcrumbList = [];
 
-    // Métodos para obtener datos de la API
+    // Obtenemos la función para consultar especialidades por ID
     const { show: getSpecialtyById } = useHttpRequest('/especialidad');
 
-    // Siempre agregamos la primera ruta "Especialidades"
+    // Agregamos la ruta principal de especialidades
     breadcrumbList.push({
       text: 'Especialidades',
       path: '/especialidad',
     });
 
-    // Si hay una especialidad seleccionada
-  /*  if (route.params.idEspecialidad) {
+    //  Si hay una especialidad seleccionada
+    if (route.params.idEspecialidad) {
       try {
         const response = await getSpecialtyById(route.params.idEspecialidad);
+        breadcrumbList[0].text = "Especialidad de " + response.nombre_especialidad; // Modifica el primer breadcrumb
+
         breadcrumbList.push({
-          text: response.nombre_especialidad,
+          text: 'Programa Formativo',
           path: `/especialidad/${route.params.idEspecialidad}`,
         });
       } catch (error) {
+        console.error("Error obteniendo especialidad:", error);
         breadcrumbList.push({
           text: 'Especialidad Desconocida',
-          path: '/especialidad',
+          path: `/especialidad/${route.params.idEspecialidad}`,
         });
       }
     }
-    */
 
-    // Si hay un programa formativo dentro de la especialidad
-    if (route.name === 'programaFormativo' && route.params.idEspecialidad) {
-      breadcrumbList.push({
-        text: 'Programa Formativo',
-        path: `/especialidad/${route.params.idEspecialidad}`,
-      });
-    }
-
-    // Si hay una unidad didáctica dentro del programa
-    if (route.name === 'UnidadDidactica' && route.params.idPrograma) {
+    //  Si hay un programa formativo dentro de la especialidad
+    if (route.name === "UnidadDidactica" ||route.name === "IndicadorLogro" &&route.params.idPrograma) {
       breadcrumbList.push({
         text: 'Unidad Didáctica',
         path: `/UnidadDidactica/${route.params.idEspecialidad}/${route.params.idPrograma}`,
       });
     }
 
+    //  Si la ruta es "Experiencia Formativa"
+    if (route.name === "ExperienciaFormativa" && route.params.idPrograma) {
+      breadcrumbList.push({
+        text: 'Experiencia Formativa',
+        path: `/ExperienciaFormativa/${route.params.idEspecialidad}/${route.params.idPrograma}`,
+      });
+    }
+
+    //  Si hay una unidad seleccionada
+    if (route.params.idUnidad) {
+      breadcrumbList.push({
+        text: 'Indicador de Logro',
+        path: `/IndicadorLogro/${route.params.idEspecialidad}/${route.params.idPrograma}/${route.params.idUnidad}`,
+      });
+    }
+
+    //  Actualizar breadcrumbs
     breadcrumbs.value = breadcrumbList;
   });
 

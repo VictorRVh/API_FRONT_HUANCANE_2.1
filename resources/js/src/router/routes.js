@@ -89,7 +89,7 @@ export default [
         }
     },
     {
-        path: '/experienciaFormativa/:idPrograma',
+        path: '/experienciaFormativa/:idEspecialidad/:idPrograma',
         name: 'ExperienciaFormativa',
         component: ()=>import('../pages/Especialidad/ExperienciaFormativa.vue'),
         props: true, // Esto pasa los parámetros de ruta como props al componente
@@ -100,7 +100,7 @@ export default [
         }
     },
     {
-        path: '/IndicadorLogro/:idUnidad',
+        path: '/IndicadorLogro/:idEspecialidad/:idPrograma/:idUnidad',
         name: 'IndicadorLogro',
         component: ()=>import('../pages/Especialidad/IndicadoresLogro.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente

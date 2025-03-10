@@ -30,6 +30,10 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  idPrograma:{
+    type: Number,
+    default:null
+  }
 });
 
 const router = useRouter();
@@ -65,7 +69,7 @@ const onDelete = (Units) => {
 const SeeMore = (id) => {
   router.push({
     name: "IndicadorLogro",
-    params: { idUnidad: id },
+    params: { idEspecialidad:props.idEspecialidad, idPrograma:props.idPrograma, idUnidad: id },
   });
 };
 </script>
