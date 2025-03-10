@@ -8,6 +8,8 @@ const userStore = useUserStore();
 const router = useRouter();
 const { index: logout } = useHttpRequest("/logout");
 
+console.log('usuario logeado', userStore.user.id)
+
 // Inyectamos el tema desde la configuración global
 const { isDarkMode, updateDarkMode } = inject("theme");
 
@@ -17,10 +19,13 @@ const toggleDarkMode = () => {
   document.documentElement.classList.toggle("dark", isDarkMode.value);
 };
 
-// Redirigir a "Editar Perfil"
 const goToEditProfile = () => {
-  router.push({ name: "datopersonal" });
+  router.push({
+    name: "datopersonal",
+    params: { id: userStore.user.id },
+  });
 };
+
 
 // Cerrar sesión
 const onLogout = async () => {
