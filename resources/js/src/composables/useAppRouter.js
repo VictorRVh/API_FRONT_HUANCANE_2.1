@@ -1,6 +1,11 @@
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
+// useHttpRequest para interactuar con la API
+import useHttpRequest from './useHttpRequest';
+
 const useAppRouter = () => {
     const route = useRoute();
     const router = useRouter();

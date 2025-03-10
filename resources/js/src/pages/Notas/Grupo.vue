@@ -68,14 +68,14 @@ if (!groupStore.groups?.length) {
 const noteUnid = (id) => {
   router.push({
     name: "notasUnits",
-    params: { id: id },
+    params: { idUnitNote: id },
   });
 };
 
 const noteExp = (id) => {
   router.push({
     name: "notasExperience",
-    params: { id: id },
+    params: { idExperiencie: id },
   });
 };
 

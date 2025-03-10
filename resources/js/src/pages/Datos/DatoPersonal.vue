@@ -1,141 +1,162 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import useUserStore from "../../store/useUserStore";
+import useHttpRequest from "../../composables/useHttpRequest";
+import useRoleStore from "../../store/useRoleStore";
+import FormInput from "../../components/ui/FormInput.vue";
+import Button from "../../components/ui/Button.vue";
+import useUtils from "../../composables/useUtils";
+import useModalToast from "../../composables/useModalToast";
+
+const props = defineProps({
+  show: {
+    type: Boolean,
+    default: () => false,
+  },
+  user: {
+    type: [Object, null],
+    default: () => null,
+  },
+})
+
+const emit = defineEmits(["hide"]);
 
 const userStore = useUserStore();
+const roleStore = useRoleStore();
 const router = useRouter();
 const route = useRoute();
 
-// Reactive states para los datos del formulario
-const form = ref({
-  id: null,
-  name: "",
-  apellido_paterno: "",
-  apellido_materno: "",
-  email: "",
-  celular: "",
-  fecha_nacimiento: "",
-  dni: "",
-  sexo: "",
-  direccion: "",
-  imagen: "",
-});
+const { omitPropsFromObject } = useUtils();
+const { showToast } = useModalToast();
 
-// Variables para manejar errores y el estado de carga
-const errors = ref({});
-const loading = ref(false);
-
-// Función para cargar datos del usuario
-const cargarDatosUsuario = async () => {
-  const userId = route.params.id; // Asume que el ID del usuario viene desde la URL
-  try {
-    if (userStore.user?.id === Number(userId)) {
-      // Si el usuario está cargado en el store, lo usamos
-      form.value = {
-        id: userStore.user.id,
-        name: userStore.user.name,
-        apellido_paterno: userStore.user.apellido_paterno,
-        apellido_materno: userStore.user.apellido_materno,
-        email: userStore.user.email,
-        celular: userStore.user.celular,
-        fecha_nacimiento: userStore.user.fecha_nacimiento,
-        dni: userStore.user.dni,
-        sexo: userStore.user.sexo,
-        direccion: userStore.user.direccion || "",
-        imagen: "", // Imagen no necesariamente está en el store
-      };
-    }
-  } catch (error) {
-    console.error("Error al cargar los datos del usuario:", error);
-  }
-};
-
-// Función para cargar una nueva imagen
-const onFileChange = (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      form.value.imagen = event.target.result; // Guardamos la imagen como base64
-    };
-    reader.readAsDataURL(file);
-  }
-};
-
-// Función para guardar los cambios
-const guardarCambios = async () => {
-  loading.value = true;
-  errors.value = {};
-
-  try {
-    const payload = {
-      name: form.value.name,
-      apellido_paterno: form.value.apellido_paterno,
-      apellido_materno: form.value.apellido_materno,
-      email: form.value.email,
-      celular: form.value.celular,
-      fecha_nacimiento: form.value.fecha_nacimiento,
-      dni: form.value.dni,
-      sexo: form.value.sexo,
-      direccion: form.value.direccion,
-      imagen: form.value.imagen, // Enviar la imagen como base64 al backend
-    };
-
-    const userId = form.value.id;
-    const { data } = await axios.put(`http://tu-backend-api.com/api/usuarios/${userId}`, payload);
-
-    // Actualizamos el userStore si es el usuario actual
-    if (userStore.user?.id === userId) {
-      userStore.setUser(data);
-    }
-
-    alert("¡Cambios guardados exitosamente!");
-    router.push({ name: "Dashboard" });
-  } catch (error) {
-    if (error.response && error.response.data.errors) {
-      errors.value = error.response.data.errors;
-    } else {
-      console.error("Error al guardar los cambios:", error);
-    }
-  } finally {
-    loading.value = false;
-  }
-};
-
-// Función para cancelar la edición
-const cancelarEdicion = () => {
-  router.push({ name: "Dashboard" });
-};
-
-// Observa cambios en el userStore y sincroniza los datos si es necesario
-watch(
-  () => userStore.user,
-  (newUser) => {
-    if (newUser && form.value.id === newUser.id) {
-      cargarDatosUsuario();
-    }
-  }
+const { store: createUser, saving, update: updateUser, updating, index } = useHttpRequest(
+  "/users"
 );
 
-// Cargar datos al montar el componente
-cargarDatosUsuario();
+
+// Reactive states para los datos del formulario
+const initialFormData = () => {
+  return {
+    name: null,
+    apellido_paterno: null,
+    apellido_materno: null,
+    dni: null,
+    sexo: null,
+    celular: null,
+    fecha_nacimiento: null,
+    email: null,
+    password: null,
+    confirm_password: null,
+    roles: [],
+  };
+};
+
+const formData = ref(initialFormData());
+const formErrors = ref({});
+
+const userAuth = useUserStore()
+
+console.log('datos usuario: ', userAuth.user)
+
+watch(
+  () => userAuth.user, // Observa cambios en userStore.user
+  (newUser) => {
+    if (newUser?.id) {
+      formData.value = {
+        ...initialFormData(),
+        ...newUser,
+      };
+    } else {
+      formData.value = initialFormData();
+    }
+  },
+  { immediate: true } // Para que se ejecute al montar el componente
+);
+const roleOptions = computed(() => {
+  const formDataRoleIds = formData.value.roles.map((role) => role?.id?.toString());
+  console.log(formDataRoleIds)
+  return roleStore.roles.filter(
+    (role) =>
+      !formDataRoleIds.includes(role?.id?.toString()) && role?.name !== "super-admin"
+  );
+});
+
+
+const selectedRole = ref(null);
+const onRoleSelect = (role) => {
+  formData.value = {
+    ...formData.value,
+    roles: [role].concat(formData.value.roles),
+  };
+  selectedRole.value = null;
+};
+const onRoleRemove = (role) => {
+  const updatedRoles = formData.value.roles.filter(
+    (fRole) => fRole?.id?.toString() !== role?.id?.toString()
+  );
+
+  formData.value = {
+    ...formData.value,
+    roles: updatedRoles,
+  };
+};
+
+console.log("Usuario seleccionado:", userStore.selectedUser);
+console.log("ID del usuario autenticado:", userAuth.user?.id);
+
+const onSubmit = async () => {
+  if (saving.value || updating.value) return;
+
+  try {
+    let data = {
+      ...formData.value, // Se copian todos los datos del formulario, sin modificar roles
+    };
+
+    console.log("Datos editados", data);
+
+    // Omitir campos innecesarios
+    const fieldsToBeOmitted = ["confirm_password", "password", "roles"]; // También omitimos los roles para que no se actualicen
+    data = omitPropsFromObject(data, fieldsToBeOmitted);
+
+    // Verificar que el usuario autenticado tenga un ID válido
+    const userId = userAuth.user?.id;
+    if (!userId) {
+      showToast("No se seleccionó un usuario para actualizar", "error");
+      return;
+    }
+
+    // Ejecutar la actualización
+    const response = await updateUser(userId, data);
+
+    if (response?.id) {
+      showToast("Usuario actualizado correctamente");
+      await userStore.loadUsers(); // Recargar lista de usuarios
+      userStore.selectedUser = null; // Limpiar usuario seleccionado después de actualizar
+      emit("hide"); // Ocultar modal o formulario
+    }
+  } catch (error) {
+    console.error("Error al actualizar usuario:", error);
+    showToast("Ocurrió un error. Intenta de nuevo.", "error");
+  }
+};
+
+
 </script>
 
 <template>
   <div class="max-w-4xl mx-auto mt-6 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
     <!-- Título -->
-    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Editar Información Personal</h2>
+    <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Editar Información Personal</h2>
 
     <!-- Formulario -->
-    <form class="space-y-6">
       <!-- Imagen de perfil -->
-      <div class="flex items-center space-x-4">
+      <!-- <div class="flex items-center space-x-4"> -->
         <!-- Imagen actual -->
-        <div class="relative">
+        <!-- <div class="relative">
           <img
-            :src="form.imagen || 'https://via.placeholder.com/150'"
+            :src="'https://via.placeholder.com/150'"
             alt="Imagen de perfil"
             class="w-24 h-24 rounded-full border border-gray-300 dark:border-gray-600 object-cover"
             
@@ -171,49 +192,157 @@ cargarDatosUsuario();
         <p class="text-gray-600 dark:text-gray-300 text-sm">
           Sube una imagen cuadrada para tu perfil.
         </p>
-      </div>
+      </div>  -->
 
       <!-- Campos del formulario -->
-      <div v-for="(label, key) in {
-        name: 'Nombres',
-        apellido_paterno: 'Apellido Paterno',
-        apellido_materno: 'Apellido Materno',
-        email: 'Correo Electrónico',
-        celular: 'Celular',
-        dni: 'DNI',
-        direccion: 'Dirección',
-      }" :key="key">
-        <label :for="key" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          {{ label }}
-        </label>
-        <input
-          v-model="form[key]"
-          :id="key"
-          type="text"
-          class="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-          :placeholder="`Ingresa ${label.toLowerCase()}`"
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormInput
+          v-model="formData.name"
+          label="Nombres"
+          :error="formErrors?.name"
+          required
         />
-        <p v-if="errors[key]" class="text-red-500 text-sm">{{ errors[key][0] }}</p>
+
+        <FormInput
+          v-model="formData.apellido_paterno"
+          label="Apellido Paterno"
+          :error="formErrors?.apellido_paterno"
+          required
+        />
+
+        <FormInput
+          v-model="formData.apellido_materno"
+          label="Apellido Materno"
+          :error="formErrors?.apellido_materno"
+          required
+        />
+
+        <FormInput
+          v-model="formData.dni"
+          :focus="show"
+          label="Dni"
+          :error="formErrors?.dni"
+          required
+        />
+
+        <FormInput
+          v-model="formData.sexo"
+          :focus="show"
+          label="Sexo"
+          :error="formErrors?.sexo"
+          required
+        />
+
+        <FormInput
+          v-model="formData.celular"
+          :focus="show"
+          label="Celular"
+          :error="formErrors?.celular"
+          required
+        />
+
+        <FormInput
+          v-model="formData.fecha_nacimiento"
+          :focus="show"
+          label="Fecha de Nacimiento"
+          type="date"
+          :error="formErrors?.fecha_nacimiento"
+          required
+        />
+
+        <FormInput
+          v-model="formData.email"
+          label="Correo electrónico"
+          :error="formErrors?.email"
+          required
+        />
+
+        <template v-if="!user?.id">
+          <FormInput
+            v-model="formData.password"
+            label="Contraseña"
+            type="password"
+            :error="formErrors?.password"
+            required
+          />
+
+          <FormInput
+            v-model="formData.confirm_password"
+            type="password"
+            label="Confirmar contraseña"
+            required
+          />
+        </template>
+
+        <FormLabelError label="Asignar rol">
+          <VSelect
+            v-model="selectedRole"
+            :options="roleOptions"
+            label="name"
+            @update:model-value="(role) => onRoleSelect(role)"
+            class=" dark:text-gray-700  "
+          />
+        </FormLabelError>
+
+        <!-- <div class="w-full space-y-3 dark:text-white"> -->
+          <!-- <FormLabelError v-if="formData.roles?.length" label="User roles" /> -->
+
+          <!-- <TransitionGroup tag="ul" name="edit-list" class="relative space-y-3">
+            <li
+              v-for="role in formData.roles"
+              :key="role.id"
+              class="shadow-google rounded-sm "
+            >
+              <div
+                class="p-4 flex-between w-full dark:bg-gray-800/60 rounded-sm border border-[#e6e6e6] dark:border-gray-700"
+              >
+                <div class="flex-1 dark:text-white">{{ role.name }}</div>
+                <span
+                  class="text-sm cursor-pointer text-red-500 dark:text-red-300"
+                  @click="onRoleRemove(role)"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="css-i6dzq1 cursor-pointer"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </span>
+              </div>
+            </li>
+
+            
+          </TransitionGroup> -->
+
+          <!-- <Button
+              :title="user?.id ? 'Actualizar' : 'Guardar'"
+              key="submit-btn"
+              :loading-title="user?.id ? 'Saving...' : 'Updating...'"
+              class="!w-full"
+              :loading="saving || updating"
+              @click="onSubmit"
+            /> -->
+        <!-- </div> -->
       </div>
 
-      <!-- Botones -->
-      <div class="flex justify-end space-x-4">
-        <button
-          type="button"
-          @click="cancelarEdicion"
-          class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500"
-        >
-          Cancelar
-        </button>
-        <button
-          type="button"
-          :disabled="loading"
-          @click="guardarCambios"
-          class="px-4 py-2 text-sm font-medium text-white bg-granate rounded-md hover:bg-granate-244 disabled:opacity-50"
-        >
-          Guardar Cambios
-        </button>
+
+      <div class="w-full space-y-3 dark:text-white">
+          <Button
+              :title="user?.id ? 'Actualizar' : 'Guardar'"
+              key="submit-btn"
+              :loading-title="user?.id ? 'Saving...' : 'Updating...'"
+              class="!w-full"
+              :loading="saving || updating"
+              @click="onSubmit"
+            />
       </div>
-    </form>
   </div>
 </template>

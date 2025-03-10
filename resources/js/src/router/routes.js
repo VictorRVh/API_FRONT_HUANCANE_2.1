@@ -6,7 +6,9 @@ export default [
         meta: {
             layout: 'full',
             permissions: [],
+            breadcrumb: 'Login'
         },
+
     },
     {
         path: '/home',
@@ -15,6 +17,7 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['users-all', 'users-view'],
+            breadcrumb: 'Inicio'
         },
     },
 
@@ -25,7 +28,9 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['users-all', 'users-view'],
+            breadcrumb: 'Usuarios'
         },
+
     },
 
     {
@@ -35,7 +40,9 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['roles-all', 'roles-view'],
+            breadcrumb: 'Roles'
         },
+
     },
 
     {
@@ -45,6 +52,7 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['permissions-all', 'permissions-view'],
+            breadcrumb: 'Permisos'
         },
     },
 
@@ -55,46 +63,51 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['specialties-all', 'specialties-view'],
+            breadcrumb: 'Especialidades'
         },
     },
     {
         path: '/especialidad/:idEspecialidad',
         name: 'programaFormativo',
-        component: ()=>import('../pages/Especialidad/ProgramaFormativo.vue'),
+        component: () => import('../pages/Especialidad/ProgramaFormativo.vue'),
         props: true, // Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['program-all', 'program-view'],
+            breadcrumb: 'Programa Formativo'
         }
     },
     {
-        path: '/unidadDidactica/:idPrograma',
+        path: '/unidadDidactica/:idEspecialidad/:idPrograma',
         name: 'UnidadDidactica',
-        component: ()=>import('../pages/Especialidad/UnidadDidactica.vue'),
+        component: () => import('../pages/Especialidad/UnidadDidactica.vue'),
         props: true, // Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['units-all', 'units-view'],
+            breadcrumb: 'Unidad Didactica'
         }
     },
     {
-        path: '/experienciaFormativa/:idPrograma',
+        path: '/experienciaFormativa/:idEspecialidad/:idPrograma',
         name: 'ExperienciaFormativa',
-        component: ()=>import('../pages/Especialidad/ExperienciaFormativa.vue'),
+        component: () => import('../pages/Especialidad/ExperienciaFormativa.vue'),
         props: true, // Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['units-all', 'units-view'],
+            breadcrumb: 'Experiencia Formativa'
         }
     },
     {
-        path: '/IndicadorLogro/:idUnidad',
+        path: '/IndicadorLogro/:idEspecialidad/:idPrograma/:idUnidad',
         name: 'IndicadorLogro',
-        component: ()=>import('../pages/Especialidad/IndicadoresLogro.vue'),
+        component: () => import('../pages/Especialidad/IndicadoresLogro.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['indicators-all', 'indicators-view'],
+            breadcrumb: 'Indicador de Logro'
         }
     },
     {
@@ -105,6 +118,7 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['plan-all', 'plan-view'],
+            breadcrumb: 'Plan Formativo'
         },
     },
     {
@@ -115,6 +129,7 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['teachers-all', 'teachers-view'],
+            breadcrumb: 'Docentes'
         },
     },
     {
@@ -125,16 +140,18 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['students-all', 'students-view'],
+            breadcrumb: 'Estudiantes'
         },
     },
     {
         path: '/sede',
         name: 'sedes',
         component: () => import('../pages/Sede/Sede.vue'),
-       // props: true, // units-all Esto pasa los parámetros de ruta como props al componente
+        // props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['places-all', 'places-view'],
+            breadcrumb: 'Sedes'
         },
     },
 
@@ -146,17 +163,19 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['groups-all', 'groups-view'],
+            breadcrumb: 'Grupos'
         },
     },
 
     {
-        path: '/grupos/:id',
+        path: '/grupos/:idGroupAll',
         name: 'grupoEst',
         component: () => import('../pages/Grupo/Estudiantes.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['groups-all', 'groups-view'],
+            breadcrumb: 'Grupo Estudiante'
         },
     },
     {
@@ -167,16 +186,18 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['groups-all', 'groups-view'],
+            breadcrumb: 'Certificado'
         },
     },
-     {
-        path: '/certificado/:id',
+    {
+        path: '/certificado/:certifyId',
         name: 'certificadoEst',
         component: () => import('../pages/Certificado/Estudiantes.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['groups-all', 'groups-view'],
+            breadcrumb: 'Certificado Estudiante'
         },
     },
     {
@@ -187,27 +208,30 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['enrollmentStudent-all', 'enrollmentStudent-view'],
+            breadcrumb: 'Matriculas'
         },
     },
     {
-        path: '/notas',
+        path: '/notas_student',
         name: 'notaStudent',
         component: () => import('../pages/NotaStudent/Grupo.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['note-student-all', 'notas-student-view'],
+            breadcrumb: 'Notas'
         },
     },
-    
+
     {
-        path: '/notas/:id',
+        path: '/notas/:idNoteStudent',
         name: 'noteByStudent',
         component: () => import('../pages/NotaStudent/viewNota.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['note-student-all', 'notas-student-view'],
+            breadcrumb: 'Historial de Notas'
         },
     },
     {
@@ -218,26 +242,29 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['notas-all', 'notas-view'],
+            breadcrumb: 'Notas'
         },
     },
     {
-        path: '/notasExperience/:id',
+        path: '/notasExperience/:idExperiencie',
         name: 'notasExperience',
         component: () => import('../pages/Notas/NotasExperiencia.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['notas-all', 'notas-view'],
+            breadcrumb: 'Notas de Experiencia'
         },
     },
     {
-        path: '/notasUnit/:id',
+        path: '/notasUnit/:idUnitNote',
         name: 'notasUnits',
         component: () => import('../pages/Notas/NotasUnidades.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
         meta: {
             layout: 'dashboard',
             permissions: ['notas-all', 'notas-view'],
+            breadcrumb: 'Notas de Unidades'
         },
     },
     {
@@ -248,6 +275,7 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['notas-all', 'notas-view'],
+            breadcrumb: 'Agregar Notas'
         },
     },
     {
@@ -258,6 +286,7 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['notas-all', 'notas-view'],
+            breadcrumb: 'Agregar Notas'
         },
     },
     {
@@ -268,6 +297,7 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['report-all', 'report-view'],
+            breadcrumb: 'Reportes'
         },
     },
     {
@@ -278,27 +308,27 @@ export default [
         meta: {
             layout: 'dashboard',
             permissions: ['data-all', 'data-view'],
+            breadcrumb: 'Datos Personales'
         },
     },
     {
-        path: '/politicas'    ,
-        name: 'politicas',                      
-        component: () => import('../pages/Home/politicas.vue'), 
+        path: '/politicas',
+        name: 'politicas',
+        component: () => import('../pages/Home/politicas.vue'),
         meta: {
             layout: 'full',
             permissions: [],
-    },
+        },
     },
     {
-        path: '/terminos'    ,
-        name: 'terminos',       
-        component: () => import('../pages/Home/terminos.vue'),  
+        path: '/terminos',
+        name: 'terminos',
+        component: () => import('../pages/Home/terminos.vue'),
         meta: {
             layout: 'full',
             permissions: [],
 
+        }
     }
-}
 
-    /* todlos que se aumento */
 ];

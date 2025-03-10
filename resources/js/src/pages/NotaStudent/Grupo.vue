@@ -53,7 +53,7 @@ if (!groupStore.groups?.length) {
 const noteAll = (id) => {
   router.push({
     name: "noteByStudent",
-    params: { id: id },
+    params: { idNoteStudent: id },
   });
 };
 

@@ -13,7 +13,7 @@ import useStudentsStore from "../../store/Grupo/useGrupoStore";
 
 const router = useRouter();
 const props = defineProps({
-  id: {
+  idUnitNote: {
     type: Number,
     default: 0,
   },
@@ -26,7 +26,7 @@ const selectUnit = ref(null);
 
 onMounted(async () => {
   if (!userStore.student?.length) {
-    await userStore.loadGroupStudentNote(props.id);
+    await userStore.loadGroupStudentNote(props.idUnitNote);
   }
   listUnit.value = userStore.student?.unidades_didacticas || [];
   lengthUnit.value = userStore.student?.total_unidades;
@@ -41,7 +41,7 @@ onMounted(async () => {
 console.log("victor hola fuera",lengthUnit)
 
 
-watch(() => props.id, async (newId) => {
+watch(() => props.idUnitNote, async (newId) => {
   await userStore.loadGroupStudentNote(newId);
   listUnit.value = userStore.student?.unidades_didacticas || [];
 
@@ -55,7 +55,7 @@ const seeNote = () => {
   if (selectUnit.value) {
     router.push({
       name: "notasEstUnidad",
-      params: { idgroup: props.id, idunit: selectUnit.value },
+      params: { idgroup: props.idUnitNote, idunit: selectUnit.value },
     });
   } else {
     console.error("Por favor, seleccione una unidad antes de continuar.");

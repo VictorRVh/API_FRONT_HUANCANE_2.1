@@ -17,7 +17,7 @@ import { generateNominaPDF, reporteNominaUgel } from "../../components/pdf/gener
 
 const router = useRouter();
 const props = defineProps({
-  id: {
+  idGroupAll: {
     type: Number,
     default: 0,
   },
@@ -29,11 +29,11 @@ const selectUnit = ref(null);
 
 onMounted(async () => {
   if (!userStore.student?.length) {
-    await userStore.loadGroupStudent(props.id);
+    await userStore.loadGroupStudent(props.idGroupAll);
   }
 });
 
-watch(() => props.id, async (newId) => {
+watch(() => props.idGroupAll, async (newId) => {
   await userStore.loadGroupStudent(newId);
 });
 
@@ -73,8 +73,8 @@ const nominaUgel = async (idGrupo) => {
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
         <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
-        <button @click="nominaNormal(props.id)">PDF</button>
-        <button @click="nominaUgel(props.id)">PDF Ugel</button>
+        <button @click="nominaNormal(props.idGroupAll)">PDF</button>
+        <button @click="nominaUgel(props.idGroupAll)">PDF Ugel</button>
       </div>
       <div class="w-full">
         <Table class="border-collapse divide-y divide-transparent">
