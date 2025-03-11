@@ -13,7 +13,7 @@ import AuthorizationFallback from "../../components/page/AuthorizationFallback.v
 import useStudentsStore from "../../store/Grupo/useGrupoStore";
 import { generateNominaPDF, reporteNominaUgel } from "../../components/pdf/generatePdf";
 
-import { exportToExcel } from '../../components/Exel/alumnosXlsx'; 
+import { exportToExcel } from '../../components/Exel/alumnosXlsx';
 
 const router = useRouter();
 const props = defineProps({
@@ -26,10 +26,21 @@ const props = defineProps({
 const userStore = useStudentsStore();
 const listUnit = ref([]);
 const selectUnit = ref(null);
-
+const dataExel = ref([]);
 onMounted(async () => {
   if (!userStore.student?.length) {
     await userStore.loadGroupStudent(props.idGroupAll);
+
+    dataExel.value = userStore.student.estudiantes.map(item => ({
+      Nombre: item.estudiante.name,
+      ApellidoPaterno: item.estudiante.apellido_paterno,
+      ApellidoMaterno: item.estudiante.apellido_materno,
+      DNI: item.estudiante.dni,
+      Email: item.estudiante.email,
+      Celular: item.estudiante.celular,
+      Sexo: item.estudiante.sexo
+    }));
+
   }
 });
 
@@ -66,15 +77,12 @@ const nominaUgel = async (idGrupo) => {
   }
 }
 
-const data = ref([
-  { Nombre: 'Juan', Edad: 30, Ciudad: 'Madrid' },
-  { Nombre: 'Ana', Edad: 25, Ciudad: 'Barcelona' },
-  { Nombre: 'Luis', Edad: 28, Ciudad: 'Valencia' },
-]);
+console.log("EXEL: ", userStore.student.estudiantes)
+
 
 // Función para exportar
 const exportData = () => {
-  exportToExcel(data.value, 'alumnos.xlsx', 'Hoja1');
+  exportToExcel(dataExel.value, 'alumnos.xlsx', 'Hoja1');
 };
 // @click="nominaNormal(idGroupAll)"
 // @click="nominaUgel(idGroupAll)" 
@@ -91,12 +99,12 @@ const pdfUgel = "Nomina UGEL";
           <!-- Primer botón con ícono SVG -->
           <div class="flex items-center gap-1">
             <!-- Ícono PDF -->
-      
+
             <!-- Botón -->
-            <CreateButton :name="'Alumnos'" @click="exportData" :color="'#155724'" /> 
+            <CreateButton :name="'Alumnos'" @click="exportData" :color="'#155724'" />
             <CreateButton :name="pdfProfe" @click="nominaNormal(props.idGroupAll)" />
             <CreateButton :name="pdfUgel" @click="nominaUgel(props.idGroupAll)" />
-         
+
           </div>
         </div>
 
