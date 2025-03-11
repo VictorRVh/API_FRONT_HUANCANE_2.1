@@ -8,12 +8,12 @@ import Tr from "../../components/table/Tr.vue";
 import Th from "../../components/table/Th.vue";
 import Td from "../../components/table/Td.vue";
 import ViewButton from "../../components/ui/ViewButton.vue";
-import CreateButton from "../../components/ui/CreateButton.vue";
+import CreateButton from "../../components/ui/CustomButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 import useStudentsStore from "../../store/Grupo/useGrupoStore";
 import { generateNominaPDF, reporteNominaUgel } from "../../components/pdf/generatePdf";
 
-
+import { exportToExcel } from '../../components/Exel/alumnosXlsx'; 
 
 const router = useRouter();
 const props = defineProps({
@@ -38,7 +38,7 @@ watch(() => props.idGroupAll, async (newId) => {
 });
 
 
-const seeNote = () => {};
+const seeNote = () => { };
 const nominaNormal = async (idGrupo) => {
   try {
     const response = await fetch(`/api/grupoDocenteTwo/${idGrupo}`);
@@ -66,6 +66,20 @@ const nominaUgel = async (idGrupo) => {
   }
 }
 
+const data = ref([
+  { Nombre: 'Juan', Edad: 30, Ciudad: 'Madrid' },
+  { Nombre: 'Ana', Edad: 25, Ciudad: 'Barcelona' },
+  { Nombre: 'Luis', Edad: 28, Ciudad: 'Valencia' },
+]);
+
+// Función para exportar
+const exportData = () => {
+  exportToExcel(data.value, 'alumnos.xlsx', 'Hoja1');
+};
+// @click="nominaNormal(idGroupAll)"
+// @click="nominaUgel(idGroupAll)" 
+const pdfProfe = "Nomina Docente";
+const pdfUgel = "Nomina UGEL";
 </script>
 
 <template>
@@ -73,8 +87,19 @@ const nominaUgel = async (idGrupo) => {
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
         <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
-        <button @click="nominaNormal(props.idGroupAll)">PDF</button>
-        <button @click="nominaUgel(props.idGroupAll)">PDF Ugel</button>
+        <div class="flex gap-4 items-center">
+          <!-- Primer botón con ícono SVG -->
+          <div class="flex items-center gap-1">
+            <!-- Ícono PDF -->
+      
+            <!-- Botón -->
+            <CreateButton :name="'Alumnos'" @click="exportData" :color="'#155724'" /> 
+            <CreateButton :name="pdfProfe" @click="nominaNormal(props.idGroupAll)" />
+            <CreateButton :name="pdfUgel" @click="nominaUgel(props.idGroupAll)" />
+         
+          </div>
+        </div>
+
       </div>
       <div class="w-full">
         <Table class="border-collapse divide-y divide-transparent">
@@ -111,7 +136,7 @@ const nominaUgel = async (idGrupo) => {
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
 
                 <ViewButton />
-        
+
               </Td>
             </Tr>
           </TBody>

@@ -61,45 +61,43 @@ const smallMode = computed(() => windowWidth.value >= 1000 && windowWidth.value 
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen bg-blancoPuro dark:bg-gray-800 dark:text-gray-400 font-inter w-full max-w-3xl">
-    <!-- Título principal -->
-    <h2 class="text-lg font-semibold text-negroClaro dark:text-gray-400 mt-0 mb-2 pl-4">
+  <div
+    class="flex flex-col min-h-screen bg-blancoPuro dark:bg-gray-800 dark:text-gray-400 font-inter w-12/12 max-w-3xl"
+  >
+    <!-- Título "HERRAMIENTAS" -->
+    <h2 class="text-lg font-semibold text-negroClaro dark:text-gray-400 mt-4 mb-2 pl-4">
       Menu
     </h2>
-    
-    <!-- Iteración por secciones sin subtítulos ni divisores -->
-    <div v-for="section in sections" :key="section.title" class="w-full mb-6">
-      <div class="flex flex-col items-start w-full space-y-2 custom-scrollbar text-xsm pl-2">
-        <RouterLink
-          v-for="item in section.items"
-          :key="item.name + item.route"
-          v-show="item.name === 'Home' || hasPermission(item.permissions)"
-          :to="{ name: item.route }"
-          class="w-full text-white flex pl-1 items-center rounded-md group transition-all duration-200 hover:bg-granate dark:hover:bg-granate-dark"
-        >
-          <template v-slot="{ isActive }">
-            <span
-              class="flex items-center justify-start w-full transition-all duration-300 rounded-lg"
-              :class="isActive
-                ? (smallMode.value
-                    ? 'bg-granate text-white px-2 py-1 border-b-2 border-granate dark:border-granate-dark'
-                    : 'bg-granate text-white px-2 border-b-2 border-granate dark:border-granate-dark pl-4')
-                : 'text-granate dark:text-white hover:bg-granate hover:text-white'"
-            >
-              <!-- Ícono siempre en tamaño normal -->
-              <component :is="item.icon" class="w-6 h-6 mr-2" />
-              <!-- Texto siempre visible -->
-              <p :class="smallMode.value ? 'text-[7px] ml-1' : 'text-s ml-2'">
-                {{ item.name }}
-              </p>
-            </span>
-          </template>
-        </RouterLink>
-      </div>
+
+    <!-- Menú de elementos con scroll vertical -->
+    <div
+      class="flex flex-col items-start w-full space-y-2 overflow-y-auto h-[70vh] custom-scrollbar"
+    >
+    <RouterLink
+  v-for="item in menuItems"
+  :key="item.name"
+  v-show="item.name === 'Home' || hasPermission(item.permissions)"
+  :to="{ name: item.route  /*, params: { id: item.id } */ }"
+  class="text-white w-full flex pl-4  items-center rounded-md group transition-all duration-200 hover:bg-granate dark:hover:bg-granate-dark"
+>
+  <template v-slot="{ isActive }">
+    <span
+      class="text-sm font-normal py-2  pl-2 flex items-center justify-start w-full h-full group-hover:text-white transition-all duration-300 rounded-lg"
+      :class="[
+        isActive
+          ? 'bg-granate text-white dark:text-white transition-all ml-5 duration-300 rounded-lg px-6'
+          : 'text-granate dark:text-white'
+      ]"
+    >
+      <component :is="item.icon" class="w-6 h-6 mr-2" />
+      <p>{{ item.name }} </p>
+    </span>
+  </template>
+</RouterLink>
+
     </div>
   </div>
 </template>
-
 <style>
 .custom-scrollbar {
   overflow-x: hidden;
