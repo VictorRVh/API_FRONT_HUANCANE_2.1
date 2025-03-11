@@ -1,19 +1,13 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
+import axios from "axios";
 import ApexCharts from "apexcharts";
 
-// Opciones dinámicas para las sedes
-const sedes = ref([
-  { id: 1, nombre: "HUANCANÉ" },
-  { id: 2, nombre: "ROSASPATA" },
-  { id: 3, nombre: "PUSY" },
-]);
-
-const especialidades = ref([]);
+// Opciones dinámicas para sedes y periodos
+const sedes = ref([]);
+const periodos = ref(["2023-I", "2023-II", "2024-I", "2024-II"]); // Periodos disponibles
 const sedeSeleccionada = ref(null);
-
-// Datos para el gráfico
-const opcionesGrafico = ref(null);
+const periodoSeleccionado = ref(null); // Nuevo input para el periodo académico
 
 // Datos reactivos de estudiantes
 const datosEstudiantes = ref({
@@ -22,102 +16,84 @@ const datosEstudiantes = ref({
   total: 0,
 });
 
-// Datos simulados con 6 o 7 especialidades por sede
-const datosSimulados = {
-  1: {
-    especialidades: [
-      { id: 1, nombre: "Ingeniería" },
-      { id: 2, nombre: "Artes" },
-      { id: 3, nombre: "Negocios" },
-      { id: 4, nombre: "Computación" },
-      { id: 5, nombre: "Agronomía" },
-      { id: 6, nombre: "Enfermería" },
-    ],
-    estudiantes: {
-      1: { primerCiclo: 120, segundoCiclo: 80 },
-      2: { primerCiclo: 70, segundoCiclo: 60 },
-      3: { primerCiclo: 90, segundoCiclo: 110 },
-      4: { primerCiclo: 100, segundoCiclo: 120 },
-      5: { primerCiclo: 130, segundoCiclo: 140 },
-      6: { primerCiclo: 80, segundoCiclo: 90 },
-    },
-  },
-  2: {
-    especialidades: [
-      { id: 7, nombre: "Diseño" },
-      { id: 8, nombre: "Derecho" },
-      { id: 9, nombre: "Arquitectura" },
-      { id: 10, nombre: "Psicología" },
-      { id: 11, nombre: "Contabilidad" },
-      { id: 12, nombre: "Turismo" },
-    ],
-    estudiantes: {
-      7: { primerCiclo: 50, segundoCiclo: 30 },
-      8: { primerCiclo: 90, segundoCiclo: 70 },
-      9: { primerCiclo: 70, segundoCiclo: 50 },
-      10: { primerCiclo: 60, segundoCiclo: 80 },
-      11: { primerCiclo: 110, segundoCiclo: 90 },
-      12: { primerCiclo: 40, segundoCiclo: 60 },
-    },
-  },
-  3: {
-    especialidades: [
-      { id: 13, nombre: "Medicina" },
-      { id: 14, nombre: "Enfermería" },
-      { id: 15, nombre: "Veterinaria" },
-      { id: 16, nombre: "Biología" },
-      { id: 17, nombre: "Matemáticas" },
-      { id: 18, nombre: "Física" },
-    ],
-    estudiantes: {
-      13: { primerCiclo: 200, segundoCiclo: 150 },
-      14: { primerCiclo: 110, segundoCiclo: 90 },
-      15: { primerCiclo: 120, segundoCiclo: 100 },
-      16: { primerCiclo: 130, segundoCiclo: 110 },
-      17: { primerCiclo: 90, segundoCiclo: 80 },
-      18: { primerCiclo: 100, segundoCiclo: 70 },
-    },
-  },
+// Función para obtener las sedes desde el backend
+const obtenerSedes = async () => {
+  try {
+    const response = await axios.get("/api/sedes");
+    sedes.value = response.data.sedes;
+    if (sedes.value.length > 0) {
+      sedeSeleccionada.value = sedes.value[0].id_sede;
+    }
+  } catch (error) {
+    console.error("Error al obtener sedes:", error);
+  }
 };
 
-// Función para cargar especialidades según la sede seleccionada
-const cargarEspecialidades = (idSede) => {
-  especialidades.value = datosSimulados[idSede]?.especialidades || [];
-  cargarDatosEstudiantes(idSede);
+// Función para obtener datos de estudiantes desde el backend
+const obtenerAlumnos = async () => {
+  if (!sedeSeleccionada.value || !periodoSeleccionado.value) {
+    console.warn("Debe seleccionar un periodo y una sede.");
+    return;
+  }
+
+  try {
+    const response = await axios.get(
+      `/api/reporte-alumnos/${periodoSeleccionado.value}/${sedeSeleccionada.value}`
+    );
+
+    procesarDatosEstudiantes(response.data.alumnos || []);
+  } catch (error) {
+    console.error("Error al obtener alumnos:", error);
+  }
 };
 
-// Función para cargar los datos de estudiantes de todas las especialidades de una sede
-const cargarDatosEstudiantes = (idSede) => {
-  const especialidadesSede = datosSimulados[idSede]?.especialidades || [];
-  const estudiantesSede = datosSimulados[idSede]?.estudiantes || {};
+// Función para procesar los datos de estudiantes recibidos del backend
+const procesarDatosEstudiantes = (data) => {
+  const categorias = [];
+  const primerPlan = [];
+  const segundoPlan = [];
+  let totalEstudiantes = 0;
 
-  datosEstudiantes.value.categorias = especialidadesSede.map((esp) => esp.nombre);
-  datosEstudiantes.value.series = [
-    {
-      name: "Primer Plan de Estudios",
-      data: especialidadesSede.map((esp) => estudiantesSede[esp.id]?.primerCiclo || 0),
-      color: "#921733", // Granate
-    },
-    {
-      name: "Segundo Plan de Estudios",
-      data: especialidadesSede.map((esp) => estudiantesSede[esp.id]?.segundoCiclo || 0),
-      color: "#701261", // Violeta
-    },
-  ];
-  datosEstudiantes.value.total = especialidadesSede.reduce(
-    (total, esp) =>
-      total +
-      (estudiantesSede[esp.id]?.primerCiclo || 0) +
-      (estudiantesSede[esp.id]?.segundoCiclo || 0),
-    0
-  );
+  // Agrupar datos por especialidad y plan de estudios
+  const agrupados = {};
+  data.forEach((item) => {
+    if (!agrupados[item.id_especialidad]) {
+      agrupados[item.id_especialidad] = {
+        nombre: item.nombre_especialidad,
+        primerPlan: 0,
+        segundoPlan: 0,
+      };
+    }
+    if (item.id_plan === 1) {
+      agrupados[item.id_especialidad].primerPlan = item.total_alumnos;
+    } else if (item.id_plan === 2) {
+      agrupados[item.id_especialidad].segundoPlan = item.total_alumnos;
+    }
+  });
+
+  // Convertir datos agrupados en formato para ApexCharts
+  Object.values(agrupados).forEach((esp) => {
+    categorias.push(esp.nombre);
+    primerPlan.push(esp.primerPlan);
+    segundoPlan.push(esp.segundoPlan);
+    totalEstudiantes += esp.primerPlan + esp.segundoPlan;
+  });
+
+  datosEstudiantes.value = {
+    categorias,
+    series: [
+      { name: "Primer Plan de Estudios", data: primerPlan, color: "#921733" },
+      { name: "Segundo Plan de Estudios", data: segundoPlan, color: "#701261" },
+    ],
+    total: totalEstudiantes,
+  };
 
   renderizarGrafico();
 };
 
 // Función para renderizar el gráfico con ApexCharts
 const renderizarGrafico = () => {
-  opcionesGrafico.value = {
+  const opcionesGrafico = {
     chart: {
       type: "bar",
       height: "100%",
@@ -140,21 +116,6 @@ const renderizarGrafico = () => {
         horizontal: false,
         columnWidth: "60%",
         borderRadius: 4,
-        dataLabels: {
-          total: {
-            enabled: true,
-            offsetY: -20,
-            style: {
-              fontSize: "14px",
-              colors: ["#000000"],
-            },
-            formatter: function (val, opts) {
-              const primerCiclo = opts.w.config.series[0].data[opts.dataPointIndex];
-              const segundoCiclo = opts.w.config.series[1].data[opts.dataPointIndex];
-              return primerCiclo + segundoCiclo + "*";
-            },
-          },
-        },
       },
     },
     fill: { opacity: 1 },
@@ -165,44 +126,56 @@ const renderizarGrafico = () => {
   const contenedorGrafico = document.getElementById("grafico-matriculas");
   if (contenedorGrafico) {
     contenedorGrafico.innerHTML = ""; // Limpiar gráfico anterior
-    const chart = new ApexCharts(contenedorGrafico, opcionesGrafico.value);
+    const chart = new ApexCharts(contenedorGrafico, opcionesGrafico);
     chart.render();
   }
 };
 
-// Watch para actualizar especialidades y datos al cambiar de sede
-watch(sedeSeleccionada, (idSede) => {
-  if (idSede) {
-    cargarEspecialidades(idSede);
-  }
+// Watch para actualizar los datos cuando cambian la sede o el período seleccionado
+watch([sedeSeleccionada, periodoSeleccionado], () => {
+  obtenerAlumnos();
 });
 
+// Cargar datos al montar el componente
 onMounted(() => {
-  sedeSeleccionada.value = 1; // Seleccionar la primera sede por defecto
+  obtenerSedes();
 });
 </script>
 
 <template>
   <div class="max-w-5xl mx-auto bg-white rounded-lg shadow dark:bg-gray-800 p-6">
-    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Ciclo Formativo  </h2>
-    <!-- Selección de sede -->
-    <div class="mb-6">
-      <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-        Seleccione una sede:
-      </label>
-      <select
-        v-model="sedeSeleccionada"
-        class="w-full border rounded-md p-2 dark:bg-gray-700 dark:text-white"
-      >
-        <option disabled value="">Seleccione una sede</option>
-        <option v-for="sede in sedes" :key="sede.id" :value="sede.id">
-          {{ sede.nombre }}
-        </option>
-      </select>
+    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Ciclo Formativo</h2>
+
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <!-- Selección de sede -->
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          Seleccione una sede:
+        </label>
+        <select v-model="sedeSeleccionada" class="w-full border rounded-md p-2 dark:bg-gray-700 dark:text-white">
+          <option disabled value="">Seleccione una sede</option>
+          <option v-for="sede in sedes" :key="sede.id_sede" :value="sede.id_sede">
+            {{ sede.nombre_sede }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Selección de período académico -->
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          Seleccione un período académico:
+        </label>
+        <select v-model="periodoSeleccionado" class="w-full border rounded-md p-2 dark:bg-gray-700 dark:text-white">
+          <option disabled value="">Seleccione un período</option>
+          <option v-for="periodo in periodos" :key="periodo" :value="periodo">
+            {{ periodo }}
+          </option>
+        </select>
+      </div>
     </div>
 
     <!-- Gráfico y resultados generales -->
-    <div class="flex gap-6 ">
+    <div class="flex gap-6">
       <!-- Gráfico -->
       <div class="flex-1">
         <div id="grafico-matriculas" class="w-full h-96"></div>
@@ -210,9 +183,7 @@ onMounted(() => {
 
       <!-- Resultados generales -->
       <div class="w-64 bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-        <h5 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
-          Resultados Generales
-        </h5>
+        <h5 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Resultados Generales</h5>
         <p class="text-base font-medium text-gray-600 dark:text-gray-300">
           Total de estudiantes matriculados:
         </p>

@@ -496,6 +496,13 @@ Route::middleware('auth:sanctum')->group(function () {
         'generarReporteCertificado',
     ])->middleware('permission:enrollmentStudent-all|enrollmentStudent-view');
 
+    // RUTA DE LOS REPORTES
+
+    Route::get('reporte-alumnos/{periodo}/{sede_id}', [
+        \App\Http\Controllers\GrupoController::class,
+        'getTotalAlumnosPorPeriodoYSede',
+    ])->middleware('permission:enrollmentStudent-all|enrollmentStudent-view');
+
 
     Route::get('/users-by-role/{role_id}', [UserController::class, 'getUsersByRole']);
 });

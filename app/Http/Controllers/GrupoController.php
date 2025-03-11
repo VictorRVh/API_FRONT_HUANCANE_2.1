@@ -6,7 +6,9 @@ use App\Models\Grupo;
 use App\Models\Matricula;
 use App\Models\Planes;
 use App\Models\Programa;
+use App\Models\Sede;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class GrupoController extends Controller
@@ -218,33 +220,33 @@ class GrupoController extends Controller
         // Obtener los ID de los grupos en los que está matriculado el estudiante
         $gruposIds = Matricula::where('id_estudiante', $estudiante_id)
             ->pluck('id_grupo'); // Extraer solo los IDs de los grupos
-    
+
         // Obtener los grupos con sus relaciones
         $grupos = Grupo::whereIn('id_grupo', $gruposIds) // Filtrar por los grupos obtenidos
             ->where('id_plan', $plan_id) // Filtrar por el plan
             ->with(['sede', 'turno', 'plan', 'especialidad', 'programa']) // Cargar relaciones necesarias
             ->get();
-    
+
         // Ocultar timestamps
         $grupos->each(function ($grupo) {
             $grupo->makeHidden(['created_at', 'updated_at']);
-    
+
             if ($grupo->sede) {
                 $grupo->sede->makeHidden(['created_at', 'updated_at']);
             }
-    
+
             if ($grupo->turno) {
                 $grupo->turno->makeHidden(['created_at', 'updated_at']);
             }
-    
+
             if ($grupo->plan) {
                 $grupo->plan->makeHidden(['created_at', 'updated_at']);
             }
-    
+
             if ($grupo->especialidad) {
                 $grupo->especialidad->makeHidden(['created_at', 'updated_at']);
             }
-    
+
             if ($grupo->programa) {
                 $grupo->programa->makeHidden(['created_at', 'updated_at']);
             }
@@ -252,10 +254,10 @@ class GrupoController extends Controller
                 $grupo->docente->makeHidden(['created_at', 'updated_at']);
             }
         });
-    
+
         return response()->json($grupos, 200);
     }
-    
+
 
     public function getAlumnosYUnidadesPorGrupo($grupo_id)
     {
@@ -473,5 +475,32 @@ class GrupoController extends Controller
         ];
 
         return response()->json($response, 200);
+    }
+
+    public function getTotalAlumnosPorPeriodoYSede($periodo, $sede_id)
+    {
+        $reporte = Sede::select(
+            'sedes.id_sede',
+            'sedes.nombre_sede',
+            'especialidades.id_especialidad',
+            'especialidades.nombre_especialidad',
+            'grupos.id_plan',
+            DB::raw('COUNT(matriculas.id_matricula) AS total_alumnos')
+        )
+            ->join('grupos', 'grupos.id_sede', '=', 'sedes.id_sede')
+            ->join('especialidades', 'grupos.id_especialidad', '=', 'especialidades.id_especialidad')
+            ->join('matriculas', 'matriculas.id_grupo', '=', 'grupos.id_grupo')
+            ->where('grupos.id_plan', $periodo)
+            ->where('sedes.id_sede', $sede_id)
+            ->groupBy(
+                'sedes.id_sede',
+                'sedes.nombre_sede',
+                'especialidades.id_especialidad',
+                'especialidades.nombre_especialidad',
+                'grupos.id_plan'
+            )
+            ->get();
+
+        return response()->json($reporte);
     }
 }
