@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import DashboardHeader from "./DashboardHeader.vue";
 import SuspenseFallback from "./SuspenseFallback.vue";
@@ -53,6 +53,13 @@ onBeforeUnmount(() => {
   window.removeEventListener("click", handleClickOutside);
 });
 
+// Cerrar sidebar automáticamente al seleccionar una herramienta en móviles
+watch(() => route.fullPath, () => {
+  if (!isLargeScreen.value) {
+    sidebarOpen.value = false;
+  }
+});
+
 // Función para navegar hacia atrás
 const goBack = () => {
   router.back();
@@ -67,7 +74,7 @@ const goBack = () => {
     <!-- Utiliza w-full en móviles, w-[15%] en pantallas lg y la clase personalizada para resoluciones >=1550px -->
     <header
       v-if="sidebarOpen || isLargeScreen"
-      class="w-full lg:w-[300px]  bg-plomoClaro dark:bg-gray-800 h-auto lg:h-screen sticky top-0 shadow-lg z-10 overflow-auto"
+      class="w-full lg:w-[200px] bg-plomoClaro dark:bg-gray-800 h-auto lg:h-screen sticky top-0 shadow-lg z-10 overflow-auto sidebar-responsive"
     >
       <DashboardHeader class="container mx-auto px-4 xl:px-0 gap-4 text-negroClaro dark:text-white" />
     </header>
@@ -169,10 +176,7 @@ const goBack = () => {
         <p
           class="ml-2 bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm dark:bg-gray-700 dark:text-gray-300"
         >
-         
-        <Breadcrumb />
-
-
+          <Breadcrumb />
         </p>
       </div>
 
@@ -201,7 +205,14 @@ const goBack = () => {
 @media (min-width: 1550px) {
   /* Para resoluciones mayores o iguales a 1550px, el sidebar se fija a 232px (15% de 1550) */
   .sidebar-responsive {
-    width: 232px !important;
+    width: 280px !important;
   }
+
+@media (max-width: 1280px) and (min-width: 1024px) {
+  /* Para resoluciones entre 1024px y 1280px, el sidebar tendrá 250px */
+  .sidebar-responsive {
+    width: 100px !important;
+  }
+}
 }
 </style>

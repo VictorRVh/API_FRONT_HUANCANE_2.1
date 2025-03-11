@@ -48,9 +48,9 @@ const copyEmail = async () => {
 </script>
 
 <template>
-  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg w-[450px] border border-gray-300 dark:border-gray-700 flex flex-col items-center">
+  <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg w-[280px] border border-gray-300 dark:border-gray-700 flex flex-col items-center">
     <!-- Avatar con icono de edición -->
-    <div class="relative w-28 h-28 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 cursor-pointer hover:ring-2 hover:ring-gray-400 dark:hover:ring-gray-500 transition-all" @click="goToEditProfile">
+    <div class="relative w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 cursor-pointer hover:ring-2 hover:ring-gray-400 dark:hover:ring-gray-500 transition-all" @click="goToEditProfile">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-gray-600 dark:text-gray-300">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
       </svg>
@@ -60,12 +60,12 @@ const copyEmail = async () => {
     </div>
 
     <!-- Nombre del usuario -->
-    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 text-center">
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1 text-center">
       {{ userStore.user?.name }}
     </h3>
 
     <!-- Rol -->
-    <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
       <span class="font-semibold">Rol:</span> {{ userStore.user.roles[0]?.name }}
     </p>
 
