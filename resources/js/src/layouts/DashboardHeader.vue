@@ -23,21 +23,21 @@ const userPermissions = computed(
 
 // Definición de elementos del menú
 const menuItems = [
-  { name: "Home", icon: "HomeIcon", route: "home", permissions: [] },
-  { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"] },
-  { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"] },
-  { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"] },
-  { name: "Matricula", icon: "BookOpenIcon", route: "matriculas", permissions: ["enrollmentStudent-all", "enrollmentStudent-icon"] },
-  { name: "Especialidad", icon: "BuildingOfficeIcon", route: "especialidad", permissions: ["specialties-all", "specialties-icon"] },
-  { name: "Reportes", icon: "ChartBarIcon", route: "reporte", permissions: ["users-all", "users-icon"] },
-  { name: "Certificados", icon: "FolderIcon", route: "certificado", permissions: ["users-all", "users-icon"] },
+{ name: "Home", icon: "HomeIcon", route: "home", permissions: [] },
   { name: "Users", icon: "UsersIcon", route: "users", permissions: ["users-all", "users-icon"] },
   { name: "Roles", icon: "BookmarkIcon", route: "roles", permissions: ["roles-all", "roles-icon"] },
   { name: "Permissions", icon: "BookmarkSquareIcon", route: "permissions", permissions: ["permissions-all", "permissions-icon"] },
+  { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"] },
+  { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"] },
+  { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"] },
   { name: "Sede", icon: "BookmarkSquareIcon", route: "sedes", permissions: ["places-all", "places-icon"] },
+  { name: "Especialidad", icon: "BuildingOfficeIcon", route: "especialidad", permissions: ["specialties-all", "specialties-icon"] },
   { name: "Grupos", icon: "UsersIcon", route: "grupos", permissions: ["groups-all", "groups-icon"] },
+  { name: "Matricula", icon: "BookOpenIcon", route: "matriculas", permissions: ["enrollmentStudent-all", "enrollmentStudent-icon"] },
   { name: "Notas", icon: "ClipboardDocumentListIcon", route: "notas", permissions: ["note-all", "note-icon"] },
   { name: "Notas", icon: "NewspaperIcon", route: "notaStudent", permissions: ["note-student-all", "note-student-icon"] },
+  { name: "Reportes", icon: "ChartBarIcon", route: "reporte", permissions: ["users-all", "users-icon"] },
+  { name: "Certificados", icon: "FolderIcon", route: "certificado", permissions: ["users-all", "users-icon"] },
 ];
 
 // Agrupar el menú en secciones (sin mostrar el título de cada sección ni línea divisoria)
