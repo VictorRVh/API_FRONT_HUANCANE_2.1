@@ -24,20 +24,21 @@ const userPermissions = computed(
 // Definición de elementos del menú
 const menuItems = [
   { name: "Home", icon: "HomeIcon", route: "home", permissions: [] },
-  { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"] },
-  { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"] },
-  { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"] },
-  { name: "Matricula", icon: "BookOpenIcon", route: "matriculas", permissions: ["enrollmentStudent-all", "enrollmentStudent-icon"] },
-  { name: "Especialidad", icon: "BuildingOfficeIcon", route: "especialidad", permissions: ["specialties-all", "specialties-icon"] },
-  { name: "Reportes", icon: "ChartBarIcon", route: "reporte", permissions: ["users-all", "users-icon"] },
-  { name: "Certificados", icon: "FolderIcon", route: "certificado", permissions: ["users-all", "users-icon"] },
   { name: "Users", icon: "UsersIcon", route: "users", permissions: ["users-all", "users-icon"] },
   { name: "Roles", icon: "BookmarkIcon", route: "roles", permissions: ["roles-all", "roles-icon"] },
   { name: "Permissions", icon: "BookmarkSquareIcon", route: "permissions", permissions: ["permissions-all", "permissions-icon"] },
+  { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"] },
+  { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"] },
+  { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"] },
   { name: "Sede", icon: "BookmarkSquareIcon", route: "sedes", permissions: ["places-all", "places-icon"] },
+  { name: "Especialidad", icon: "BuildingOfficeIcon", route: "especialidad", permissions: ["specialties-all", "specialties-icon"] },
   { name: "Grupos", icon: "UsersIcon", route: "grupos", permissions: ["groups-all", "groups-icon"] },
+  { name: "Matricula", icon: "BookOpenIcon", route: "matriculas", permissions: ["enrollmentStudent-all", "enrollmentStudent-icon"] },
   { name: "Notas", icon: "ClipboardDocumentListIcon", route: "notas", permissions: ["note-all", "note-icon"] },
   { name: "Notas", icon: "NewspaperIcon", route: "notaStudent", permissions: ["note-student-all", "note-student-icon"] },
+  { name: "Reportes", icon: "ChartBarIcon", route: "reporte", permissions: ["users-all", "users-icon"] },
+  { name: "Certificados", icon: "FolderIcon", route: "certificado", permissions: ["users-all", "users-icon"] },
+
 ];
 
 // Agrupar el menú en secciones (puedes ajustar títulos y agrupación)
@@ -77,8 +78,7 @@ const smallMode = computed(() => windowWidth.value >= 1000 && windowWidth.value 
     <h2 class="text-lg font-semibold text-negroClaro dark:text-gray-400 mt-0 mb-2 pl-4">
       Menu
     </h2>
-<<<<<<< HEAD
-    
+
     <!-- Iteración por secciones -->
     <div v-for="section in sections" :key="section.title" class="w-full mb-6">
       <!-- Subtítulo de sección -->
@@ -117,35 +117,6 @@ const smallMode = computed(() => windowWidth.value >= 1000 && windowWidth.value 
       
       <!-- Línea divisoria minimal al final de la sección -->
       <hr class="border-gray-200 dark:border-gray-600 mt-2 mx-4" />
-=======
-
-    <!-- Menú de elementos con scroll vertical -->
-    <div
-      class="flex flex-col items-start w-full space-y-2 overflow-y-auto h-[70vh] custom-scrollbar"
-    >
-    <RouterLink
-  v-for="item in menuItems"
-  :key="item.name"
-  v-show="item.name === 'Home' || hasPermission(item.permissions)"
-  :to="{ name: item.route  /*, params: { id: item.id } */ }"
-  class="text-white w-full flex pl-4  items-center rounded-md group transition-all duration-200 hover:bg-granate dark:hover:bg-granate-dark"
->
-  <template v-slot="{ isActive }">
-    <span
-      class="text-sm font-normal py-2  pl-2 flex items-center justify-start w-full h-full group-hover:text-white transition-all duration-300 rounded-lg"
-      :class="[
-        isActive
-          ? 'bg-granate text-white dark:text-white transition-all ml-5 duration-300 rounded-lg px-6'
-          : 'text-granate dark:text-white'
-      ]"
-    >
-      <component :is="item.icon" class="w-6 h-6 mr-2" />
-      <p>{{ item.name }} </p>
-    </span>
-  </template>
-</RouterLink>
-
->>>>>>> 838443957aa2ee17b879dcc604d39618887a46c0
     </div>
   </div>
 </template>

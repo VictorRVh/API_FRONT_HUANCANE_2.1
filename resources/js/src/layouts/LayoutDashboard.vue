@@ -5,6 +5,7 @@ import DashboardHeader from "./DashboardHeader.vue";
 import SuspenseFallback from "./SuspenseFallback.vue";
 import useUserStore from "../store/useUserStore";
 import Data from "./Data.vue"; // Importación de Data.vue
+import Breadcrumb from '../components/pagination/Breadcrumb.vue';
 
 const userStore = useUserStore();
 
@@ -168,7 +169,10 @@ const goBack = () => {
         <p
           class="ml-2 bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm dark:bg-gray-700 dark:text-gray-300"
         >
-          {{ route.fullPath }}
+         
+        <Breadcrumb />
+
+
         </p>
       </div>
 
