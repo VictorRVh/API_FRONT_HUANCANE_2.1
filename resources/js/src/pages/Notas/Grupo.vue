@@ -88,7 +88,7 @@ const changePlan = () => {
   <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex justify-between">
-        <h2 class="text-black font-bold text-2xl">Grupos</h2>
+        <h2 class="text-black font-bold text-2xl">Notas</h2>
         
       </div>
 

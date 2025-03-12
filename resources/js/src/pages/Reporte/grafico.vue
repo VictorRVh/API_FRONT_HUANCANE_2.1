@@ -189,7 +189,7 @@ const changePlan = async () => {
 <template>
   <div class="max-w-6xl mx-auto bg-white rounded-lg shadow dark:bg-gray-800 p-6">
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
-      Ciclo Formativo
+      Reportes
     </h2>
 
     <!-- Filtros -->

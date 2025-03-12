@@ -25,7 +25,6 @@ import usePlaceStore from "../../store/Sede/useSedeStore";
 import useStudentsStore from "../../store/Estudiante/useStudentStore";
 
 
-
 const roleStore = useRoleStore();
 let specialtiesStore = ref(null);
 let userStore = ref(null);
@@ -100,7 +99,7 @@ const changePlan = () => {
   <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-black font-bold text-2xl">Gestión / Grupos</h2>
+        <h2 class="text-black font-bold text-2xl">Grupos</h2>
         <CreateButton v-if="roleStore.role[0].id !=7" @click="showSlider(true)" />
       </div>
 

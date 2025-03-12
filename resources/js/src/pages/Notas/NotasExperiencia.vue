@@ -38,15 +38,12 @@ const seeNote = () => {
   if (idExp.value) {
     router.push({
       name: "notasEst",
-      params: { idgroup: props.idExperiencie, idexp: idExp.value ,id:"657870657269656e636961" },
+      params: { idgroup: props.idExperiencie, idExperiencie: idExp.value ,idType:"657870657269656e636961" },
     });
-  } else {
+  } else {  idExperiencie/
     console.error("Por favor, seleccione una unidad antes de continuar.");
   }
 };
-
-
-
 
 </script>
 

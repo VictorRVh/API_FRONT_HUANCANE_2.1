@@ -104,7 +104,7 @@ export function useBreadcrumb() {
       });
     }
 
-    if (route.params.idExperiencie || route.params.idUnitNote) {
+    if (route.params.idExperiencie || route.params.idUnitNote || route.params.idgroup) {
       breadcrumbList.push({
         text: 'Notas',
         path: `/notas`,
@@ -126,7 +126,14 @@ export function useBreadcrumb() {
         path: `/notasUnit/${route.params.idUnitNote}`,
       });
     }
-    
+    if (route.params.idType) {
+      //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
+      breadcrumbList.push({
+        text: 'Agregar Notas',
+        path: `/notas/unidad/${route.params.idgroup}/${route.params.idExperiencie}/${route.params.idType}`,
+      });
+    }
+
     if (route.params.idNoteStudent) {
       //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
       breadcrumbList.push({
@@ -141,11 +148,10 @@ export function useBreadcrumb() {
         path: `/notas/${route.params.idNoteStudent}`,
       });
     }
+
     //  Actualizar breadcrumbs
     breadcrumbs.value = breadcrumbList;
   });
-
-
 
   return { breadcrumbs };
 }
