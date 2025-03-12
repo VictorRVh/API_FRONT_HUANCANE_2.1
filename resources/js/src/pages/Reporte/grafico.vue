@@ -1,99 +1,64 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import axios from "axios";
 import ApexCharts from "apexcharts";
+import usePlaceStore from "../../store/Sede/useSedeStore";
+import useReportStore from "../../store/Sede/useReporteStore";
+import usePlanStore from "../../store/Especialidad/usePlanFormativoStore";
 
-// Opciones dinámicas para sedes y periodos
-const sedes = ref([]);
-const periodos = ref(["2023-I", "2023-II", "2024-I", "2024-II"]); // Periodos disponibles
-const sedeSeleccionada = ref(null);
-const periodoSeleccionado = ref(null); // Nuevo input para el periodo académico
+// Stores
+const placesStore = usePlaceStore();
+const planStore = usePlanStore();
+const reportStore = useReportStore();
 
-// Datos reactivos de estudiantes
-const datosEstudiantes = ref({
-  categorias: [],
-  series: [],
-  total: 0,
+// Refs
+const selectedPlace = ref(0);
+const selectedPlan = ref(0);
+const opcionesGrafico = ref(null);
+
+// Nueva referencia para manejar la instancia del gráfico
+let chartInstance = null;
+
+// Carga inicial de datos (sede y plan)
+onMounted(async () => {
+  if (!placesStore.Places.length) await placesStore.loadPlaces();
+  if (placesStore.Places.length > 0) {
+    selectedPlace.value = placesStore.Places[placesStore.Places.length - 1]?.id_sede;
+  }
+
+  if (!planStore.plans.length) await planStore.loadPlans();
+  if (planStore.plans.length > 0) {
+    selectedPlan.value = planStore.plans[planStore.plans.length - 1]?.id_plan;
+  }
+
+  await cargarReporte();
 });
 
-// Función para obtener las sedes desde el backend
-const obtenerSedes = async () => {
-  try {
-    const response = await axios.get("/api/sedes");
-    sedes.value = response.data.sedes;
-    if (sedes.value.length > 0) {
-      sedeSeleccionada.value = sedes.value[0].id_sede;
-    }
-  } catch (error) {
-    console.error("Error al obtener sedes:", error);
+// Watchers para detectar cambios
+watch([selectedPlace, selectedPlan], async ([newPlace, newPlan]) => {
+  if (newPlace && newPlan) {
+    await cargarReporte();
   }
-};
+});
 
-// Función para obtener datos de estudiantes desde el backend
-const obtenerAlumnos = async () => {
-  if (!sedeSeleccionada.value || !periodoSeleccionado.value) {
-    console.warn("Debe seleccionar un periodo y una sede.");
+// Función que carga el reporte desde la API y genera el gráfico
+const cargarReporte = async () => {
+  await reportStore.loadReports(selectedPlan.value, selectedPlace.value);
+
+  if (!reportStore.Reports.length) {
+    console.warn("No se encontraron reportes.");
+    renderizarGrafico([], []);
     return;
   }
 
-  try {
-    const response = await axios.get(
-      `/api/reporte-alumnos/${periodoSeleccionado.value}/${sedeSeleccionada.value}`
-    );
+  const categorias = reportStore.Reports.map(report => report.nombre_especialidad);
+  const datosSeries = reportStore.Reports.map(report => report.total_alumnos);
 
-    procesarDatosEstudiantes(response.data.alumnos || []);
-  } catch (error) {
-    console.error("Error al obtener alumnos:", error);
-  }
+  renderizarGrafico(categorias, datosSeries);
 };
 
-// Función para procesar los datos de estudiantes recibidos del backend
-const procesarDatosEstudiantes = (data) => {
-  const categorias = [];
-  const primerPlan = [];
-  const segundoPlan = [];
-  let totalEstudiantes = 0;
-
-  // Agrupar datos por especialidad y plan de estudios
-  const agrupados = {};
-  data.forEach((item) => {
-    if (!agrupados[item.id_especialidad]) {
-      agrupados[item.id_especialidad] = {
-        nombre: item.nombre_especialidad,
-        primerPlan: 0,
-        segundoPlan: 0,
-      };
-    }
-    if (item.id_plan === 1) {
-      agrupados[item.id_especialidad].primerPlan = item.total_alumnos;
-    } else if (item.id_plan === 2) {
-      agrupados[item.id_especialidad].segundoPlan = item.total_alumnos;
-    }
-  });
-
-  // Convertir datos agrupados en formato para ApexCharts
-  Object.values(agrupados).forEach((esp) => {
-    categorias.push(esp.nombre);
-    primerPlan.push(esp.primerPlan);
-    segundoPlan.push(esp.segundoPlan);
-    totalEstudiantes += esp.primerPlan + esp.segundoPlan;
-  });
-
-  datosEstudiantes.value = {
-    categorias,
-    series: [
-      { name: "Primer Plan de Estudios", data: primerPlan, color: "#921733" },
-      { name: "Segundo Plan de Estudios", data: segundoPlan, color: "#701261" },
-    ],
-    total: totalEstudiantes,
-  };
-
-  renderizarGrafico();
-};
-
-// Función para renderizar el gráfico con ApexCharts
-const renderizarGrafico = () => {
-  const opcionesGrafico = {
+// Renderizar el gráfico asegurando que no se duplique
+const renderizarGrafico = (categorias, datosSeries) => {
+  opcionesGrafico.value = {
     chart: {
       type: "bar",
       height: "100%",
@@ -101,14 +66,20 @@ const renderizarGrafico = () => {
       fontFamily: "Inter, sans-serif",
       toolbar: { show: false },
     },
-    series: datosEstudiantes.value.series,
+    series: [
+      {
+        name: "Total Alumnos",
+        data: datosSeries,
+        color: "#921733",
+      }
+    ],
     xaxis: {
-      categories: datosEstudiantes.value.categorias,
+      categorias,
       labels: { style: { fontSize: "14px" } },
     },
     yaxis: {
       labels: {
-        formatter: (value) => value + " estudiantes",
+        formatter: (value) => `${value} estudiantes`,
       },
     },
     plotOptions: {
@@ -120,81 +91,67 @@ const renderizarGrafico = () => {
     },
     fill: { opacity: 1 },
     legend: { position: "top" },
-    dataLabels: { enabled: false },
+    dataLabels: { enabled: true },
+    noData: {
+      text: 'No hay datos disponibles',
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: '#888',
+        fontSize: '14px'
+      }
+    }
   };
 
   const contenedorGrafico = document.getElementById("grafico-matriculas");
+
   if (contenedorGrafico) {
-    contenedorGrafico.innerHTML = ""; // Limpiar gráfico anterior
-    const chart = new ApexCharts(contenedorGrafico, opcionesGrafico);
-    chart.render();
+    // Destruye el gráfico previo antes de crear uno nuevo
+    if (chartInstance) {
+      chartInstance.destroy();
+      chartInstance = null;
+    }
+
+    chartInstance = new ApexCharts(contenedorGrafico, opcionesGrafico.value);
+    chartInstance.render();
   }
 };
 
-// Watch para actualizar los datos cuando cambian la sede o el período seleccionado
-watch([sedeSeleccionada, periodoSeleccionado], () => {
-  obtenerAlumnos();
-});
+// Métodos de cambio en los selects
+const changePlace = async () => {
+  await cargarReporte();
+};
 
-// Cargar datos al montar el componente
-onMounted(() => {
-  obtenerSedes();
-});
+const changePlan = async () => {
+  await cargarReporte();
+};
 </script>
 
 <template>
   <div class="max-w-5xl mx-auto bg-white rounded-lg shadow dark:bg-gray-800 p-6">
     <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Ciclo Formativo</h2>
 
-    <div class="grid grid-cols-2 gap-4 mb-6">
-      <!-- Selección de sede -->
-      <div>
-        <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-          Seleccione una sede:
-        </label>
-        <select v-model="sedeSeleccionada" class="w-full border rounded-md p-2 dark:bg-gray-700 dark:text-white">
-          <option disabled value="">Seleccione una sede</option>
-          <option v-for="sede in sedes" :key="sede.id_sede" :value="sede.id_sede">
-            {{ sede.nombre_sede }}
-          </option>
-        </select>
-      </div>
+    <div class="flex justify-between mb-6">
+      <!-- Select de Sede -->
+      <select @change="changePlace" v-model="selectedPlace" class="border rounded-md p-2">
+        <option value="" disabled>Seleccione una sede</option>
+        <option v-for="place in placesStore.Places.sedes" :key="place.id_sede" :value="place.id_sede">
+          {{ place.nombre_sede }}
+        </option>
+      </select>
 
-      <!-- Selección de período académico -->
-      <div>
-        <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-          Seleccione un período académico:
-        </label>
-        <select v-model="periodoSeleccionado" class="w-full border rounded-md p-2 dark:bg-gray-700 dark:text-white">
-          <option disabled value="">Seleccione un período</option>
-          <option v-for="periodo in periodos" :key="periodo" :value="periodo">
-            {{ periodo }}
-          </option>
-        </select>
-      </div>
+      <!-- Select de Plan -->
+      <select @change="changePlan" v-model="selectedPlan" class="border rounded-md p-2">
+        <option value="" disabled>Seleccione un plan</option>
+        <option v-for="plan in planStore.plans" :key="plan.id_plan" :value="plan.id_plan">
+          {{ plan.nombre_plan }}
+        </option>
+      </select>
     </div>
 
-    <!-- Gráfico y resultados generales -->
-    <div class="flex gap-6">
-      <!-- Gráfico -->
-      <div class="flex-1">
-        <div id="grafico-matriculas" class="w-full h-96"></div>
-      </div>
-
-      <!-- Resultados generales -->
-      <div class="w-64 bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-        <h5 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Resultados Generales</h5>
-        <p class="text-base font-medium text-gray-600 dark:text-gray-300">
-          Total de estudiantes matriculados:
-        </p>
-        <p class="text-2xl font-bold text-gray-900 dark:text-white">
-          {{ datosEstudiantes.total }}
-        </p>
-      </div>
-    </div>
+    <!-- Contenedor del gráfico -->
+    <div id="grafico-matriculas" class="w-full h-96"></div>
   </div>
 </template>
-
-<style scoped>
-/* Estilos personalizados (opcional) */
-</style>

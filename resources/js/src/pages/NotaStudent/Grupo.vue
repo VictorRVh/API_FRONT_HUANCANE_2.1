@@ -14,17 +14,11 @@ import ViewButton from "../../components/ui/ViewButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
 
 import useGroupsStore from "../../store/Grupo/useGrupoStore";
-import useSlider from "../../composables/useSlider";
 import useModalToast from "../../composables/useModalToast";
-import useHttpRequest from "../../composables/useHttpRequest";
 import useRoleStore from "../../store/useRoleStore";
-import useAuth from "../../composables/useAuth";
-import GrupoSlider from "../../components/page/Grupo/GrupoSlider.vue";
-
-import useSpecialtyStore from "../../store/Especialidad/useEspecialidadStore";
 import usePlanStore from "../../store/Especialidad/usePlanFormativoStore";
-import usePlaceStore from "../../store/Sede/useSedeStore";
-import useStudentsStore from "../../store/Estudiante/useStudentStore";
+
+
 
 const roleStore = useRoleStore();
 let specialtiesStore = ref(null);
