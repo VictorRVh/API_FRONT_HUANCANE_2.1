@@ -115,6 +115,7 @@ const onSubmit = async () => {
 
   let data = {
     ...formData.value,
+    dni: String(formData.value.dni),
   };
 
   const { validated, errors } = await runYupValidation(schema, data);
