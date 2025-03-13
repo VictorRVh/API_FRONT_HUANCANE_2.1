@@ -168,14 +168,43 @@ const onSubmit = async () => {
 watch(
   () => props.show,
   (newValue) => {
+    console.log("matricula: ", props.Enrollment);
+    
     if (newValue) {
-      formData.value = props.Enrollment ? { ...props.Enrollment } : initialFormData();
-    } else {
-      formData.value = initialFormData();
+      if (props.Enrollment) {
+        formData.value = {
+          id_grupo: props.Enrollment.id_grupo,
+          id_estudiante: props.Enrollment.id_estudiante,
+        };
+
+        // Esto lo necesitas para cargar los grupos correctos en el select
+        idSpecialty.value = props.Enrollment.grupos?.id_especialidad || 0;
+        idPlanRef.value = props.Enrollment.grupos?.id_plan || 0;
+
+        // Esto recarga los grupos si cambia la especialidad o el plan
+        groupStore.loadGroups(idPlanRef.value, idSpecialty.value);
+
+        // Opcional: Mostrar el estudiante seleccionado
+        selectedStudentName.value = `${props.Enrollment.name} ${props.Enrollment.apellido_paterno}`;
+        studentOptions.value = [
+          {
+            id: props.Enrollment.id_estudiante,
+            name: selectedStudentName.value,
+          },
+        ];
+      } else {
+        formData.value = initialFormData();
+        idSpecialty.value = 0;
+        idPlanRef.value = 0;
+        selectedStudentName.value = "";
+        studentOptions.value = [];
+      }
+
       formErrors.value = {};
     }
   }
 );
+
 
 watch(searchQuery, () => {
   if (searchQuery.value.length === 7 || searchQuery.value.length === 8) {
@@ -195,7 +224,7 @@ watch([idPlanRef, idSpecialty], ([newPlan, newSpecialty]) => {
   <Slider :show="show" :title="title" @hide="emit('hide') ">
     <AuthorizationFallback :permissions="requiredEnrollment">
       <div class="mt-4 space-y-4">
-        <FormLabelError label="Buscar Estudiante por DNI">
+        <FormLabelError v-if="!props.Enrollment" label="Buscar Estudiante por DNI">
           <FormInput v-model="searchQuery" placeholder="Ingresa DNI" :error="formErrors.id_estudiante" />
         </FormLabelError>
 
