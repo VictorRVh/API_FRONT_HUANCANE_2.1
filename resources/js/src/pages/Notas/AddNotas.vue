@@ -21,9 +21,11 @@ import useStudentsStore from "../../store/Grupo/useGrupoStore";
 // Definir propiedades
 const props = defineProps({
   idgroup: { type: Number, default: null },
-  idexp: { type: Number, default: null },
-  idunit: { type: Number, default: null },
-  id: { type: String, default: null },
+  idExperiencie: { type: Number, default: null },
+  idUnitNote: { type: Number, default: null },
+  idType: { type: String, default: null },
+  idTypeUnit: { type: String, default: null },
+  
 });
 
 // Configuración inicial
@@ -32,7 +34,7 @@ const listNotes = ref([]); // Lista de notas de estudiantes
 const isSubmitting = ref(false); // Estado de envío
 
 // Configuración de la URL según el ID
-const url = props.id === "657870657269656e636961"
+const url =  props.idType=== "657870657269656e636961"
   ? "/registrar_nota_experiencia"
   : "/registrar_notas_unidades";
 
@@ -46,7 +48,7 @@ const loadGroupData = async () => {
   listNotes.value = userStore.student.estudiantes.map((element) => ({
     fullName: `${element.estudiante?.name} ${element.estudiante?.apellido_paterno} ${element.estudiante?.apellido_materno}`,
     nota: null,
-    [props.id === "657870657269656e636961" ? "id_experiencia" : "id_unidad_didactica"]: props.id === "657870657269656e636961" ? props.idexp : props.idunit ,
+    [props.idType === "657870657269656e636961" ? "id_experiencia" : "id_unidad_didactica"]:  props.idType=== "657870657269656e636961" ? props.idExperiencie : props.idUnitNote ,
     id_estudiante: element.estudiante?.id,
     id_grupo: props.idgroup,
   }));
@@ -74,8 +76,9 @@ const submitNote = async () => {
   try {
     const response = await createUnit({ notas: listNotes.value });
     if (response.status === 201) {
+      router.push({ name:  props.idType=== "657870657269656e636961"? "notasExperience": "notasUnits" });
       showToast("Notas guardadas exitosamente", "success");
-      router.push({ name: props.id === "657870657269656e636961"? "notasExperience": "notasUnits", params: { id: props.idgroup } });
+     // outer.push({ name:  props.idType=== "657870657269656e636961"? `notasExperience/${props.idExperiencie}`: `notasUnits/${props.idUnitNote}`, params: { id: props.idgroup } });
     } else {
       throw new Error("Error al guardar");
     }

@@ -40,7 +40,7 @@ const seeNote = () => {
       name: "notasEst",
       params: { idgroup: props.idExperiencie, idExperiencie: idExp.value ,idType:"657870657269656e636961" },
     });
-  } else {  idExperiencie/
+  } else {  
     console.error("Por favor, seleccione una unidad antes de continuar.");
   }
 };

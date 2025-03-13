@@ -114,7 +114,7 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
   <AuthorizationFallback :permissions="['enrollmentStudent-all', 'enrollmentStudent-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex justify-between">
-        <h2 class="text-black font-bold text-2xl dark:text-white">Matricula</h2>
+        <h2 class="text-black font-bold text-2xl dark:text-white">Matrícula</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 

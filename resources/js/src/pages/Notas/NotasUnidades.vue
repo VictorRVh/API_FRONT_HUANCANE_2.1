@@ -55,7 +55,7 @@ const seeNote = () => {
   if (selectUnit.value) {
     router.push({
       name: "notasEstUnidad",
-      params: { idgroup: props.idUnitNote, idunit: selectUnit.value },
+      params: { idgroup: props.idUnitNote, idUnitNote: selectUnit.value  },
     });
   } else {
     console.error("Por favor, seleccione una unidad antes de continuar.");

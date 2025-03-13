@@ -119,7 +119,7 @@ export function useBreadcrumb() {
       });
     }
 
-    if (route.params.idUnitNote) {
+    if (route.params.idUnitNote || route.params.idTypeUnit) {
       //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
       breadcrumbList.push({
         text: 'Notas de Unidades',
@@ -132,8 +132,14 @@ export function useBreadcrumb() {
         text: 'Agregar Notas',
         path: `/notas/unidad/${route.params.idgroup}/${route.params.idExperiencie}/${route.params.idType}`,
       });
-    }
-
+    }  
+    if (route.name === "notasEstUnidad") {
+      //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
+      breadcrumbList.push({
+        text: 'Agregar Notas',
+        path: `/notas/unidad/${route.params.idgroup}/${route.params.idUnitNote}`,
+      });
+    } 
     if (route.params.idNoteStudent) {
       //  breadcrumbList[0].text = "Grupo"; // Modifica el primer breadcrumb
       breadcrumbList.push({

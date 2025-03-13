@@ -23,11 +23,6 @@ const props = defineProps({
     type: Boolean,
     default: () => false,
   },
-  user: {
-    type: [Object, null],
-    default: () => null,
-  },
-
 });
 const emit = defineEmits(["hide"]);
 
@@ -41,12 +36,12 @@ const { omitPropsFromObject } = useUtils();
 const { showToast } = useModalToast();
 
 const requiredPermissions = computed(() => {
-  if (!props.user?.id) return ["students-all", "students-create"];
-  else return ["students-all", "students-edit"];
+  if (!props.user?.id) return ["teachers-all", "teachers-create"];
+  else return ["teachers-all", "teachers-edit"];
 });
 
 const title = computed(() =>
-  props.user ? `Actualizar "${props.user?.name}"` : "Agregar nuevo usuario"
+  props.user ? `Actualizar Docente "${props.user?.name}"` : "Agregar Nuevo Docente"
 );
 
 const initialFormData = () => {
@@ -61,7 +56,7 @@ const initialFormData = () => {
     email: null,
     password: null,
     confirm_password: null,
-    roles: [8],
+    roles: [7],
   };
 };
 
@@ -133,8 +128,8 @@ const onSubmit = async () => {
     : await createUser(data);
 
   if (response?.id) {
-    showToast(`Estudiante ${props.user?.id ? "Creado" : "Actualizado"} satisfactoriamente`);
-    userStore.loadStudents();
+    showToast(`Docente ${props.user?.id ? "Actualizado" : "Creado"} satisfactoriamente`);
+    userStore.loadTeacher();
     emit("hide");
   }
 };
@@ -233,7 +228,7 @@ const onSubmit = async () => {
         <div class="w-full space-y-3">
           <TransitionGroup tag="ul" name="edit-list" class="relative space-y-3">
             <Button
-              :title="user?.id ? 'Actualizar' : 'Guardar'"
+              :title="user?.id ? 'Actulizar' : 'Guardar'"
               key="submit-btn"
               :loading-title="user?.id ? 'Actualizando...' : 'Guardando...'"
               class="!w-full"

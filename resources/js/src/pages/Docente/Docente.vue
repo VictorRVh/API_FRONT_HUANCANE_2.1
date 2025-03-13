@@ -12,7 +12,7 @@ import EditButton from "../../components/ui/EditButton.vue";
 import ViewButton from "../../components/ui/ViewButton.vue";
 import DeleteButton from "../../components/ui/DeleteButton.vue";
 import AuthorizationFallback from "../../components/page/AuthorizationFallback.vue";
-import EstudianteSlider from "../../components/page/Estudiante/EstudianteSlider.vue";
+import DocenteSlider from "../../components/page/Docente/DocenteSlider.vue";
 
 import useStudentsStore from "../../store/Estudiante/useStudentStore";
 
@@ -70,10 +70,10 @@ const changePage = (page) => {
 </script>
 
 <template>
-  <AuthorizationFallback :permissions="['students-all', 'students-view']">
+  <AuthorizationFallback :permissions="['teachers-all', 'teachers-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-black dark:text-white font-bold text-2xl">Docentes</h2>
+        <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
@@ -112,7 +112,7 @@ const changePage = (page) => {
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <!-- <ViewButton /> -->
+                  <ViewButton />
                   <EditButton @click="showSlider(true, user)" />
                   <DeleteButton @click="onDelete(user)" />
                 </div>
@@ -132,7 +132,7 @@ const changePage = (page) => {
       </div>
     </div>
 
-    <EstudianteSlider
+    <DocenteSlider
       :show="slider"
       :user="sliderData"
       @hide="hideSlider"

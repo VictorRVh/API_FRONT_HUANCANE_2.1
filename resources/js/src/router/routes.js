@@ -268,7 +268,7 @@ export default [
         },
     },
     {
-        path: '/notas/unidad/:idgroup/:idunit',
+        path: '/notas/unidad/:idgroup/:idUnitNote',
         name: 'notasEstUnidad',
         component: () => import('../pages/Notas/AddNotas.vue'),
         props: true, // units-all Esto pasa los parámetros de ruta como props al componente
