@@ -59,7 +59,7 @@ const onSignIn = async () => {
         <h2 class="text-3xl font-regular text-[#49454F] p-5">Intranet</h2>
       </div>
       <div class="flex flex-col justify-center items-center flex-grow">
-        <h1 class="text-5xl font-regular text-[#49454F] mb-10">CEPRO HUANCANÉ</h1>
+        <h1 class="text-5xl font-regular text-[#49454F] mb-10">CETPRO HUANCANÉ</h1>
         <img
           class="h-48 w-auto mb-6"
           src="../assets/img/logoTwo.png"

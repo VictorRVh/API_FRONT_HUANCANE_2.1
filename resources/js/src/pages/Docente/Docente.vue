@@ -73,7 +73,7 @@ const changePage = (page) => {
   <AuthorizationFallback :permissions="['teachers-all', 'teachers-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
+        <h2 class="text-black dark:text-white font-bold text-2xl">Docentes</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 

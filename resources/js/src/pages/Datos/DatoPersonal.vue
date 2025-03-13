@@ -117,7 +117,7 @@ const onSubmit = async () => {
     console.log("Datos editados", data);
 
     // Omitir campos innecesarios
-    const fieldsToBeOmitted = ["confirm_password", "password", "roles"]; // También omitimos los roles para que no se actualicen
+    const fieldsToBeOmitted = ["roles"]; // También omitimos los roles para que no se actualicen
     data = omitPropsFromObject(data, fieldsToBeOmitted);
 
     // Verificar que el usuario autenticado tenga un ID válido
