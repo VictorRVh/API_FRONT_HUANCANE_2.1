@@ -172,6 +172,10 @@ watch(
     
     if (newValue) {
       if (props.Enrollment) {
+
+        console.log('erntrok', props.Enrollment)
+        console.log('HOLA', formData.value)
+
         formData.value = {
           id_grupo: props.Enrollment.id_grupo,
           id_estudiante: props.Enrollment.id_estudiante,
@@ -185,7 +189,7 @@ watch(
         groupStore.loadGroups(idPlanRef.value, idSpecialty.value);
 
         // Opcional: Mostrar el estudiante seleccionado
-        selectedStudentName.value = `${props.Enrollment.name} ${props.Enrollment.apellido_paterno}`;
+        selectedStudentName.value = `${props.Enrollment.estudiante.name} ${props.Enrollment.estudiante.apellido_paterno}`;
         studentOptions.value = [
           {
             id: props.Enrollment.id_estudiante,
