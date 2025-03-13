@@ -45,7 +45,7 @@ const onDelete = (Place) => {
 
     const isDeleted = await deleteSpecialy(Place?.id_sede);
     if (isDeleted) {
-      showToast(`Place "${Place?.nombre_sede}" deleted successfully...`);
+      showToast(`Sede "${Place?.nombre_sede}" eliminada correctamente.`);
       placesStore.loadPlaces();
       userStore.loadUsers();
       roleStore.loadRoles();
@@ -73,9 +73,8 @@ const SeeMore = (idr) => {
           <THead>
             <Tr>
               <Th> Id </Th>
-              <Th> Place </Th>
-              <Th> Ubicación </Th>
-              <Th> Action </Th>
+              <Th> Sede </Th>
+              <Th> Acciones </Th>
             </Tr>
           </THead>
 
@@ -91,13 +90,8 @@ const SeeMore = (idr) => {
                 </div>
               </Td>
               <Td class="py-2 px-4 border-0">
-                <div class="text-black font-medium dark:text-white">
-                  {{ Place?.ubicacion }}
-                </div>
-              </Td>
-              <Td class="py-2 px-4 border-0">
                 <div class="flex flex-row gap-2 justify-center items-center ">
-                  <ViewButton @click="SeeMore(Place?.id_sede)" />
+                  <!-- <ViewButton @click="SeeMore(Place?.id_sede)" /> -->
                   <EditButton @click="showSlider(true, Place)" />
                   <DeleteButton @click="onDelete(Place)" />
                 </div>

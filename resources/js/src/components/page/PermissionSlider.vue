@@ -52,8 +52,8 @@ const requiredPermissions = computed(() => {
 
 const title = computed(() =>
   props.permission
-    ? `Update permission "${props.permission?.name}"`
-    : "Add new permission"
+    ? `Actualizar permiso "${props.permission?.name}"`
+    : "Agregar nuevo permiso"
 );
 
 const initialFormData = () => {
@@ -122,7 +122,7 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.name"
           :focus="show"
-          label="Name"
+          label="Nombre"
           :error="formErrors?.name"
           required
         />

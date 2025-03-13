@@ -54,7 +54,7 @@ const requiredSpecialties = computed(() => {
 
 // Computed para el título
 const title = computed(() =>
-  props.plan ? `Update plan "${props.plan?.nombre_plan}"` : "Add new plan"
+  props.plan ? `Actualizar plan "${props.plan?.nombre_plan}"` : "Agregar nuevo plan"
 );
 
 // Inicialización del formulario
@@ -143,7 +143,7 @@ const onSubmit = async () => {
         />
 
         <Button
-          :title="plan?.id_plan ? 'Save' : 'Create'"
+          :title="plan?.id_plan ? 'Actualizar' : 'Crear'"
           :loading-title="plan?.id_plan ? 'Saving...' : 'Creating...'"
           class="!w-full"
           :loading="saving || updating"

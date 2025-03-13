@@ -58,8 +58,8 @@ const requiredPlaces = computed(() => {
 // Computed para el título
 const title = computed(() =>
   props.place
-    ? `Update place "${props.place?.nombre_sede}"`
-    : "Add new place"
+    ? `Actualizar sede "${props.place?.nombre_sede}"`
+    : "Agregar nueva sede"
 );
 
 // Inicialización del formulario
@@ -99,10 +99,10 @@ const schema = yup.object().shape({
     .string()
     .nullable()
     .required("El nombre de la sede es obligatorio"),
-    ubicacion: yup
-    .string()
-    .nullable()
-    .required("El nombre de la sede es obligatorio"),
+    // ubicacion: yup
+    // .string()
+    // .nullable()
+    // .required("El nombre de la sede es obligatorio"),
 });
 
 // Función para manejar el envío del formulario
@@ -131,7 +131,7 @@ const onSubmit = async () => {
 
   if (response?.sede.id_sede) {
     showToast(
-      `place ${props.place?.id_sede ? "updated" : "created"} successfully`
+      `Sede ${props.place?.id_sede ? "actualizada" : "creada"} correctamente`
     );
 
     // Cargar datos actualizados en las tiendas
@@ -160,13 +160,13 @@ const onSubmit = async () => {
           required
         />
 
-        <FormInput
+        <!-- <FormInput
           v-model="formData.ubicacion"
           :focus="show"
           label="Ubicación"
           :error="formErrors?.ubicacion"
           required
-        />
+        /> -->
 
         <Button
           :title="place?.id_sede ? 'Save' : 'Create'"

@@ -58,8 +58,8 @@ const requiredSpecialties = computed(() => {
 // Computed para el título
 const title = computed(() =>
   props.specialty
-    ? `Update specialty "${props.specialty?.nombre_especialidad}"`
-    : "Add new specialty"
+    ? `Actualizar especialidad "${props.specialty?.nombre_especialidad}"`
+    : "Agregar nueva especialidad"
 );
 
 // Inicialización del formulario
@@ -153,7 +153,7 @@ const onSubmit = async () => {
         />
 
         <Button
-          :title="specialty?.id_especialidad ? 'Save' : 'Create'"
+          :title="specialty?.id_especialidad ? 'Actualizar' : 'Crear'"
           :loading-title="specialty?.id_especialidad ? 'Saving...' : 'Creating...'"
           class="!w-full"
           :loading="saving || updating"

@@ -73,7 +73,7 @@ const changePage = (page) => {
   <AuthorizationFallback :permissions="['students-all', 'students-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex-between">
-        <h2 class="text-black dark:text-white font-bold text-2xl">Estudiantes</h2>
+        <h2 class="text-black dark:text-white font-bold text-2xl">Docentes</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
@@ -112,7 +112,7 @@ const changePage = (page) => {
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <ViewButton />
+                  <!-- <ViewButton /> -->
                   <EditButton @click="showSlider(true, user)" />
                   <DeleteButton @click="onDelete(user)" />
                 </div>

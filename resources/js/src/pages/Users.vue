@@ -2,7 +2,7 @@
     <AuthorizationFallback :permissions="['users-all', 'users-view']">
         <div class="w-full space-y-4 py-4"> <!-- Reducido padding vertical -->
             <div class="flex-between">
-                <h2 class="text-active font-bold text-xl">Users</h2> <!-- Ajustado tamaño de texto -->
+                <h2 class="text-active font-bold text-xl">Usuarios</h2> <!-- Ajustado tamaño de texto -->
                 <CreateButton @click="showSlider(true)" />
             </div>
 
@@ -12,10 +12,10 @@
                     <THead>
                         <Tr>
                             <Th> Id </Th>
-                            <Th> User </Th>
+                            <Th> Usuario </Th>
                             <Th> Roles </Th>
-                            <Th> Permissions </Th>
-                            <Th> Action </Th>
+                            <Th> Permisos </Th>
+                            <Th> Accciones </Th>
                         </Tr>
                     </THead>
 

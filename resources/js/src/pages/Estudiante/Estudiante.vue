@@ -111,7 +111,7 @@ const changePage = (page) => {
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <ViewButton />
+                  <!-- <ViewButton /> -->
                   <EditButton @click="showSlider(true, user)" />
                   <DeleteButton @click="onDelete(user)" />
                 </div>

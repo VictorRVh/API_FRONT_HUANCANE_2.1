@@ -223,7 +223,7 @@ watch([idPlanRef, idSpecialty], ([newPlan, newSpecialty]) => {
         </FormLabelError>
 
         <Button
-          :title="props.Enrollment?.id_matricula ? 'Guardar' : 'Crear'"
+          :title="props.Enrollment?.id_matricula ? 'Actualizar' : 'Matricular'"
           class="!w-full"
           @click="onSubmit"
           :loading="saving || updating"

@@ -47,7 +47,7 @@ const requiredPermissions = computed(() => {
 });
 
 const title = computed(() =>
-    props.role ? `Update role "${props.role?.name}"` : 'Agregar Nuevo Rol',
+    props.role ? `Actualizar rol "${props.role?.name}"` : 'Agregar Nuevo Rol',
 );
 
 const initialFormData = () => {
@@ -150,7 +150,7 @@ const onSubmit = async () => {
 
     if (response?.id) {
         showToast(
-            `Role ${props.role?.id ? 'updated' : 'created'} successfully`,
+            `Rol ${props.role?.id ? 'actualizado' : 'creado'} correctamente`,
         );
         roleStore.loadRoles();
         userStore.loadUsers();
@@ -170,12 +170,12 @@ const onSubmit = async () => {
                 <FormInput
                     v-model="formData.name"
                     :focus="show"
-                    label="Name"
+                    label="Nombre"
                     :error="formErrors?.name"
                     required
                 />
 
-                <FormLabelError label="Add permission">
+                <FormLabelError label="Agregar permiso">
                     <VSelect
                         v-model="selectedPermission"
                         :options="permissionOptions"
@@ -190,7 +190,7 @@ const onSubmit = async () => {
                 <div class="w-full space-y-3">
                     <div class="flex-between gap-4">
                         <label class="text-sm font-semibold  dark:text-white"
-                            >Role permissions</label
+                            >Permisos de rol</label
                         >
 
                         <div
@@ -198,7 +198,7 @@ const onSubmit = async () => {
                             class="text-xs font-bold cursor-pointer hover:underline w-max-content text-sky-500 dark:text-white "
                             @click="onAddAllPermissions"
                         >
-                            add all permissions
+                            Añadir todos los permisos
                         </div>
                     </div>
 
@@ -249,7 +249,7 @@ const onSubmit = async () => {
                         </li>
 
                         <Button
-                            :title="role?.id ? 'Save' : 'Update'"
+                            :title="role?.id ? 'Actualizar' : 'Agregar'"
                             :loading-title="
                                 role?.id ? 'Saving...' : 'Updating...'
                             "

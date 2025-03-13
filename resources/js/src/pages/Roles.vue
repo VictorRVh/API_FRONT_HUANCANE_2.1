@@ -12,9 +12,9 @@
                     <THead>
                         <Tr>
                             <Th> Id </Th>
-                            <Th> Role </Th>
-                            <Th> Permissions </Th>
-                            <Th> Action </Th>
+                            <Th> Rol </Th>
+                            <Th> Permisos </Th>
+                            <Th> Acciones </Th>
                         </Tr>
                     </THead>
 

@@ -24,9 +24,9 @@ const userPermissions = computed(
 // Definición de elementos del menú
 const menuItems = [
 { name: "Home", icon: "HomeIcon", route: "home", permissions: [] },
-  { name: "Users", icon: "UsersIcon", route: "users", permissions: ["users-all", "users-icon"] },
+  { name: "Usuarios", icon: "UsersIcon", route: "users", permissions: ["users-all", "users-icon"] },
   { name: "Roles", icon: "BookmarkIcon", route: "roles", permissions: ["roles-all", "roles-icon"] },
-  { name: "Permissions", icon: "BookmarkSquareIcon", route: "permissions", permissions: ["permissions-all", "permissions-icon"] },
+  { name: "Permisos", icon: "BookmarkSquareIcon", route: "permissions", permissions: ["permissions-all", "permissions-icon"] },
   { name: "Docente", icon: "UserIcon", route: "docentes", permissions: ["teachers-all", "teachers-icon"] },
   { name: "Estudiante", icon: "AcademicCapIcon", route: "estudiantes", permissions: ["students-all", "students-icon"] },
   { name: "PlanFormativo", icon: "CalendarIcon", route: "plan", permissions: ["plan-all", "plan-icon"] },

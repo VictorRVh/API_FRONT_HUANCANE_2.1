@@ -86,7 +86,7 @@ const requiredGroup = computed(() => {
 
 // Computed para el título
 const title = computed(() =>
-  props.group ? `Update group "${props.group?.nombre_grupo}"` : "Add new group"
+  props.group ? `Actualizar grupo "${props.group?.nombre_grupo}"` : "Agregar nuevo grupo"
 );
 
 // Inicialización del formulario
@@ -292,7 +292,7 @@ watch(
         </FormLabelError>
 
         <Button
-          :title="group?.id_grupo ? 'Save' : 'Create'"
+          :title="group?.id_grupo ? 'Actualizar' : 'Crear'"
           :loading-title="group?.id_grupo ? 'Saving...' : 'Creating...'"
           class="!w-full"
           :loading="saving || updating"

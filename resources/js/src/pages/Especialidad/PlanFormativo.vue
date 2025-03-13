@@ -63,7 +63,7 @@ const SeeMore = (id) => {};
   <AuthorizationFallback :permissions="['plan-all', 'plan-view']">
     <div class="w-full space-y-4 py-6">
       <div class="flex justify-between">
-        <h2 class="text-black dark:text-white font-bold text-2xl">Planes Formativos</h2>
+        <h2 class="text-black dark:text-white font-bold text-2xl">Planes</h2>
         <CreateButton @click="showSlider(true)" />
       </div>
 
@@ -87,7 +87,7 @@ const SeeMore = (id) => {};
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <eyeButton @click="SeeMore(plan?.id_plan)" />
+                  <!-- <eyeButton @click="SeeMore(plan?.id_plan)" /> -->
                   <EditButton @click="showSlider(true, plan)" />
                   <DeleteButton @click="onDelete(plan)" />
                 </div>
