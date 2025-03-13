@@ -133,7 +133,7 @@ const onSubmit = async () => {
     : await createUser(data);
 
   if (response?.id) {
-    showToast(`Estudiante ${props.user?.id ? "Creado" : "Actualizado"} satisfactoriamente`);
+    showToast(`Student ${props.user?.id ? "updated" : "created"} satisfactoriamente`);
     userStore.loadStudents();
     emit("hide");
   }
@@ -235,7 +235,7 @@ const onSubmit = async () => {
             <Button
               :title="user?.id ? 'Actualizar' : 'Guardar'"
               key="submit-btn"
-              :loading-title="user?.id ? 'Actualizando...' : 'Guardando...'"
+              :loading-title="user?.id ? 'Guardando...' : 'Actualizando...'"
               class="!w-full"
               :loading="saving || updating"
               @click="onSubmit"

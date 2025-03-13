@@ -23,6 +23,11 @@ const props = defineProps({
     type: Boolean,
     default: () => false,
   },
+  user: {
+    type: [Object, null],
+    default: () => null,
+  },
+  
 });
 const emit = defineEmits(["hide"]);
 
