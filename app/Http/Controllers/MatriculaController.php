@@ -51,10 +51,11 @@ class MatriculaController extends Controller
 
         if ($isEnrolled) {
             return response()->json([
-                'message' => 'El estudiante ya esta matriculado en este plan academico',
-                'status' => 400
-            ], 400);
+                'message' => 'El estudiante ya está matriculado en este plan académico',
+                'status' => 409
+            ], 409);
         }
+
 
         // Crear una nueva matricula
         $matricula = Matricula::create([

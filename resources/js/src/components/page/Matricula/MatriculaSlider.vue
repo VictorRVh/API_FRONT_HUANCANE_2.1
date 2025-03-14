@@ -215,6 +215,8 @@ const onSubmit = async () => {
       // RESPUESTA SIN MATRÍCULA → ERROR DE BACKEND
       showToast("Ocurrió un error al guardar la matrícula.", "error");
 
+      console.log('EL VERDADERO RESPOMSE', errors)
+
       if (response?.errors) {
         formErrors.value = response.errors;
         console.log("Errores validados por la API:", response.errors);
