@@ -1,5 +1,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
+
+
 import Slider from "../../ui/Slider.vue";
 import FormInput from "../../ui/FormInput.vue";
 import FormLabelError from "../../ui/FormLabelError.vue";
@@ -35,8 +37,8 @@ const userStore = useUserStore();
 const roleStore = useRoleStore();
 const EnrollmentStore = useEnrollmentStore();
 
-const idSpecialty = ref(0);
-const idPlanRef = ref(0);
+const idSpecialty = ref(null);
+const idPlanRef = ref(null);
 const searchQuery = ref("");
 const studentOptions = ref([]);
 
@@ -46,6 +48,8 @@ const selectedStudentName = ref("");
 const initialFormData = () => ({
   id_grupo: null,
   id_estudiante: null,
+  id_especialidad: null,
+  id_plan: null
 });
 
 // Ahora puedes usar `initialFormData` para inicializar `formData`
@@ -67,8 +71,11 @@ const requiredEnrollment = computed(() =>
     ? ["enrollmentStudent-all", "enrollmentStudent-edit"]
     : ["enrollmentStudent-all", "enrollmentStudent-create"]
 );
+
+
+
 const title = computed(() =>
-  props.Enrollment ? `Update Matrícula "${props.Enrollment?.nombre_grupo}"` : "Agregar Matrícula"
+  props.Enrollment ? `Actualizar Matrícula de "${props.Enrollment?.estudiante.name}"` : "Agregar Matrícula"
 );
 
 
@@ -94,20 +101,38 @@ const groupOptions = computed(() =>
 
 // Validación Yup
 const schema = yup.object({
-  id_grupo: yup.number().nullable().required("El grupo es obligatorio"),
-  id_estudiante: yup.number().nullable().required("El estudiante es obligatorio"),
+
+  id_estudiante: yup
+    .string()
+    .nullable()
+    .required('Selecciona un estudiante antes de continuar'),
+
+  id_specialty: yup
+    .number()
+    .nullable()
+    .required('La especialidad es obligatoria'),
+
+  id_plan: yup
+    .number()
+    .nullable()
+    .required('El plan es obligatorio'),
+
+  id_grupo: yup
+    .string()
+    .nullable()
+    .required('Debes seleccionar un grupo'),
 });
 
 // Búsqueda de estudiante por DNI
 const searchStudentByDNI = async () => {
   if (searchQuery.value.length === 7 || searchQuery.value.length === 8) {
     try {
-      console.log("Buscando estudiante con DNI:", searchQuery.value);
+      //console.log("Buscando estudiante con DNI:", searchQuery.value);
 
       // Llamar a la función para cargar los datos del estudiante
       await EnrollmentStore.loadEnrollmentById(searchQuery.value);
 
-      console.log("Datos recibidos:", EnrollmentStore?.EnrollmentDni);
+      //console.log("Datos recibidos:", EnrollmentStore?.EnrollmentDni);
 
       // Verificar si se encontraron estudiantes
       if (EnrollmentStore?.EnrollmentDni && EnrollmentStore.EnrollmentDni.length > 0) {
@@ -129,7 +154,7 @@ const searchStudentByDNI = async () => {
         showToast("No se encontraron estudiantes con ese DNI.", "error");
       }
     } catch (error) {
-      console.error("Error al buscar estudiantes:", error);
+      //console.error("Error al buscar estudiantes:", error);
       showToast("Ocurrió un error al buscar el estudiante. Inténtalo de nuevo.", "error");
     }
   }
@@ -140,7 +165,10 @@ const searchStudentByDNI = async () => {
 const onSubmit = async () => {
   if (saving.value || updating.value) return;
 
-  const data = { ...formData.value };
+  const data = {
+    ...formData.value, id_specialty: idSpecialty.value,
+    id_plan: idPlanRef.value
+  };
   const { validated, errors } = await runYupValidation(schema, data);
   if (!validated) {
     formErrors.value = errors;
@@ -151,10 +179,10 @@ const onSubmit = async () => {
     ? await updateEnrollment(props.Enrollment?.id_matricula, data)
     : await createEnrollment(data);
 
-    //console.log("hola a todos",response.matricula?.id_matricula)
+  //console.log("hola a todos",response.matricula?.id_matricula)
 
   if (response.matricula?.id_matricula) {
-    showToast(`Matrícula ${props.Enrollment?.id_matricula ? "actualizado" : "creado"} con éxito`);
+    showToast(`Matrícula ${props.Enrollment?.name ? "actualizado" : "creado"} con éxito`);
     EnrollmentStore.loadEnrollmentBySpecialties(props.searchId[0], props.searchId[1]);
     //roleStore.loadRoles();
     isUserAuthenticated();
@@ -168,28 +196,20 @@ const onSubmit = async () => {
 watch(
   () => props.show,
   (newValue) => {
-    console.log("matricula: ", props.Enrollment);
-    
     if (newValue) {
       if (props.Enrollment) {
-
-        console.log('erntrok', props.Enrollment)
-        console.log('HOLA', formData.value)
-
+        // Modo "editar matrícula"
         formData.value = {
           id_grupo: props.Enrollment.id_grupo,
           id_estudiante: props.Enrollment.id_estudiante,
         };
 
-        // Esto lo necesitas para cargar los grupos correctos en el select
-        idSpecialty.value = props.Enrollment.grupos?.id_especialidad || 0;
-        idPlanRef.value = props.Enrollment.grupos?.id_plan || 0;
+        idSpecialty.value = props.Enrollment.grupos?.id_especialidad || '';
+        idPlanRef.value = props.Enrollment.grupos?.id_plan || '';
 
-        // Esto recarga los grupos si cambia la especialidad o el plan
         groupStore.loadGroups(idPlanRef.value, idSpecialty.value);
 
-        // Opcional: Mostrar el estudiante seleccionado
-        selectedStudentName.value = `${props.Enrollment.estudiante.name} ${props.Enrollment.estudiante.apellido_paterno}`;
+        selectedStudentName.value = `${props.Enrollment?.estudiante?.name} ${props.Enrollment?.estudiante?.apellido_paterno}`;
         studentOptions.value = [
           {
             id: props.Enrollment.id_estudiante,
@@ -197,11 +217,19 @@ watch(
           },
         ];
       } else {
+        // Modo "nueva matrícula"
         formData.value = initialFormData();
-        idSpecialty.value = 0;
-        idPlanRef.value = 0;
+
+        // Aquí estás inicializando a 0, lo que probablemente es el valor que después muestra el select
+        idSpecialty.value = null;
+        idPlanRef.value = null;
+
         selectedStudentName.value = "";
         studentOptions.value = [];
+
+
+        // Deberías limpiar o resetear el grupo también
+        formData.value.id_grupo = null;
       }
 
       formErrors.value = {};
@@ -220,47 +248,44 @@ watch(searchQuery, () => {
 
 watch([idPlanRef, idSpecialty], ([newPlan, newSpecialty]) => {
   groupStore?.loadGroups(newPlan, newSpecialty);
+  formData.value.id_grupo = null;
+  console.log("enetera", formData.id_grupo)
 });
+
 
 </script>
 
 <template>
-  <Slider :show="show" :title="title" @hide="emit('hide') ">
+  <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredEnrollment">
       <div class="mt-4 space-y-4">
         <FormLabelError v-if="!props.Enrollment" label="Buscar Estudiante por DNI">
           <FormInput v-model="searchQuery" placeholder="Ingresa DNI" :error="formErrors.id_estudiante" />
         </FormLabelError>
 
-        <FormLabelError label="Selecciona el Estudiante">
-          <VSelect
-            v-model="formData.id_estudiante"
-            :options="studentOptions"
-            label="name"
+        <FormLabelError label="Selecciona el Estudiante" :error="formErrors.id_estudiante">
+          <VSelect v-model="formData.id_estudiante" :options="studentOptions" label="name"
             :reduce="(option) => option.id"
-            :error="formErrors.id_estudiante"
-            disabled
-          />
+            :class="formErrors.id_estudiante ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''"
+            disabled />
         </FormLabelError>
 
-        <FormLabelError label="Selecciona la especialidad">
+        <FormLabelError label="Selecciona la especialidad" :error="formErrors.id_specialty">
           <VSelect v-model="idSpecialty" :options="specialtyOptions" label="name" :reduce="(option) => option.id" />
         </FormLabelError>
 
-        <FormLabelError label="Selecciona el plan">
+        <FormLabelError label="Selecciona el plan" :error="formErrors.id_plan">
           <VSelect v-model="idPlanRef" :options="planOptions" label="name" :reduce="(option) => option.id" />
         </FormLabelError>
 
-        <FormLabelError label="Selecciona el Grupo">
-          <VSelect v-model="formData.id_grupo" :options="groupOptions" label="name" :reduce="(option) => option.id" />
+        <FormLabelError label="Selecciona el Grupo" :error="formErrors.id_grupo">
+          <VSelect v-model="formData.id_grupo" :options="groupOptions" label="name" :reduce="(option) => option.id"
+            :class="formErrors.id_grupo ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''" />
         </FormLabelError>
 
-        <Button
-          :title="props.Enrollment?.id_matricula ? 'Actualizar' : 'Matricular'"
-          class="!w-full"
-          @click="onSubmit"
-          :loading="saving || updating"
-        />
+
+        <Button :title="props.Enrollment?.id_matricula ? 'Actualizar' : 'Matricular'" class="!w-full" @click="onSubmit"
+          :loading="saving || updating" />
       </div>
     </AuthorizationFallback>
   </Slider>
