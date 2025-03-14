@@ -25,7 +25,7 @@ const props = defineProps({
   Enrollment: Object,
   specialtyId: Array,
   planId: Array,
-  groupId:Array,
+  groupId: Array,
   searchId: Array,
 });
 
@@ -166,41 +166,75 @@ const searchStudentByDNI = async () => {
 const onSubmit = async () => {
   if (saving.value || updating.value) return;
 
+  // Armas el payload
   const data = {
-    ...formData.value, id_specialty: idSpecialty.value,
+    ...formData.value,
+    id_specialty: idSpecialty.value,
     id_plan: idPlanRef.value
   };
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors;
-    return;
-  }
 
-  const response = props.Enrollment?.id_matricula
-    ? await updateEnrollment(props.Enrollment?.id_matricula, data)
-    : await createEnrollment(data);
+  try {
+    // 1. VALIDACIÓN YUP
+    const { validated, errors } = await runYupValidation(schema, data);
 
-  //console.log("hola a todos",response.matricula?.id_matricula)
+    if (!validated) {
+      formErrors.value = errors;
+      showToast("Completa los campos obligatorios antes de enviar.", "error");
+      return;
+    }
 
-  if (response.matricula?.id_matricula) {
-    showToast(`Matrícula ${props.Enrollment?.name ? "actualizado" : "creado"} con éxito`);
-  /*  enrollmentStore.loadEnrollmentBySpecialtiesAndGroup(
-    selectedPlan.value,
-    selectedSpecialty.value,
-    selectedGroup.value
-  );
-  */
-    EnrollmentStore.loadEnrollmentBySpecialtiesAndGroup(
-      props.searchId[0], props.searchId[1],props.groupId
-    );
-    //roleStore.loadRoles();
-    isUserAuthenticated();
-    emit("hide");
-    consola.log("paso hide")
-  } else {
-    showToast("Error al guardar el matrícula. Inténtalo de nuevo.", "error");
+    // Limpias errores antiguos
+    formErrors.value = {};
+
+    // 2. INTENTAS LLAMAR A LA API
+    let response;
+
+    if (props.Enrollment?.id_matricula) {
+      response = await updateEnrollment(props.Enrollment.id_matricula, data);
+    } else {
+      response = await createEnrollment(data);
+    }
+
+    console.log("Matrícula response:", response);
+
+    // 3. VERIFICAS RESPUESTA EXITOSA
+    if (response?.matricula?.id_matricula) {
+      showToast(`Matrícula ${props.Enrollment?.name ? "actualizada" : "creada"} con éxito`, "success");
+
+      // Cargas nuevamente el listado
+      EnrollmentStore.loadEnrollmentBySpecialtiesAndGroup(
+        props.searchId[0],
+        props.searchId[1],
+        props.groupId
+      );
+
+      isUserAuthenticated(); // Por si es necesario
+
+      emit("hide"); // Cierra el modal
+    } else {
+      // RESPUESTA SIN MATRÍCULA → ERROR DE BACKEND
+      showToast("Ocurrió un error al guardar la matrícula.", "error");
+
+      if (response?.errors) {
+        formErrors.value = response.errors;
+        console.log("Errores validados por la API:", response.errors);
+      }
+    }
+
+  } catch (error) {
+    // 4. MANEJAS ERRORES GENERALES (network, servidor caído, etc)
+    console.error("Error en la petición:", error);
+
+    showToast("Hubo un problema en la comunicación con el servidor.", "error");
+
+    // Si la API devuelve un response con errores específicos
+    if (error?.response?.data?.errors) {
+      formErrors.value = error.response.data.errors;
+      console.log("Errores de validación desde la API:", error.response.data.errors);
+    }
   }
 };
+
 
 watch(
   () => props.show,
