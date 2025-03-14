@@ -217,7 +217,9 @@ const onSubmit = async () => {
 
       console.log("cochinada: ",errors)
       showToast("Ocurrió un error al guardar la matrícula.", "error");
-      
+
+ 
+
       if (response?.errors) {
         formErrors.value = response.errors;
         console.log("Errores validados por la API:", response.errors);
