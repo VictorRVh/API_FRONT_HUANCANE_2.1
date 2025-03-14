@@ -25,6 +25,7 @@ const props = defineProps({
   Enrollment: Object,
   specialtyId: Array,
   planId: Array,
+  groupId:Array,
   searchId: Array,
 });
 
@@ -183,7 +184,15 @@ const onSubmit = async () => {
 
   if (response.matricula?.id_matricula) {
     showToast(`Matrícula ${props.Enrollment?.name ? "actualizado" : "creado"} con éxito`);
-    EnrollmentStore.loadEnrollmentBySpecialties(props.searchId[0], props.searchId[1]);
+  /*  enrollmentStore.loadEnrollmentBySpecialtiesAndGroup(
+    selectedPlan.value,
+    selectedSpecialty.value,
+    selectedGroup.value
+  );
+  */
+    EnrollmentStore.loadEnrollmentBySpecialtiesAndGroup(
+      props.searchId[0], props.searchId[1],props.groupId
+    );
     //roleStore.loadRoles();
     isUserAuthenticated();
     emit("hide");

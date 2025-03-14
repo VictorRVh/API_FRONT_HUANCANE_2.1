@@ -178,7 +178,7 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
       </div>
     </div>
 
-    <EnrollmentSlider :specialtyId="specialtiesStore.specialties" :planId="planStore.plans" :show="slider"
+    <EnrollmentSlider :specialtyId="specialtiesStore.specialties" :planId="planStore.plans" :groupId="selectedGroup" :show="slider"
       :Enrollment="sliderData" :searchId="[selectedPlan, selectedSpecialty]" @hide="hideSlider" />
   </AuthorizationFallback>
 </template>
