@@ -109,36 +109,63 @@ const schema = yup.object().shape({
 });
 
 const onSubmit = async () => {
-  //console.log("jaaaaaaaa");
-
+  // Evitar múltiples envíos
   if (saving.value || updating.value) return;
 
-  let data = {
-    ...formData.value,
-    dni: String(formData.value.dni),
-  };
+  try {
+    saving.value = true;
 
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors;
-    return;
-  }
-  formErrors.value = {};
+    let data = {
+      ...formData.value,
+      dni: String(formData.value.dni),
+    };
 
-  const fieldsToBeOmitted = ["confirm_password"];
-  if (props.user?.id) fieldsToBeOmitted.push("password");
-  data = omitPropsFromObject(data, fieldsToBeOmitted);
+    // Validar el formulario con Yup
+    const { validated, errors } = await runYupValidation(schema, data);
+    if (!validated) {
+      formErrors.value = errors; // Mostrar los errores
+      return;
+    }
 
-  const response = props.user?.id
-    ? await updateUser(props.user?.id, data)
-    : await createUser(data);
+    formErrors.value = {}; // Limpiar los errores previos
 
-  if (response?.id) {
-    showToast(`Docente ${props.user?.id ? "Actualizado" : "Creado"} satisfactoriamente`);
-    userStore.loadTeacher();
-    emit("hide");
+    // Omitir campos innecesarios antes de enviar
+    const fieldsToBeOmitted = ["confirm_password"];
+    if (props.user?.id) fieldsToBeOmitted.push("password");
+    data = omitPropsFromObject(data, fieldsToBeOmitted);
+
+    // Crear o actualizar usuario
+    const response = props.user?.id
+      ? await updateUser(props.user?.id, data)
+      : await createUser(data);
+
+    console.log("response usuario/docente: ", response);
+
+    if (response?.id) {
+      showToast(
+        `Docente ${props.user?.id ? "actualizado" : "creado"} satisfactoriamente`
+      );
+
+      // Recargar datos
+      userStore.loadTeacher();
+
+      // Cerrar modal
+      emit("hide");
+
+    } else {
+      showToast("Error al guardar el docente. Inténtalo de nuevo.", "error");
+    }
+
+  } catch (error) {
+    console.error("Error en onSubmit Docente:", error);
+    showToast("Ocurrió un error inesperado al guardar el docente.", "error");
+
+  } finally {
+    saving.value = false;
+    updating.value = false;
   }
 };
+
 </script>
 
 <template>

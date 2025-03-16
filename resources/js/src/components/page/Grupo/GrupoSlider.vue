@@ -163,27 +163,41 @@ const schema = yup.object().shape({
 const onSubmit = async () => {
   if (saving.value || updating.value) return;
 
-  const data = { ...formData.value };
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors;
-    return;
-  }
+  try {
+    const data = { ...formData.value };
 
-  const response = props.group?.id_grupo
-    ? await updateGroup(props.group?.id_grupo, data)
-    : await createGroup(data);
+    // Ejecuta la validación Yup
+    const { validated, errors } = await runYupValidation(schema, data);
 
-  if (response.grupo?.id_grupo) {
-    showToast(`Grupo ${props.group?.id_grupo ? "actualizado" : "creado"} con éxito`);
-    groupStore.loadGroups(props.searchId[0], props.searchId[1]);
-    //roleStore.loadRoles();
-    isUserAuthenticated();
-    emit("hide");
-  } else {
-    showToast("Error al guardar el grupo. Inténtalo de nuevo.", "error");
+    if (!validated) {
+      formErrors.value = errors;
+      return;
+    }
+
+    // Crear o actualizar grupo
+    const response = props.group?.id_grupo
+      ? await updateGroup(props.group?.id_grupo, data)
+      : await createGroup(data);
+
+    if (response.grupo?.id_grupo) {
+      showToast(`Grupo ${props.group?.id_grupo ? "actualizado" : "creado"} con éxito`);
+
+      groupStore.loadGroups(props.searchId[0], props.searchId[1]);
+
+      isUserAuthenticated();
+
+      emit("hide");
+    } else {
+      showToast("Error al guardar el grupo. Inténtalo de nuevo.", "error");
+    }
+  } catch (error) {
+    // Manejo de errores inesperados
+    console.error("Error en onSubmit:", error);
+
+    showToast("Ocurrió un error inesperado. Inténtalo más tarde.", "error");
   }
 };
+
 
 watch(
   [() => formData.value.id_especialidad, () => formData.value.id_plan],

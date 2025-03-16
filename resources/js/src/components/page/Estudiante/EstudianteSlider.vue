@@ -109,35 +109,45 @@ const schema = yup.object().shape({
 });
 
 const onSubmit = async () => {
-  //console.log("jaaaaaaaa");
-
   if (saving.value || updating.value) return;
 
-  let data = {
-    ...formData.value,
-  };
+  try {
+    let data = {
+      ...formData.value,
+    };
 
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors;
-    return;
-  }
-  formErrors.value = {};
+    // Validación con Yup
+    const { validated, errors } = await runYupValidation(schema, data);
+    if (!validated) {
+      formErrors.value = errors;
+      return;
+    }
+    formErrors.value = {};
 
-  const fieldsToBeOmitted = ["confirm_password"];
-  if (props.user?.id) fieldsToBeOmitted.push("password");
-  data = omitPropsFromObject(data, fieldsToBeOmitted);
+    // Omitir campos innecesarios
+    const fieldsToBeOmitted = ["confirm_password"];
+    if (props.user?.id) fieldsToBeOmitted.push("password");
+    data = omitPropsFromObject(data, fieldsToBeOmitted);
 
-  const response = props.user?.id
-    ? await updateUser(props.user?.id, data)
-    : await createUser(data);
+    // Crear o actualizar usuario
+    const response = props.user?.id
+      ? await updateUser(props.user?.id, data)
+      : await createUser(data);
 
-  if (response?.id) {
-    showToast(`Student ${props.user?.id ? "updated" : "created"} satisfactoriamente`);
-    userStore.loadStudents();
-    emit("hide");
+    if (response?.id) {
+      showToast(`Student ${props.user?.id ? "updated" : "created"} satisfactoriamente`);
+      userStore.loadStudents();
+      emit("hide");
+    } else {
+      showToast("Error al guardar el usuario. Inténtalo nuevamente.", "error");
+    }
+
+  } catch (error) {
+    console.error("Error en onSubmit:", error);
+    showToast("Ocurrió un error inesperado al guardar el usuario.", "error");
   }
 };
+
 </script>
 
 <template>

@@ -94,62 +94,66 @@ const onSubmit = async () => {
   // Evitar múltiples envíos
   if (saving.value || updating.value) return;
 
-  const data = { ...formData.value };
+  try {
+    // Activamos el flag de saving
+    saving.value = true;
 
-  // Validar el formulario con Yup
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors; // Mostrar los errores
-    return;
-  }
-  formErrors.value = {}; // Limpiar los errores
+    const data = { ...formData.value };
 
-  // Crear o actualizar la plan
-  const response = props.plan?.id_plan
-    ? await updatePlan(props.plan?.id_plan, data)
-    : await createPlan(data);
+    // Validar el formulario con Yup
+    const { validated, errors } = await runYupValidation(schema, data);
+    if (!validated) {
+      formErrors.value = errors; // Mostrar errores en el formulario
+      return;
+    }
+    formErrors.value = {}; // Limpiar errores previos
 
-  // Si la respuesta es exitosa
+    // Crear o actualizar el plan
+    const response = props.plan?.id_plan
+      ? await updatePlan(props.plan?.id_plan, data)
+      : await createPlan(data);
 
-  //console.log("response: ", response.plan);
+    console.log("response: ", response.plan);
 
-  if (response?.plan.id_plan) {
-    showToast(`plan ${props.plan?.id_plan ? "updated" : "created"} successfully`);
+    // Verificar si la respuesta es exitosa
+    if (response?.plan?.id_plan) {
+      showToast(`Plan ${props.plan?.id_plan ? "updated" : "created"} successfully`);
 
-    // Cargar datos actualizados en las tiendas
-    planStore.loadPlans();
-    userStore.loadUsers();
-    roleStore.loadRoles();
-    isUserAuthenticated();
+      // Cargar datos actualizados en las stores necesarias
+      planStore.loadPlans();
+      userStore.loadUsers();
+      roleStore.loadRoles();
+      isUserAuthenticated();
 
-    // Cerrar el modal
-    emit("hide");
-  } else {
-    showToast("Error al guardar la plan. Inténtalo de nuevo.", "error");
+      // Cerrar el modal o formulario
+      emit("hide");
+    } else {
+      showToast("Error al guardar el plan. Inténtalo de nuevo.", "error");
+    }
+
+  } catch (error) {
+    console.error("Error en onSubmit plan:", error);
+    showToast("Ocurrió un error inesperado al guardar el plan.", "error");
+
+  } finally {
+    // Desactivamos los flags de loading
+    saving.value = false;
+    updating.value = false;
   }
 };
+
 </script>
 
 <template>
   <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredSpecialties">
       <div class="mt-4 space-y-4">
-        <FormInput
-          v-model="formData.nombre_plan"
-          :focus="show"
-          label="Nombre de la plan"
-          :error="formErrors?.nombre_plan"
-          required
-        />
+        <FormInput v-model="formData.nombre_plan" :focus="show" label="Nombre de la plan"
+          :error="formErrors?.nombre_plan" required />
 
-        <Button
-          :title="plan?.id_plan ? 'Actualizar' : 'Crear'"
-          :loading-title="plan?.id_plan ? 'Saving...' : 'Creating...'"
-          class="!w-full"
-          :loading="saving || updating"
-          key="submit-btn"
-          @click="onSubmit"
-        />
+        <Button :title="plan?.id_plan ? 'Actualizar' : 'Crear'"
+          :loading-title="plan?.id_plan ? 'Saving...' : 'Creating...'" class="!w-full" :loading="saving || updating"
+          key="submit-btn" @click="onSubmit" />
       </div>
     </AuthorizationFallback>
   </Slider>

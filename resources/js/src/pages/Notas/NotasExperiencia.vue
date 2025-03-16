@@ -28,19 +28,19 @@ onMounted(async () => {
     await userStore.loadGroupStudentExperience(props.idExperiencie);
   }
   idExp.value = userStore.student?.experiencia_formativa[0]?.id_experiencia
-  showBtn.value =userStore.student?.experiencia_formativa[0].nota_asignada;
+  showBtn.value = userStore.student?.experiencia_formativa[0].nota_asignada;
   //console.log("hola : sacateañl ",userStore.student?.experiencia_formativa[0].nota_asignada  )
-  console.log("hola : sacateañl ",  userStore?.student?.experiencia_formativa  )
-   
+  console.log("hola : sacateañl ", userStore?.student?.experiencia_formativa)
+
 });
 
 const seeNote = () => {
   if (idExp.value) {
     router.push({
       name: "notasEst",
-      params: { idgroup: props.idExperiencie, idExperiencie: idExp.value ,idType:"657870657269656e636961" },
+      params: { idgroup: props.idExperiencie, idExperiencie: idExp.value, idType: "657870657269656e636961" },
     });
-  } else {  
+  } else {
     console.error("Por favor, seleccione una unidad antes de continuar.");
   }
 };
@@ -54,7 +54,7 @@ const seeNote = () => {
         <h2 class="text-active font-bold text-2xl">Estudiantes</h2>
       </div>
       <div class="flex justify-between">
-        <div></div> 
+        <div></div>
         <CreateButton v-if="!showBtn" @click="seeNote" value="Hazlo" />
       </div>
       <div class="w-full">
@@ -71,25 +71,16 @@ const seeNote = () => {
           </THead>
           <TBody>
             <Tr v-for="user in userStore.student.estudiantes" :key="user.id">
-              <Td>{{ user.estudiante?.id }}</Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.name }}</div>
-                <div class="text-xsm text-[#aaa]">{{ user.estudiante?.email }}</div>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">{{ user.estudiante?.id }}</Td>
+              <Td class="py-2 px-4 border-0">
+                <div class="text-black font-medium dark:text-white">{{ user.estudiante?.name }}</div>
+                <div class="text-sm text-gray-500 dark:text-white">{{ user.estudiante?.email }}</div>
               </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.apellido_paterno }}</div>
-              </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.apellido_materno }}</div>
-              </Td>
-              <Td>
-                <div class="text-emerald-500 dark:text-emerald-200">{{ user.estudiante?.dni }}</div>
-              </Td>
-              <Td
-                class="py-2 px-4 border-0 text-black"
-                v-for="note in user.estudiante?.notas_experiencia_formativa"
-                :key="note.id_nota_experiencia"
-              >
+              <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.apellido_paterno }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.apellido_materno }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.dni }}</Td>
+              <Td class="py-2 px-4 border-0 text-black" v-for="note in user.estudiante?.notas_experiencia_formativa"
+                :key="note.id_nota_experiencia">
                 {{ note.nota_experiencia }}
               </Td>
             </Tr>

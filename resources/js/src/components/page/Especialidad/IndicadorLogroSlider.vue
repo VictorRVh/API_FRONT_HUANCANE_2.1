@@ -108,40 +108,57 @@ const schema = yup.object().shape({
 const onSubmit = async () => {
   // Evitar múltiples envíos
   if (saving.value || updating.value) return;
-  const data = { ...formData.value };
-  // Validar el formulario con Yup
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors; // Mostrar los errores
-    return;
-  }
-  formErrors.value = {}; // Limpiar los errores
-  // Crear o actualizar la unidad_didactica
-  const response = props.Indicator?.id_indicador
-    ? await updateIndicator(props.Indicator?.id_indicador, data)
-    : await createIndicator(data);
 
-  // Si la respuesta es exitosa
+  try {
+    // Activamos el flag de saving
+    saving.value = true;
 
-  //console.log("response Indi: ", response.indicador?.id_indicador);
+    const data = { ...formData.value };
 
-  if (response.indicador?.id_indicador) {
-    showToast(
-      `Indicator ${props.Indicator?.id_indicador ? "updated" : "created"} successfully`
-    );
+    // Validar el formulario con Yup
+    const { validated, errors } = await runYupValidation(schema, data);
+    if (!validated) {
+      formErrors.value = errors; // Mostrar los errores de validación
+      return;
+    }
+    formErrors.value = {}; // Limpiar errores previos
 
-    // Cargar datos actualizados en las tiendas
-    IndicatorStore.loadIndicators(props.UnidadId);
-    userStore.loadUsers();
-    roleStore.loadRoles();
-    isUserAuthenticated();
+    // Crear o actualizar el indicador
+    const response = props.Indicator?.id_indicador
+      ? await updateIndicator(props.Indicator?.id_indicador, data)
+      : await createIndicator(data);
 
-    // Cerrar el modal
-    emit("hide");
-  } else {
-    showToast("Error al guardar la unidad_didactica. Inténtalo de nuevo.", "error");
+    console.log("response Indi: ", response.indicador?.id_indicador);
+
+    // Si la respuesta es exitosa
+    if (response.indicador?.id_indicador) {
+      showToast(
+        `Indicator ${props.Indicator?.id_indicador ? "updated" : "created"} successfully`
+      );
+
+      // Recargar datos en las stores
+      IndicatorStore.loadIndicators(props.UnidadId);
+      userStore.loadUsers();
+      roleStore.loadRoles();
+      isUserAuthenticated();
+
+      // Cerrar el modal o formulario
+      emit("hide");
+    } else {
+      showToast("Error al guardar el indicador. Inténtalo de nuevo.", "error");
+    }
+
+  } catch (error) {
+    console.error("Error en onSubmit Indicator:", error);
+    showToast("Ocurrió un error inesperado al guardar el indicador.", "error");
+
+  } finally {
+    // Desactivar flags de carga
+    saving.value = false;
+    updating.value = false;
   }
 };
+
 </script>
 
 <template>

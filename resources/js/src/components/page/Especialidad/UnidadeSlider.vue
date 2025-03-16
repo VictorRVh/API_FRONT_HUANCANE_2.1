@@ -142,42 +142,55 @@ const onSubmit = async () => {
   // Evitar múltiples envíos
   if (saving.value || updating.value) return;
 
-  const data = { ...formData.value };
+  try {
+    // Puedes marcar que empieza el proceso, si no lo estás manejando fuera
+    saving.value = true;
 
-  // Validar el formulario con Yup
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors; // Mostrar los errores
-    return;
-  }
-  formErrors.value = {}; // Limpiar los errores
+    const data = { ...formData.value };
 
-  // Crear o actualizar la unidad_didactica
-  const response = props.Unit?.id_unidad_didactica
-    ? await updateUnit(props.Unit?.id_unidad_didactica, data)
-    : await createUnit(data);
+    // Validar el formulario con Yup
+    const { validated, errors } = await runYupValidation(schema, data);
+    if (!validated) {
+      formErrors.value = errors; // Mostrar los errores
+      return;
+    }
+    formErrors.value = {}; // Limpiar los errores previos
 
-  // Si la respuesta es exitosa
+    // Crear o actualizar la unidad_didactica
+    const response = props.Unit?.id_unidad_didactica
+      ? await updateUnit(props.Unit?.id_unidad_didactica, data)
+      : await createUnit(data);
 
-  //console.log("response: ", response.unidad.id_unidad_didactica);
+    // Verificar respuesta exitosa
+    if (response?.unidad?.id_unidad_didactica) {
+      showToast(
+        `Unit ${props.Unit?.id_unidad_didactica ? "updated" : "created"} successfully`
+      );
 
-  if (response.unidad?.id_unidad_didactica) {
-    showToast(
-      `Unit ${props.Unit?.id_unidad_didactica ? "updated" : "created"} successfully`
-    );
+      // Recargar las stores necesarias
+      UnitStore.loadUnits(props.ProgramId);
+      userStore.loadUsers();
+      roleStore.loadRoles();
+      isUserAuthenticated();
 
-    // Cargar datos actualizados en las tiendas
-    UnitStore.loadUnits(props.ProgramId);
-    userStore.loadUsers();
-    roleStore.loadRoles();
-    isUserAuthenticated();
+      // Cerrar el modal
+      emit("hide");
+    } else {
+      // Error controlado (por si el backend responde sin ID)
+      showToast("Error al guardar la unidad didáctica. Inténtalo de nuevo.", "error");
+    }
 
-    // Cerrar el modal
-    emit("hide");
-  } else {
-    showToast("Error al guardar la unidad_didactica. Inténtalo de nuevo.", "error");
+  } catch (error) {
+    console.error("Error en onSubmit unidad_didactica:", error);
+    showToast("Ocurrió un error inesperado al guardar la unidad didáctica.", "error");
+
+  } finally {
+    // Marcar fin del proceso (opcional, si manejas estos flags)
+    saving.value = false;
+    updating.value = false;
   }
 };
+
 </script>
 
 <template>
