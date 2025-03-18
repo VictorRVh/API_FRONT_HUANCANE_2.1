@@ -12,14 +12,15 @@ return new class extends Migration
     public function up()
     {
         schema::create('programas', function (Blueprint $table) {
-            $table->id('id_programa');
+            // $table->id('id_programa');
+            $table->uuid('id_programa')->primary();
             $table->string('nombre_programa');
             $table->integer('horas_semanales');
             $table->string('unidades_competencia');
-            $table->unsignedBigInteger('id_plan');  // Asegúrate de que el tipo sea bigint
+            $table->uuid('id_plan');  // Asegúrate de que el tipo sea bigint
             $table->foreign('id_plan')->references('id_plan')->on('planes')->onDelete('cascade');  // Definir manualmente la relación
-            $table->unsignedBigInteger('id_especialidad');
-            $table->foreign('id_especialidad')->references('id_especialidad')->on('especialidades')->onDelete('cascade');  // Definir manualmente la clave foránea
+            $table->uuid('id_especialidad');
+            $table->foreign('id_especialidad')->references('id_especialidad')->on('especialidades')->onDelete('cascade');
             $table->timestamps();
         });
     }

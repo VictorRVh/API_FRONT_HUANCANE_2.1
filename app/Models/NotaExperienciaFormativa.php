@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class NotaExperienciaFormativa extends Model
 {
@@ -13,6 +14,9 @@ class NotaExperienciaFormativa extends Model
 
     protected $primaryKey = 'id_nota';
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'nota',
         'id_experiencia',
@@ -20,6 +24,16 @@ class NotaExperienciaFormativa extends Model
         'id_grupo',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->id_nota)) {
+                $model->id_nota = (string) Str::uuid();
+            }
+        });
+    }
 
     public function experienciaFormativa()
     {

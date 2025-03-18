@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserTableSeeder extends Seeder
 {
@@ -17,6 +18,7 @@ class UserTableSeeder extends Seeder
 
         $users = [
             [
+                'id' => Str::uuid(),
                 'name' => 'Mr. Super Admin',
                 'apellido_paterno' => 'Admin',
                 'apellido_materno' => 'Uno',
@@ -29,6 +31,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Mr. Admin',
                 'apellido_paterno' => 'Principal',
                 'apellido_materno' => 'Dos',
@@ -41,6 +44,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Mr. Author',
                 'apellido_paterno' => 'Escritor',
                 'apellido_materno' => 'Tres',
@@ -53,6 +57,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Mr. Editor',
                 'apellido_paterno' => 'Editor',
                 'apellido_materno' => 'Cuatro',
@@ -65,6 +70,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Mr. User 1',
                 'apellido_paterno' => 'Usuario',
                 'apellido_materno' => 'Uno',
@@ -77,6 +83,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Mr. User 2',
                 'apellido_paterno' => 'Usuario',
                 'apellido_materno' => 'Dos',
@@ -89,6 +96,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Mr. User 3',
                 'apellido_paterno' => 'Usuario',
                 'apellido_materno' => 'Tres',
@@ -101,6 +109,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Mr. User 4',
                 'apellido_paterno' => 'Usuario',
                 'apellido_materno' => 'Cuatro',
@@ -113,6 +122,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Mr. User 5',
                 'apellido_paterno' => 'Usuario',
                 'apellido_materno' => 'Cinco',
@@ -125,6 +135,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Victor',
                 'apellido_paterno' => 'Usuario',
                 'apellido_materno' => 'Vvictor',
@@ -137,6 +148,7 @@ class UserTableSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
+                'id' => Str::uuid(),
                 'name' => 'Leonardo',
                 'apellido_paterno' => 'Usuario',
                 'apellido_materno' => 'Leonarod',

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('matriculas', function (Blueprint $table) {
             $table->id('id_matricula');
-            $table->unsignedBigInteger('id_grupo'); // Asegúrate de que el tipo de dato coincida
+            $table->uuid('id_grupo'); // Asegúrate de que el tipo de dato coincida
             $table->foreign('id_grupo')->references('id_grupo')->on('grupos')->onDelete('cascade');
-            $table->unsignedBigInteger('id_estudiante'); // Asegúrate de que el tipo de dato coincida
+            $table->uuid('id_estudiante'); // Asegúrate de que el tipo de dato coincida
             $table->foreign('id_estudiante')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

@@ -12,7 +12,8 @@ return new class extends Migration
     public function up()
     {
         schema::create('especialidades', function (Blueprint $table) {
-            $table->id('id_especialidad');  // Clave primaria bigint
+            // $table->id('id_especialidad');  // Clave primaria bigint
+            $table->uuid('id_especialidad')->primary(); // Clave primaria bigint
             $table->string('nombre_especialidad');
             $table->timestamps();
         });

@@ -46,7 +46,7 @@ const onSignIn = async () => {
 
   if (user?.id) {
     userStore.setUser(user);
-    await pushToRoute({ name: "users" });
+    await pushToRoute({ name: "home" });
   }
 };
 </script>

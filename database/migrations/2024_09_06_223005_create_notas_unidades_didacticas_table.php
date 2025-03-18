@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('notas_unidades_didacticas', function (Blueprint $table) {
-            $table->id('id_nota');
+            $table->uuid('id_nota')->primary();
             $table->string('nota');
-            $table->unsignedBigInteger('id_unidad_didactica'); // Asegúrate de que el tipo de dato coincida
+            $table->uuid('id_unidad_didactica'); // Asegúrate de que el tipo de dato coincida
             $table->foreign('id_unidad_didactica')->references('id_unidad_didactica')->on('unidades_didacticas')->onDelete('cascade');
-            $table->unsignedBigInteger('id_estudiante'); // Asegúrate de que el tipo de dato coincida
+            $table->uuid('id_estudiante'); // Asegúrate de que el tipo de dato coincida
             $table->foreign('id_estudiante')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('id_grupo')->constrained('grupos', 'id_grupo')->onDelete('cascade');
+            $table->uuid('id_grupo');
+            $table->foreign('id_grupo')->references('id_grupo')->on('grupos')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -12,15 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('grupos', function (Blueprint $table) {
-            $table->id('id_grupo'); // Clave primaria
+            $table->uuid('id_grupo')->primary(); // Clave primaria
             $table->string('nombre_grupo');
+
             $table->foreignId('id_sede')->constrained('sedes', 'id_sede')->onDelete('cascade');
             $table->foreignId('id_turno')->constrained('turnos', 'id')->onDelete('cascade');
-            $table->foreignId('id_especialidad')->constrained('especialidades', 'id_especialidad')->onDelete('cascade');
-            $table->foreignId('id_plan')->constrained('planes', 'id_plan')->onDelete('cascade');
-            $table->foreignId('id_programa')->constrained('programas', 'id_programa')->onDelete('cascade');
-            $table->unsignedBigInteger('id_docente'); // Clave foránea
+
+            $table->uuid('id_especialidad');
+            $table->foreign('id_especialidad')->references('id_especialidad')->on('especialidades')->onDelete('cascade');
+
+            $table->uuid('id_plan');
+            $table->foreign('id_plan')->references('id_plan')->on('planes')->onDelete('cascade');
+
+            $table->uuid('id_programa');
+            $table->foreign('id_programa')->references('id_programa')->on('programas')->onDelete('cascade');
+
+            $table->uuid('id_docente');
             $table->foreign('id_docente')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
