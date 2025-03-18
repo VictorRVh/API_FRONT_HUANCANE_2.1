@@ -137,8 +137,8 @@ class UserTableSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'name' => 'Victor',
-                'apellido_paterno' => 'Usuario',
-                'apellido_materno' => 'Vvictor',
+                'apellido_paterno' => 'Valdez',
+                'apellido_materno' => 'Huanacuni',
                 'dni' => '73638061',
                 'sexo' => 'F',
                 'celular' => '956789432',
@@ -150,8 +150,8 @@ class UserTableSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'name' => 'Leonardo',
-                'apellido_paterno' => 'Usuario',
-                'apellido_materno' => 'Leonarod',
+                'apellido_paterno' => 'Quispe',
+                'apellido_materno' => 'Mejia',
                 'dni' => '73638912',
                 'sexo' => 'F',
                 'celular' => '956789432',

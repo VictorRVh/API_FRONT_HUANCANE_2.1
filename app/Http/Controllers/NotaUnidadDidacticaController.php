@@ -7,6 +7,8 @@ use App\Models\Matricula;
 use App\Models\NotaUnidadDidactica;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
 
 class NotaUnidadDidacticaController extends Controller
 {
@@ -39,6 +41,7 @@ class NotaUnidadDidacticaController extends Controller
 
         // Crear una nueva nota
         $nota = NotaUnidadDidactica::create([
+            'id_nota' => Str::uuid(),
             'nota' => $request->nota,
             'id_unidad_didactica' => $request->id_unidad_didactica,
             'id_estudiante' => $request->id_estudiante,
@@ -155,6 +158,7 @@ class NotaUnidadDidacticaController extends Controller
         // Insertar las notas masivamente
         $notas = array_map(function ($nota) {
             return [
+                'id_nota' => (string) Str::uuid(),
                 'nota' => $nota['nota'],
                 'id_unidad_didactica' => $nota['id_unidad_didactica'],
                 'id_estudiante' => $nota['id_estudiante'],

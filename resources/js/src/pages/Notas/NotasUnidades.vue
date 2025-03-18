@@ -14,7 +14,7 @@ import useStudentsStore from "../../store/Grupo/useGrupoStore";
 const router = useRouter();
 const props = defineProps({
   idUnitNote: {
-    type: Number,
+    type: String,
     default: 0,
   },
 });

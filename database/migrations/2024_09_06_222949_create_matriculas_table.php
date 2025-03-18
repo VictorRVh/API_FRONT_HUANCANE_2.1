@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('matriculas', function (Blueprint $table) {
-            $table->id('id_matricula');
+            $table->uuid('id_matricula')->primary();
             $table->uuid('id_grupo'); // Asegúrate de que el tipo de dato coincida
             $table->foreign('id_grupo')->references('id_grupo')->on('grupos')->onDelete('cascade');
             $table->uuid('id_estudiante'); // Asegúrate de que el tipo de dato coincida

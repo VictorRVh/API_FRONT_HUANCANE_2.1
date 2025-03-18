@@ -21,9 +21,9 @@ import useStudentsStore from "../../store/Grupo/useGrupoStore";
 
 // ================== PROPS ==================
 const props = defineProps({
-  idgroup: { type: Number, default: null },
-  idExperiencie: { type: Number, default: null },
-  idUnitNote: { type: Number, default: null },
+  idgroup: { type: String, default: null },
+  idExperiencie: { type: String, default: null },
+  idUnitNote: { type: String, default: null },
   idType: { type: String, default: null },
   idTypeUnit: { type: String, default: null },
 });

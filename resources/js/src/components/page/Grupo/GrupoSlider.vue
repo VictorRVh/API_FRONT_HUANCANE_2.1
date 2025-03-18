@@ -154,9 +154,9 @@ const schema = yup.object().shape({
   nombre_grupo: yup.string().nullable().required("El nombre del grupo es obligatorio"),
   id_sede: yup.number().nullable().required("La sede es obligatoria"),
   id_turno: yup.number().nullable().required("El turno es obligatorio"),
-  id_especialidad: yup.number().nullable().required("La especialidad es obligatoria"),
-  id_plan: yup.number().nullable().required("El plan es obligatorio"),
-  id_docente: yup.number().nullable().required("El docente es obligatorio"),
+  id_especialidad: yup.string().nullable().required("La especialidad es obligatoria"),
+  id_plan: yup.string().nullable().required("El plan es obligatorio"),
+  id_docente: yup.string().nullable().required("El docente es obligatorio"),
 });
 
 // Envío del formulario

@@ -6,6 +6,7 @@ use App\Models\ExperienciaFormativa;
 use App\Models\NotaExperienciaFormativa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class NotaExperienciaFormativaController extends Controller
 {
@@ -156,6 +157,7 @@ class NotaExperienciaFormativaController extends Controller
         // Insertar las notas masivamente
         $notas = array_map(function ($nota) {
             return [
+                'id_nota' => (string) Str::uuid(),
                 'nota' => $nota['nota'],
                 'id_experiencia' => $nota['id_experiencia'],
                 'id_estudiante' => $nota['id_estudiante'],

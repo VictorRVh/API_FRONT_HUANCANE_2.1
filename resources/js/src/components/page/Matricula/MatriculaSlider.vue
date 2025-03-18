@@ -109,12 +109,12 @@ const schema = yup.object({
     .required('Selecciona un estudiante antes de continuar'),
 
   id_specialty: yup
-    .number()
+    .string()
     .nullable()
     .required('La especialidad es obligatoria'),
 
   id_plan: yup
-    .number()
+    .string()
     .nullable()
     .required('El plan es obligatorio'),
 

@@ -17,22 +17,23 @@ class NotaUnidadDidactica extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id_nota',
         'nota',
         'id_unidad_didactica',
         'id_estudiante',
         'id_grupo'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->id_nota)) {
-                $model->id_nota = (string) Str::uuid();
-            }
-        });
-    }
+    //     static::creating(function ($model) {
+    //         if (empty($model->id_nota)) {
+    //             $model->id_nota = (string) Str::uuid();
+    //         }
+    //     });
+    // }
 
     public function unidadDidactica()
     {
