@@ -34,11 +34,11 @@ onMounted(async () => {
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
-  console.log("victor hola",lengthUnit)
-  
+  console.log("victor hola", lengthUnit)
+
 });
 
-console.log("victor hola fuera",lengthUnit)
+console.log("victor hola fuera", lengthUnit)
 
 
 watch(() => props.idUnitNote, async (newId) => {
@@ -48,14 +48,14 @@ watch(() => props.idUnitNote, async (newId) => {
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
- 
+
 });
 
 const seeNote = () => {
   if (selectUnit.value) {
     router.push({
       name: "notasEstUnidad",
-      params: { idgroup: props.idUnitNote, idUnitNote: selectUnit.value  },
+      params: { idgroup: props.idUnitNote, idUnitNote: selectUnit.value },
     });
   } else {
     console.error("Por favor, seleccione una unidad antes de continuar.");
@@ -71,17 +71,9 @@ const seeNote = () => {
       </div>
 
       <div class="flex justify-between">
-        <select
-          id="plan-select"
-          v-model="selectUnit"
-          class="border rounded-md p-2"
-        >
+        <select id="plan-select" v-model="selectUnit" class="border rounded-md p-2">
           <option value="" disabled>Seleccione una especialidad</option>
-          <option
-            v-for="unit in listUnit"
-            :key="unit?.id_unidad_didactica"
-            :value="unit?.id_unidad_didactica"
-          >
+          <option v-for="unit in listUnit" :key="unit?.id_unidad_didactica" :value="unit?.id_unidad_didactica">
             {{ unit.nombre_unidad }}
           </option>
         </select>
@@ -111,12 +103,15 @@ const seeNote = () => {
               <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.apellido_paterno }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.apellido_materno }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.dni }}</Td>
-              <Td
-                class="py-2 px-4 border-0 text-black"
-                v-for="note in user.estudiante?.notas"
-                :key="note.id_nota"
-              >
-                {{ note.nota }}
+              <Td class="py-2 px-4 border-0" v-for="note in user.estudiante?.notas" :key="note.id_nota">
+                <span :class="[
+                  'px-2 py-1 rounded-full',
+                  note.nota <= 10
+                    ? 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300 font-bold'
+                    : 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300'
+                ]">
+                  {{ note.nota }}
+                </span>
               </Td>
             </Tr>
           </TBody>

@@ -25,7 +25,7 @@ const props = defineProps({
   idExperiencie: { type: Number, default: null },
   idUnitNote: { type: Number, default: null },
   idType: { type: String, default: null },
-  idTypeUnit: { type: String, default: null },  
+  idTypeUnit: { type: String, default: null },
 });
 
 // ================== CONSTANTES ==================
@@ -53,7 +53,7 @@ const loadGroupData = async () => {
     listNotes.value = userStore.student.estudiantes.map((element) => ({
       fullName: `${element.estudiante?.name} ${element.estudiante?.apellido_paterno} ${element.estudiante?.apellido_materno}`,
       nota: null,
-      [props.idType === TYPE_EXPERIENCE ? "id_experiencia" : "id_unidad_didactica"]: 
+      [props.idType === TYPE_EXPERIENCE ? "id_experiencia" : "id_unidad_didactica"]:
         props.idType === TYPE_EXPERIENCE ? props.idExperiencie : props.idUnitNote,
       id_estudiante: element.estudiante?.id,
       id_grupo: props.idgroup,
@@ -70,7 +70,7 @@ const validateNotes = () => {
   for (const note of listNotes.value) {
     const parsedNote = parseFloat(note.nota);
 
-    if (note.nota !== null && (isNaN(parsedNote) || parsedNote < 0 || parsedNote > 20)) {
+    if (note.nota === null || isNaN(parsedNote) || parsedNote < 0 || parsedNote > 20) {
       showToast(
         `La nota para ${note.fullName} debe ser un número entre 0 y 20.`,
         "error"
@@ -96,23 +96,25 @@ const submitNote = async () => {
     const response = await createUnit({ notas: listNotes.value });
 
     if (response?.status === 201) {
+      // Limpia el formulario para evitar doble envío
+      listNotes.value = [];
+
+      // Redirige después de guardar
       const routeName = props.idType === TYPE_EXPERIENCE
-        ? "notasExperience"
-        : "notasUnits";
+        ? `/notasExperience/${props.idgroup}`
+        : `/notasUnit/${props.idgroup}`;
 
+      router.push(routeName);
       showToast("Notas guardadas exitosamente", "success");
-
-      // Redirección a la vista correspondiente
-      router.push({ name: routeName });
     } else {
       throw new Error("Error al guardar");
     }
 
   } catch (error) {
-    console.error("Error en el envío de notas:", error);
+    console.log("Error en el envío de notas:", error);
     showToast("Error al guardar notas. Inténtalo de nuevo.", "error");
-
   } finally {
+    // Activa el botón de nuevo si hubo error
     isSubmitting.value = false;
   }
 };
@@ -122,18 +124,18 @@ onMounted(loadGroupData);
 
 // Observar cambios en el grupo para recargar los estudiantes
 watch(() => props.idgroup, loadGroupData);
-
 </script>
 
 <template>
   <AuthorizationFallback :permissions="['groups-all', 'groups-view']">
     <div class="w-full space-y-4 py-6">
+      <!-- Cabecera -->
       <header class="flex justify-between">
         <h2 class="text-black font-bold text-2xl">Estudiantes</h2>
       </header>
 
+      <!-- Tabla de estudiantes -->
       <section class="w-full">
-        <!-- Tabla de estudiantes -->
         <Table class="border-collapse divide-y divide-transparent">
           <THead>
             <Tr>
@@ -142,30 +144,34 @@ watch(() => props.idgroup, loadGroupData);
               <Th>Nota</Th>
             </Tr>
           </THead>
+
           <TBody>
             <Tr v-for="user in listNotes" :key="user.id_estudiante">
-              <Td class="py-2 px-4 border-0 text-black">{{ user?.id_estudiante }}</Td>
-              <Td class="py-2 px-4 border-0 text-black ">{{ user?.fullName }}</Td>
-              <Td class="py-2 w-[100px] border-0">
-                <CustomInput
-                  v-model="user.nota"
-                  input-class="w-[50px] m-auto text-center"
-                  :style="{ color: user.nota !== null && parseFloat(user.nota) <= 10 ? 'red' : 'black' }"
-                />
+              <Td class="py-2 px-4 border-0 text-black">
+                {{ user?.id_estudiante }}
               </Td>
+              <Td class="py-2 px-4 border-0 text-black">
+                {{ user?.fullName }}
+              </Td>
+              <Td class="py-2 w-[100px] border-0">
+                <CustomInput v-model="user.nota" :input-class="[
+                  'w-[50px] m-auto text-center',
+                  user.nota === null
+                    ? 'text-gray-500 dark:text-gray-400'
+                    : parseFloat(user.nota) <= 10
+                      ? 'text-red-600 dark:text-red-400'
+                      : 'text-black dark:text-white'
+                ]" />
+              </Td>
+
             </Tr>
           </TBody>
         </Table>
 
         <!-- Botón para guardar -->
         <div class="flex justify-end w-[120px] mt-4">
-          <Button
-            :title="isSubmitting ? 'Guardando..' : 'Guardar'"
-            :loading="isSubmitting"
-            :disabled="isSubmitting"
-            class="!w-full"
-            @click="submitNote"
-          />
+          <Button :title="isSubmitting ? 'Guardando...' : 'Guardar'" :loading="isSubmitting" :disabled="isSubmitting"
+            class="!w-full" @click="submitNote" />
         </div>
       </section>
     </div>
