@@ -64,6 +64,10 @@ const loadEnrollments = async () => {
   );
 };
 
+onMounted(() => {
+  groupStore.resetStore();
+});
+
 const onDelete = async (enrollment) => {
   if (deleting.value) return;
 

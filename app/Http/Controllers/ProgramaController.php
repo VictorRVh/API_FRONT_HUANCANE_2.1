@@ -24,7 +24,7 @@ class ProgramaController extends Controller
         // Validación
         $validator = Validator::make($request->all(), [
             'nombre_programa' => 'required|string|max:255',
-            'horas_semanales' => 'required|integer|max:255',
+            'horas_semanales' => 'required|integer',
             'unidades_competencia' => 'required|string|max:255',
             'id_plan' => 'required|exists:planes,id_plan',
             'id_especialidad' => 'required|exists:especialidades,id_especialidad', 
