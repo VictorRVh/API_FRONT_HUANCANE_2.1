@@ -102,42 +102,63 @@ const onSubmit = async () => {
   // Evitar múltiples envíos
   if (saving.value || updating.value) return;
 
-  const data = { ...formData.value };
+  try {
+    saving.value = true;
 
-  // Validar el formulario con Yup
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors; // Mostrar los errores
-    return;
-  }
-  formErrors.value = {}; // Limpiar los errores
+    const data = { ...formData.value };
 
-  // Crear o actualizar la especialidad
-  const response = props.specialty?.id_especialidad
-    ? await updateSpecialty(props.specialty?.id_especialidad, data)
-    : await createSpecialty(data);
+    // Validar el formulario con Yup
+    const { validated, errors } = await runYupValidation(schema, data);
+    if (!validated) {
+      formErrors.value = errors; // Mostrar los errores de validación
+      return;
+    }
 
-  // Si la respuesta es exitosa
+    formErrors.value = {}; // Limpiar errores previos
 
-  console.log("response: ", response.especialidad);
+    // Crear o actualizar la especialidad
+    const response = props.specialty?.id_especialidad
+      ? await updateSpecialty(props.specialty?.id_especialidad, data)
+      : await createSpecialty(data);
 
-  if (response?.especialidad.id_especialidad) {
+    console.log("response: ", response.especialidad);
+
+    // Si la respuesta es exitosa
+    if (response?.especialidad?.id_especialidad) {
+      showToast(
+        `Specialty ${
+          props.specialty?.id_especialidad ? "updated" : "created"
+        } successfully`
+      );
+
+      // Cargar datos actualizados en las stores
+      specialtyStore.loadSpecialties();
+      userStore.loadUsers();
+      roleStore.loadRoles();
+      isUserAuthenticated();
+
+      // Cerrar el modal
+      emit("hide");
+    } else {
+      showToast(
+        "Error al guardar la especialidad. Inténtalo de nuevo.",
+        "error"
+      );
+    }
+
+  } catch (error) {
+    console.error("Error en onSubmit Specialty:", error);
     showToast(
-      `Specialty ${props.specialty?.id_especialidad ? "updated" : "created"} successfully`
+      "Ocurrió un error inesperado al guardar la especialidad.",
+      "error"
     );
 
-    // Cargar datos actualizados en las tiendas
-    specialtyStore.loadSpecialties();
-    userStore.loadUsers();
-    roleStore.loadRoles();
-    isUserAuthenticated();
-
-    // Cerrar el modal
-    emit("hide");
-  } else {
-    showToast("Error al guardar la especialidad. Inténtalo de nuevo.", "error");
+  } finally {
+    saving.value = false;
+    updating.value = false;
   }
 };
+
 </script>
 
 <template>

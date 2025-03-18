@@ -195,7 +195,7 @@ const onSubmit = async () => {
       response = await createEnrollment(data);
     }
 
-    console.log("Matrícula response:", response);
+    //console.log("Matrícula response:", response);
 
     // 3. VERIFICAS RESPUESTA EXITOSA
     if (response?.matricula?.id_matricula) {
@@ -213,9 +213,12 @@ const onSubmit = async () => {
       emit("hide"); // Cierra el modal
     } else {
       // RESPUESTA SIN MATRÍCULA → ERROR DE BACKEND
+      //if(response?.error?.response.data){
+
+      console.log("cochinada: ",errors)
       showToast("Ocurrió un error al guardar la matrícula.", "error");
 
-      console.log('EL VERDADERO RESPOMSE', errors)
+ 
 
       if (response?.errors) {
         formErrors.value = response.errors;
@@ -294,7 +297,7 @@ watch(searchQuery, () => {
 watch([idPlanRef, idSpecialty], ([newPlan, newSpecialty]) => {
   groupStore?.loadGroups(newPlan, newSpecialty);
   formData.value.id_grupo = null;
-  console.log("enetera", formData.id_grupo)
+ // console.log("enetera", formData.id_grupo)
 });
 
 

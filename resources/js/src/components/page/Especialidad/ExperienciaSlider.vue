@@ -135,42 +135,60 @@ const onSubmit = async () => {
   // Evitar múltiples envíos
   if (saving.value || updating.value) return;
 
-  const data = { ...formData.value };
+  try {
+    saving.value = true;
 
-  // Validar el formulario con Yup
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors; // Mostrar los errores
-    return;
-  }
-  formErrors.value = {}; // Limpiar los errores
+    const data = { ...formData.value };
 
-  // Crear o actualizar la unidad_didactica
-  const response = props.experiencia?.id_experiencia_formativa
-    ? await updateExperiencia(props.experiencia?.id_experiencia_formativa, data)
-    : await createExperiencia(data);
+    // Validar el formulario con Yup
+    const { validated, errors } = await runYupValidation(schema, data);
+    if (!validated) {
+      formErrors.value = errors; // Mostrar los errores de validación
+      return;
+    }
 
-  // Si la respuesta es exitosa
+    formErrors.value = {}; // Limpiar errores previos
 
-  console.log("response: ", response);
+    // Crear o actualizar la experiencia formativa
+    const response = props.experiencia?.id_experiencia_formativa
+      ? await updateExperiencia(props.experiencia?.id_experiencia_formativa, data)
+      : await createExperiencia(data);
 
-  if (response.experiencia?.id_experiencia) {
-    showToast(
-      `Experiencia ${props.experiencia?.id_experiencia_formativa ? "updated" : "created"} successfully`
-    );
+    console.log("response: ", response);
 
-    // Cargar datos actualizados en las tiendas
-    experienciaStore.loadExperiencias(props.ProgramId);
-    userStore.loadUsers();
-    roleStore.loadRoles();
-    isUserAuthenticated();
+    // Si la respuesta es exitosa
+    if (response.experiencia?.id_experiencia) {
+      showToast(
+        `Experiencia ${
+          props.experiencia?.id_experiencia_formativa ? "updated" : "created"
+        } successfully`
+      );
 
-    // Cerrar el modal
-    emit("hide");
-  } else {
-    showToast("Error al guardar la unidad_didactica. Inténtalo de nuevo.", "error");
+      // Cargar datos actualizados en las stores
+      experienciaStore.loadExperiencias(props.ProgramId);
+      userStore.loadUsers();
+      roleStore.loadRoles();
+      isUserAuthenticated();
+
+      // Cerrar el modal
+      emit("hide");
+    } else {
+      showToast(
+        "Error al guardar la experiencia formativa. Inténtalo de nuevo.",
+        "error"
+      );
+    }
+
+  } catch (error) {
+    console.error("Error en onSubmit Experiencia:", error);
+    showToast("Ocurrió un error inesperado al guardar la experiencia.", "error");
+
+  } finally {
+    saving.value = false;
+    updating.value = false;
   }
 };
+
 </script>
 
 <template>

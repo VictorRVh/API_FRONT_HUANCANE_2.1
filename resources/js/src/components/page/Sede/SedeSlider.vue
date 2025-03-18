@@ -78,7 +78,7 @@ watch(
   (newValue) => {
     if (newValue) {
       if (props.place?.id_sede) {
-        formData.value = { 
+        formData.value = {
           nombre_sede: props.place.nombre_sede,
           ubicacion: props.place.ubicacion
         };
@@ -99,10 +99,10 @@ const schema = yup.object().shape({
     .string()
     .nullable()
     .required("El nombre de la sede es obligatorio"),
-    // ubicacion: yup
-    // .string()
-    // .nullable()
-    // .required("El nombre de la sede es obligatorio"),
+  // ubicacion: yup
+  // .string()
+  // .nullable()
+  // .required("El nombre de la sede es obligatorio"),
 });
 
 // Función para manejar el envío del formulario
@@ -110,55 +110,65 @@ const onSubmit = async () => {
   // Evitar múltiples envíos
   if (saving.value || updating.value) return;
 
-  const data = { ...formData.value };
+  try {
+    const data = { ...formData.value };
 
-  // Validar el formulario con Yup
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors; // Mostrar los errores
-    return;
-  }
-  formErrors.value = {}; // Limpiar los errores
+    // Validar el formulario con Yup
+    const { validated, errors } = await runYupValidation(schema, data);
+    if (!validated) {
+      formErrors.value = errors; // Mostrar los errores de validación
+      return;
+    }
 
-  // Crear o actualizar la sede
-  const response = props.place?.id_sede
-    ? await updatePlace(props.place?.id_sede, data)
-    : await createPlace(data);
+    // Limpiar errores previos
+    formErrors.value = {};
 
-  // Si la respuesta es exitosa
+    let response;
 
-  console.log("response: ", response.sede);
+    // Crear o actualizar la sede
+    if (props.place?.id_sede) {
+      response = await updatePlace(props.place?.id_sede, data);
+    } else {
+      response = await createPlace(data);
+    }
 
-  if (response?.sede.id_sede) {
-    showToast(
-      `Sede ${props.place?.id_sede ? "actualizada" : "creada"} correctamente`
-    );
+    console.log("response: ", response);
 
-    // Cargar datos actualizados en las tiendas
-    placeStore.loadPlaces();
-    userStore.loadUsers();
-    roleStore.loadRoles();
-    isUserAuthenticated();
+    // Si la respuesta es exitosa
+    if (response?.sede?.id_sede) {
+      showToast(
+        `Sede ${props.place?.id_sede ? "actualizada" : "creada"} correctamente`
+      );
 
-    // Cerrar el modal
-    emit("hide");
-  } else {
-    showToast("Error al guardar la sede. Inténtalo de nuevo.", "error");
+      // Cargar datos actualizados en las tiendas
+      placeStore.loadPlaces();
+      userStore.loadUsers();
+      roleStore.loadRoles();
+      isUserAuthenticated();
+
+      // Cerrar el modal
+      emit("hide");
+    } else {
+      showToast("Error al guardar la sede. Inténtalo de nuevo.", "error");
+    }
+  } catch (error) {
+    // Manejo de errores inesperados (red, servidor, código)
+    console.error("Error en onSubmit:", error);
+
+    // Mostrar mensaje genérico o el mensaje del error si viene del backend
+    const errorMessage = error?.response?.data?.message || "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.";
+    showToast(errorMessage, "error");
   }
 };
+
 </script>
 
 <template>
   <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredPlaces">
       <div class="mt-4 space-y-4">
-        <FormInput
-          v-model="formData.nombre_sede"
-          :focus="show"
-          label="Nombre de la sede"
-          :error="formErrors?.nombre_sede"
-          required
-        />
+        <FormInput v-model="formData.nombre_sede" :focus="show" label="Nombre de la sede"
+          :error="formErrors?.nombre_sede" required />
 
         <!-- <FormInput
           v-model="formData.ubicacion"
@@ -168,14 +178,9 @@ const onSubmit = async () => {
           required
         /> -->
 
-        <Button
-          :title="place?.id_sede ? 'Save' : 'Create'"
-          :loading-title="place?.id_sede ? 'Saving...' : 'Creating...'"
-          class="!w-full"
-          :loading="saving || updating"
-          key="submit-btn"
-          @click="onSubmit"
-        />
+        <Button :title="place?.id_sede ? 'Save' : 'Create'"
+          :loading-title="place?.id_sede ? 'Saving...' : 'Creating...'" class="!w-full" :loading="saving || updating"
+          key="submit-btn" @click="onSubmit" />
       </div>
     </AuthorizationFallback>
   </Slider>

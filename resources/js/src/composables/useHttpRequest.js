@@ -105,6 +105,7 @@ const useHttpRequest = (path = '') => {
             }
             return null;
         } catch (error) {
+           // console.log("error de matricula: ",error.response.data)
             saving.value = false;
             return handleError(error, null, callback);
         }
@@ -180,6 +181,12 @@ const useHttpRequest = (path = '') => {
                         )}`
                         : ''
                     }`,
+                    'error',
+                );
+            }
+            if (errorData.status === 409) {
+                showToast(
+                    error.response.data?.message || 'Conflicto detectado.',
                     'error',
                 );
             }

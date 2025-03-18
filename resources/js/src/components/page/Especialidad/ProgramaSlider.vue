@@ -121,42 +121,56 @@ const onSubmit = async () => {
   // Evitar múltiples envíos
   if (saving.value || updating.value) return;
 
-  const data = { ...formData.value };
+  try {
+    // Activamos el flag de saving (opcional si lo manejas en el botón)
+    saving.value = true;
 
-  // Validar el formulario con Yup
-  const { validated, errors } = await runYupValidation(schema, data);
-  if (!validated) {
-    formErrors.value = errors; // Mostrar los errores
-    return;
-  }
-  formErrors.value = {}; // Limpiar los errores
+    const data = { ...formData.value };
 
-  // Crear o actualizar la program
-  const response = props.program?.id_programa
-    ? await updateProgram(props.program?.id_programa, data)
-    : await createProgram(data);
+    // Validar el formulario con Yup
+    const { validated, errors } = await runYupValidation(schema, data);
+    if (!validated) {
+      formErrors.value = errors; // Mostrar los errores en el formulario
+      return;
+    }
+    formErrors.value = {}; // Limpiar errores previos
 
-  // Si la respuesta es exitosa
+    // Crear o actualizar el programa
+    const response = props.program?.id_programa
+      ? await updateProgram(props.program?.id_programa, data)
+      : await createProgram(data);
 
-  console.log("response fro: ", response.programa?.id_programa);
+    console.log("response fro: ", response.programa?.id_programa);
 
-  if (response.programa?.id_programa) {
-    showToast(
-      `program ${props.program?.id_programa ? "updated" : "created"} successfully`
-    );
+    // Verificar si la respuesta es exitosa
+    if (response?.programa?.id_programa) {
+      showToast(
+        `Program ${props.program?.id_programa ? "updated" : "created"} successfully`
+      );
 
-    // Cargar datos actualizados en las tiendas
-    programStore.loadPrograms(props.specialtyId, props.planId);
-    userStore.loadUsers();
-    roleStore.loadRoles();
-    isUserAuthenticated();
+      // Cargar datos actualizados en las tiendas necesarias
+      programStore.loadPrograms(props.specialtyId, props.planId);
+      userStore.loadUsers();
+      roleStore.loadRoles();
+      isUserAuthenticated();
 
-    // Cerrar el modal
-    emit("hide");
-  } else {
-    showToast("Error al guardar la program. Inténtalo de nuevo.", "error");
+      // Cerrar el modal o formulario
+      emit("hide");
+    } else {
+      showToast("Error al guardar el programa. Inténtalo de nuevo.", "error");
+    }
+
+  } catch (error) {
+    console.error("Error en onSubmit program:", error);
+    showToast("Ocurrió un error inesperado al guardar el programa.", "error");
+
+  } finally {
+    // Desactivamos los flags de loading
+    saving.value = false;
+    updating.value = false;
   }
 };
+
 </script>
 
 <template>
