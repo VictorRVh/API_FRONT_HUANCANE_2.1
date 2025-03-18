@@ -32,6 +32,10 @@ const specialtiesStore = useSpecialtyStore();
 const planStore = usePlanStore();
 const groupStore = useGroupsStore();
 
+onMounted(() => {
+  groupStore.resetStore();
+});
+
 const { slider, sliderData, showSlider, hideSlider } = useSlider("enrollment-crud");
 const { showConfirmModal, showToast } = useModalToast();
 const { destroy: deleteEnrollment, deleting } = useHttpRequest("/matricula");

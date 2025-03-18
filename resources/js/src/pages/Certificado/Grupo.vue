@@ -61,6 +61,11 @@ if (planStore.plans.length > 0) {
 const router = useRouter();
 
 const groupStore = useGroupsStore();
+
+onMounted(() => {
+  groupStore.resetStore();
+});
+
 if (!groupStore.groups?.length)
   await groupStore.loadGroups(selectedPlan.value, selectSpecialties.value);
 

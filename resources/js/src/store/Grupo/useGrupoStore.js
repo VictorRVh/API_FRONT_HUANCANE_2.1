@@ -51,6 +51,14 @@ const useGroupsStore = defineStore('Groups', () => {
         group.value = authGroup;
     };
 
+    const resetStore = () => {
+        group.value = null;
+        groups.value = [];
+        student.value = [];
+        certificate.value = [];
+    };
+      
+
     const userStore = useUserStore();
     const user = userStore.user; // Accedemos al valor real del usuario
     const isDocente = user?.roles?.[0]?.name === 'docente';
@@ -58,7 +66,7 @@ const useGroupsStore = defineStore('Groups', () => {
 
     // Función para cargar todas las Groupaes
     const loadGroups = async (plan = 1, especialty) => {
-
+        
         // // Obtiene los grupos según el rol del usuario
         // const response = await getGroups(plan, especialty);
         if (isDocente) {
@@ -93,7 +101,6 @@ const useGroupsStore = defineStore('Groups', () => {
         const response = await getGrupoStudent(id); // Usamos el método show
         student.value = response;
     };
-
     
     const loadGroupStudentExperience = async (id) => {
         const response = await getGrupoStudentExp(id); // Usamos el método show
@@ -127,6 +134,7 @@ const useGroupsStore = defineStore('Groups', () => {
         loadGroupStudentExperience,
         loadGroupStudent,
         loadCertificate,
+        resetStore,
     };
 });
 
