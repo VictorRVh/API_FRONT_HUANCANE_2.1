@@ -94,11 +94,11 @@ const SeeMore = (id) => {
 
           <TBody>
             <Tr
-              v-for="Indicator in IndicatorStore.Indicators.unidad_didactica?.indicadores_logro"
+              v-for="(Indicator,index) in IndicatorStore.Indicators.unidad_didactica?.indicadores_logro"
               :key="Indicator.id_indicador"
             >
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ Indicator?.id_indicador }}
+                {{ index+1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Indicator?.descripcion }}

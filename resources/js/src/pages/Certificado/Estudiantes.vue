@@ -138,9 +138,9 @@ const generateSelectedCertificates = async () => {
           </Tr>
         </THead>
         <TBody>
-          <Tr v-for="user in userStore?.student?.estudiantes" :key="user.estudiante.id">
+          <Tr v-for="(user,index) in userStore?.student?.estudiantes" :key="user.estudiante.id">
             <Td class="py-2 px-4 border-0 text-black dark:text-white">
-              {{ user.estudiante.id }}
+              {{ index+1 }}
             </Td>
             <Td class="py-2 px-4 border-0 text-black dark:text-white">
               {{ user.estudiante.name }}

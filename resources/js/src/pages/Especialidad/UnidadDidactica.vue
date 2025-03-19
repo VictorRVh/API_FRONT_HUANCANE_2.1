@@ -100,11 +100,11 @@ const SeeMore = (id) => {
 
           <TBody>
             <Tr
-              v-for="Units in UnitsStore.Units.unidades_didacticas"
+              v-for="(Units,index) in UnitsStore.Units.unidades_didacticas"
               :key="Units.id_unidad_didactica"
             >
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ Units?.id_unidad_didactica }}
+                {{ index+1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Units?.nombre_unidad }}

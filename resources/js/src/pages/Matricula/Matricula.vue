@@ -162,8 +162,8 @@ watch([selectedPlan, selectedSpecialty], ([newPlan, newSpecialty]) => {
           </THead>
 
           <TBody>
-            <Tr v-for="enrollment in enrollmentStore.EnrollmentGroup" :key="enrollment.id_Enrollment">
-              <Td class="py-2 px-4 border-0 text-black">{{ enrollment?.id_matricula }}</Td>
+            <Tr v-for="(enrollment,index) in enrollmentStore.EnrollmentGroup" :key="enrollment.id_Enrollment">
+              <Td class="py-2 px-4 border-0 text-black">{{ index+1 }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ enrollment.estudiante?.name }}</Td>
               <Td class="py-2 px-4 border-0 text-black">
                 {{ enrollment.estudiante?.apellido_paterno }} {{ enrollment.estudiante?.apellido_materno }}

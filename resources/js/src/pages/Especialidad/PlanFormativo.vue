@@ -78,9 +78,9 @@ const SeeMore = (id) => {};
           </THead>
 
           <TBody>
-            <Tr v-for="plan in planStore.plans" :key="plan.id_plan">
+            <Tr v-for="(plan,index) in planStore.plans" :key="plan.id_plan">
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ plan?.id_plan }}
+                {{ index+1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ plan?.nombre_plan }}

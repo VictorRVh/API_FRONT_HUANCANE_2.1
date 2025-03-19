@@ -83,21 +83,33 @@ const SeeMore = (idr) => {
             <Tr>
               <Th>Id</Th>
               <Th>Especialidad</Th>
+              <Th>Items</Th>
               <Th>Acción</Th>
             </Tr>
           </THead>
 
           <TBody>
-            <Tr v-for="specialty in specialtiesStore.specialties" :key="specialty.id_especialidad">
+            <Tr v-for="(specialty , index) in specialtiesStore.specialties" :key="specialty.id_especialidad">
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ specialty?.id_especialidad }}
+                {{ index+1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ specialty?.nombre_especialidad }}
               </Td>
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">
+              <div class="flex items-center justify-center space-x-2">
+                  <div @click="SeeMore(specialty?.id_especialidad)"
+
+                    class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
+                  >
+                    Programas
+                  </div>
+              
+                </div>
+              </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <eyeButton @click="SeeMore(specialty?.id_especialidad)" />
+              
                   <EditButton @click="showSlider(true, specialty)" />
                   <DeleteButton @click="onDelete(specialty)" />
                 </div>

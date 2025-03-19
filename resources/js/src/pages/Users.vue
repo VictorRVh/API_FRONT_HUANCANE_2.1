@@ -20,8 +20,8 @@
                     </THead>
 
                     <TBody>
-                        <Tr v-for="user in paginatedUsers" :key="user.id">
-                            <Td class="py-4 px-6 border-0">{{ user?.id }}</Td>
+                        <Tr v-for="(user, index) in paginatedUsers" :key="user.id">
+                            <Td class="py-4 px-6 border-0">{{ index+1 }}</Td>
                             <Td class="py-4 px-6 border-0">
                                 <div class="font-bold text-granate dark:text-white">{{ user?.name }}</div>
                                 <div class="text-sm text-gray-500">{{ user?.email }}</div>

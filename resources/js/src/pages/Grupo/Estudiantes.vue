@@ -122,9 +122,9 @@ const pdfUgel = "Nomina UGEL";
             </Tr>
           </THead>
           <TBody>
-            <Tr v-for="user in userStore.student.estudiantes" :key="user.id">
+            <Tr v-for="(user,index) in userStore.student.estudiantes" :key="user.id">
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user.estudiante?.id }}
+                {{ index+1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 <div>{{ user.estudiante?.name }}</div>

@@ -83,11 +83,11 @@ const onDelete = (experiencias) => {
 
           <TBody>
             <Tr
-              v-for="experiencias in experienciasStore.experiencias.experiencias_formativas"
+              v-for="(experiencias,index) in experienciasStore.experiencias.experiencias_formativas"
               :key="experiencias.id_experiencia_formativa"
             >
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ experiencias?.id_experiencia_formativa }}
+                {{ index+1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ experiencias?.nombre_experiencia }}

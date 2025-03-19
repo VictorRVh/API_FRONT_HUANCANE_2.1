@@ -80,10 +80,10 @@ const SeeMore = (idr) => {
 
           <TBody>
             <Tr
-              v-for="Place in placesStore.Places.sedes"
+              v-for="(Place,index) in placesStore.Places.sedes"
               :key="Place.id_sede"
             >
-              <Td class="py-2 px-4 border-0 text-black">{{ Place?.id_sede }}</Td>
+              <Td class="py-2 px-4 border-0 text-black">{{ index+1 }}</Td>
               <Td class="py-2 px-4 border-0">
                 <div class="text-black font-medium dark:text-white">
                   {{ Place?.nombre_sede }}

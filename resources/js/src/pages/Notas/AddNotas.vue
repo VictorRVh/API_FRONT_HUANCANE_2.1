@@ -146,9 +146,9 @@ watch(() => props.idgroup, loadGroupData);
           </THead>
 
           <TBody>
-            <Tr v-for="user in listNotes" :key="user.id_estudiante">
+            <Tr v-for="(user,index) in listNotes" :key="user.id_estudiante">
               <Td class="py-2 px-4 border-0 text-black">
-                {{ user?.id_estudiante }}
+                {{ index+1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black">
                 {{ user?.fullName }}

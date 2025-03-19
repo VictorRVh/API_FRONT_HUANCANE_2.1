@@ -146,11 +146,11 @@ const changePlan = () => {
 
           <TBody>
             <Tr
-              v-for="grupo in groupStore.groups"
+              v-for="(grupo,index) in groupStore.groups"
               :key="grupo.id_grupo"
               class="border-b"
             >
-              <Td class="text-black border-none">{{ grupo?.id_grupo }}</Td>
+              <Td class="text-black border-none">{{ index+1 }}</Td>
               <Td class="text-black border-none">{{ grupo?.nombre_grupo }}</Td>
               <Td class="text-black border-none">{{ grupo?.sede.nombre_sede }}</Td>
               <Td class="text-black border-none">{{ grupo?.plan.nombre_plan }}</Td>

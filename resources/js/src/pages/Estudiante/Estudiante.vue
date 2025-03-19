@@ -90,9 +90,9 @@ const changePage = (page) => {
           </THead>
 
           <TBody>
-            <Tr v-for="user in paginatedStudents" :key="user.id">
+            <Tr v-for="(user,index) in paginatedStudents" :key="user.id">
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ user?.id }}
+                {{ index+1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 <div>{{ user?.name }}</div>

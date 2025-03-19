@@ -70,8 +70,8 @@ const seeNote = () => {
             </Tr>
           </THead>
           <TBody>
-            <Tr v-for="user in userStore.student.estudiantes" :key="user.id">
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">{{ user.estudiante?.id }}</Td>
+            <Tr v-for="(user,index) in userStore.student.estudiantes" :key="user.id">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">{{ index+1 }}</Td>
               <Td class="py-2 px-4 border-0">
                 <div class="text-black font-medium dark:text-white">{{ user.estudiante?.name }}</div>
                 <div class="text-sm text-gray-500 dark:text-white">{{ user.estudiante?.email }}</div>
