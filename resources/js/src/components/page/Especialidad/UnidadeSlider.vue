@@ -60,7 +60,7 @@ const requiredUnits = computed(() => {
 
 // Computed para el título
 const title = computed(() =>
-  props.Unit ? `Update Unit "${props.Unit?.nombre_unidad}"` : "Add new Unit"
+  props.Unit ? `Actualizar unidad didáctica "${props.Unit?.nombre_unidad}"` : "Agregar Unidad Didáctica"
 );
 
 // Inicialización del formulario
@@ -164,7 +164,7 @@ const onSubmit = async () => {
     // Verificar respuesta exitosa
     if (response?.unidad?.id_unidad_didactica) {
       showToast(
-        `Unit ${props.Unit?.id_unidad_didactica ? "updated" : "created"} successfully`
+        `Unidad didáctica ${props.Unit?.id_unidad_didactica ? "actualizada" : "creada"} correctamente.`
       );
 
       // Recargar las stores necesarias
@@ -257,7 +257,7 @@ const onSubmit = async () => {
         />
         
         <Button
-          :title="Unit?.id_unidad_didactica ? 'Save' : 'Create'"
+          :title="Unit?.id_unidad_didactica ? 'Actualizar' : 'Crear'"
           :loading-title="Unit?.id_unidad_didactica ? 'Saving...' : 'Creating...'"
           class="!w-full"
           :loading="saving || updating"

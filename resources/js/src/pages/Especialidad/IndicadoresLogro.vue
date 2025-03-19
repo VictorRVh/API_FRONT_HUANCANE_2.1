@@ -105,7 +105,7 @@ const SeeMore = (id) => {
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <eyeButton @click="SeeMore(Indicator?.id_indicador)" />
+                  <!-- <eyeButton @click="SeeMore(Indicator?.id_indicador)" /> -->
                   <EditButton @click="showSlider(true, Indicator)" />
                   <DeleteButton @click="onDelete(Indicator)" />
                 </div>

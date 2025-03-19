@@ -156,6 +156,7 @@ class UnidadDidacticaController extends Controller
                     'creditos' => $unidad->creditos,
                     'dias' => $unidad->dias,
                     'horas' => $unidad->horas,
+                    'capacidad' => $unidad->capacidad
                 ];
             })
         ], 200);

@@ -62,8 +62,8 @@ const requiredIndicators = computed(() => {
 // Computed para el título
 const title = computed(() =>
   props.Indicator
-    ? `Update Indicator "${props.Indicator?.descripcion}"`
-    : "Add new Indicator"
+    ? `Actualizar indicador de logro "${props.Indicator?.descripcion}"`
+    : "Agregar indicador de logro"
 );
 
 // Inicialización del formulario
@@ -101,7 +101,7 @@ const schema = yup.object().shape({
   descripcion: yup
     .string()
     .nullable()
-    .required("El nombre de la unidad_didactica es obligatorio"),
+    .required("El nombre del indicador de logro es obligatorio"),
 });
 
 // Función para manejar el envío del formulario
@@ -133,7 +133,7 @@ const onSubmit = async () => {
     // Si la respuesta es exitosa
     if (response.indicador?.id_indicador) {
       showToast(
-        `Indicator ${props.Indicator?.id_indicador ? "updated" : "created"} successfully`
+        `Indicador de logro ${props.Indicator?.id_indicador ? "actualizado" : "creado"} correctamente.`
       );
 
       // Recargar datos en las stores
@@ -168,13 +168,13 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.descripcion"
           :focus="show"
-          label="Nombre de la unidad_didactica"
+          label="Nombre del indicador de logro"
           :error="formErrors?.descripcion"
           required
         />
 
         <Button
-          :title="Indicator?.id_indicador ? 'Save' : 'Create'"
+          :title="Indicator?.id_indicador ? 'Actualizar' : 'Crear'"
           :loading-title="Indicator?.id_indicador ? 'Saving...' : 'Creating...'"
           class="!w-full"
           :loading="saving || updating"

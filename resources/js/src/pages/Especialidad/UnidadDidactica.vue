@@ -93,6 +93,7 @@ const SeeMore = (id) => {
               <Th>Créditos</Th>
               <Th>Días</Th>
               <Th>Horas</Th>
+              <Th>Items</Th>
               <Th>Acción</Th>
             </Tr>
           </THead>
@@ -123,9 +124,17 @@ const SeeMore = (id) => {
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Units?.horas }}
               </Td>
+              <div class="flex items-center justify-center my-10">
+                  <div @click="SeeMore(Units?.id_unidad_didactica)"
+
+                    class="text-blue-500 hover:text-blue-700 font-semibold cursor-pointer border-b-2 border-transparent hover:border-blue-500"
+                  >
+                    Indicador
+                  </div>
+              </div>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <eye-button @click="SeeMore(Units?.id_unidad_didactica)" />
+                  <!-- <eye-button @click="SeeMore(Units?.id_unidad_didactica)" /> -->
                   <EditButton @click="showSlider(true, Units)" />
                   <DeleteButton @click="onDelete(Units)" />
                 </div>
