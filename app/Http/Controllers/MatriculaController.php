@@ -32,7 +32,7 @@ class MatriculaController extends Controller
             ], 400);
         }
 
-        // Obtener el grupo para verificar el plan académico
+        // Obtener grupo para conocer su plan y especialidad
         $grupo = Grupo::find($request->id_grupo);
 
         if (!$grupo) {
@@ -42,22 +42,22 @@ class MatriculaController extends Controller
             ], 404);
         }
 
-        // Verificar si el estudiante ya está matriculado en el mismo plan académico
+        // Validar que no esté ya matriculado en el mismo plan y especialidad
         $isEnrolled = Matricula::where('id_estudiante', $request->id_estudiante)
             ->whereHas('grupos', function ($query) use ($grupo) {
-                $query->where('id_plan', $grupo->id_plan);
+                $query->where('id_plan', $grupo->id_plan)
+                    ->where('id_especialidad', $grupo->id_especialidad);
             })
             ->exists();
 
         if ($isEnrolled) {
             return response()->json([
-                'message' => 'El estudiante ya está matriculado en este plan académico',
+                'message' => 'El estudiante ya está matriculado en este plan académico y especialidad',
                 'status' => 409
             ], 409);
         }
 
-
-        // Crear una nueva matricula
+        // Crear la matrícula
         $matricula = Matricula::create([
             'id_grupo' => $request->id_grupo,
             'id_estudiante' => $request->id_estudiante,
