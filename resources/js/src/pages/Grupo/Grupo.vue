@@ -60,10 +60,10 @@ const router = useRouter();
 
 const groupStore = useGroupsStore();
 
+groupStore.resetStore();
+  
 
-onMounted(() => {
-  groupStore.resetStore();
-});
+
 
 if (!groupStore.groups?.length)
   await groupStore.loadGroups(selectedPlan.value, selectSpecialties.value);

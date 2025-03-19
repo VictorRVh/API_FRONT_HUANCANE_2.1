@@ -32,6 +32,11 @@ const specialtiesStore = useSpecialtyStore();
 const planStore = usePlanStore();
 const groupStore = useGroupsStore();
 
+
+groupStore.resetStore();
+
+
+
 const { slider, sliderData, showSlider, hideSlider } = useSlider("enrollment-crud");
 const { showConfirmModal, showToast } = useModalToast();
 const { destroy: deleteEnrollment, deleting } = useHttpRequest("/matricula");
@@ -60,9 +65,6 @@ const loadEnrollments = async () => {
   );
 };
 
-onMounted(() => {
-  groupStore.resetStore();
-});
 
 const onDelete = async (enrollment) => {
   if (deleting.value) return;
