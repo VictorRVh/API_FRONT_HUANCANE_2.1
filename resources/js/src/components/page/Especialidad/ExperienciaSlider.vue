@@ -57,7 +57,7 @@ const requiredExperiencias = computed(() => {
 
 // Computed para el título
 const title = computed(() =>
-  props.experiencia ? `Update experiencia "${props.experiencia?.nombre_experiencia}"` : "Add new Experiencia"
+  props.experiencia ? `Actualizar experiencia "${props.experiencia?.nombre_experiencia}"` : "Agregar nueva experiencia"
 );
 
 // Inicialización del formulario
@@ -107,7 +107,7 @@ const schema = yup.object().shape({
   nombre_experiencia: yup
     .string()
     .nullable()
-    .required("El nombre de la unidad_didactica es obligatorio"),
+    .required("El nombre de la experiencia es obligatorio"),
     fecha_inicio:yup
     .date()
     .nullable()
@@ -160,8 +160,8 @@ const onSubmit = async () => {
     if (response.experiencia?.id_experiencia) {
       showToast(
         `Experiencia ${
-          props.experiencia?.id_experiencia_formativa ? "updated" : "created"
-        } successfully`
+          props.experiencia?.id_experiencia_formativa ? "actualizada" : "creada"
+        } correctamente.`
       );
 
       // Cargar datos actualizados en las stores
@@ -205,7 +205,6 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.fecha_inicio"
           type="date"
-          :focus="show"
           label="Fecha Inicio"
           :error="formErrors?.fecha_inicio"
           required
@@ -213,7 +212,6 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.fecha_fin"
           type="date"
-          :focus="show"
           label="Fecha Final"
           :error="formErrors?.fecha_fin"
           required
@@ -221,7 +219,6 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.creditos"
           type="number"
-          :focus="show"
           label="Créditos"
           :error="formErrors?.creditos"
           required
@@ -229,7 +226,6 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.dias"
           type="number"
-          :focus="show"
           label="Días"
           :error="formErrors?.dias"
           required
@@ -237,14 +233,13 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.horas"
           type="number"
-          :focus="show"
           label="Horas"
           :error="formErrors?.horas"
           required
         />
 
         <Button
-          :title="experiencia?.id_experiencia ? 'Save' : 'Create'"
+          :title="experiencia?.id_experiencia ? 'Actualizar' : 'Crear'"
           :loading-title="experiencia?.id_experiencia ? 'Saving...' : 'Creating...'"
           class="!w-full"
           :loading="saving || updating"

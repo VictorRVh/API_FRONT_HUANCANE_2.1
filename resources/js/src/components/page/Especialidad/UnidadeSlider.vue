@@ -208,7 +208,6 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.fecha_inicio"
           type="date"
-          :focus="show"
           label="Fecha Inicio"
           :error="formErrors?.fecha_inicio"
           required
@@ -216,7 +215,6 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.fecha_fin"
           type="date"
-          :focus="show"
           label="Fecha Final"
           :error="formErrors?.fecha_fin"
           required
@@ -224,7 +222,6 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.creditos"
           type="number"
-          :focus="show"
           label="Créditos"
           :error="formErrors?.creditos"
           required
@@ -232,7 +229,6 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.dias"
           type="number"
-          :focus="show"
           label="Días"
           :error="formErrors?.dias"
           required
@@ -240,7 +236,6 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.horas"
           type="number"
-          :focus="show"
           label="Horas"
           :error="formErrors?.horas"
           required
