@@ -63,7 +63,7 @@ const requiredSpecialties = computed(() => {
 
 // Computed para el título
 const title = computed(() =>
-  props.program ? `Update program "${props.program?.nombre_programa}"` : "Add new program"
+  props.program ? `Actualizar programa "${props.program?.nombre_programa}"` : "Agregar nuevo programa"
 );
 
 console.log("Los id: ", props.planId, props.specialtyId);
@@ -81,12 +81,16 @@ const formData = ref(initialFormData());
 const formErrors = ref({});
 
 // Función para restablecer el formulario al abrir el modal
+// Función para restablecer el formulario al abrir el modal
 watch(
   () => props.show,
   (newValue) => {
     if (newValue) {
       if (props.program?.id_programa) {
-        formData.value = { nombre_programa: props.program.nombre_programa };
+        formData.value = Object.entries(initialFormData()).reduce((r, [key, val]) => {
+          if (props.program[key]) return { ...r, [key]: props.program[key] };
+          return { ...r, [key]: val };
+        }, {});
       } else {
         formData.value = initialFormData();
         formErrors.value = {};
@@ -145,7 +149,7 @@ const onSubmit = async () => {
     // Verificar si la respuesta es exitosa
     if (response?.programa?.id_programa) {
       showToast(
-        `Program ${props.program?.id_programa ? "updated" : "created"} successfully`
+        `Program ${props.program?.id_programa ? "Actualizando" : "Creando"} Exitosamente`
       );
 
       // Cargar datos actualizados en las tiendas necesarias
@@ -180,13 +184,12 @@ const onSubmit = async () => {
         <FormInput
           v-model="formData.nombre_programa"
           :focus="show"
-          label="Nombre del program"
+          label="Nombre del programa"
           :error="formErrors?.nombre_programa"
           required
         />
         <FormInput
           v-model="formData.horas_semanales"
-          :focus="show"
           label="Horas Semanales"
           :error="formErrors?.horas_semanales"
           required
@@ -205,8 +208,8 @@ const onSubmit = async () => {
         
 
         <Button
-          :title="program?.id_programa ? 'Save' : 'Create'"
-          :loading-title="program?.id_programa ? 'Saving...' : 'Creating...'"
+          :title="program?.id_programa ? 'Guardar' : 'Crear'"
+          :loading-title="program?.id_programa ? 'Guardando...' : 'Creando...'"
           class="!w-full"
           :loading="saving || updating"
           key="submit-btn"

@@ -135,9 +135,9 @@ const changePlan = () => {
           </THead>
 
           <TBody>
-            <Tr v-for="Program in ProgramStore.Programs.programas" :key="Program.id_programa">
+            <Tr v-for="(Program,index) in ProgramStore.Programs.programas" :key="Program.id_programa">
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
-                {{ Program?.id_programa }}
+                {{ index+1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black dark:text-white">
                 {{ Program?.nombre_programa }}
@@ -167,7 +167,7 @@ const changePlan = () => {
               </Td>
               <Td class="py-2 px-4 border-0">
                 <div class="flex gap-2 justify-center items-center">
-                  <EyeButton/>
+                  
                   <EditButton @click="showSlider(true, Program)" />
                   <DeleteButton @click="onDelete(Program)" />
                 </div>
