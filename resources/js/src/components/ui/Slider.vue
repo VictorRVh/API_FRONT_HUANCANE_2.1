@@ -9,7 +9,7 @@ defineProps({
   },
   sliderClass: {
     type: String,
-    default: () => "w-[520px]",
+    default: () => "w-full max-w-[90%] md:w-[1000px]",
   },
   transitionClass: {
     type: String,
@@ -24,14 +24,16 @@ const emit = defineEmits(["hide"]);
 </script>
 
 <template>
+  <!-- Fondo oscuro ofuscado -->
   <Teleport to="body">
     <div
       v-if="show"
-      class="w-screen h-screen fixed bg-gray-200 z-[308] top-0 left-0 opacity-20"
+      class="fixed inset-0 z-[308] bg-black/80 backdrop-blur-sm"
       @click="emit('hide', false)"
     ></div>
   </Teleport>
 
+  <!-- Slider centrado en pantalla -->
   <Teleport to="body">
     <Transition
       :enter-from-class="transitionClass"
@@ -41,24 +43,24 @@ const emit = defineEmits(["hide"]);
     >
       <div
         v-if="show"
-        class="h-[calc(100vh-80px)] fixed max-w-full top-20 z-[309] bg-white dark:bg-gray-800 border-l border-gray-400 dark:border-gray-700 shadow-google right-0 slider-container"
+        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[309] bg-white dark:bg-gray-800 border border-gray-400 dark:border-gray-900 shadow-lg rounded-2xl max-h-[90vh] overflow-hidden flex flex-col"
         :class="[sliderClass]"
       >
-        <div class="w-full h-full p-4 overflow-y-auto overflow-x-hidden">
-          <div class="flex-between w-full">
-            <div :class="{ dark: isDarkMode }">
+        <!-- Encabezado -->
+        <div class="p-4">
+          <div class="flex justify-between items-center w-full mb-2">
+            <div class="w-full">
               <slot name="title">
-                <div class="font-bold text-lg text-gray-900 dark:text-white">
+                <div class="text-gray-900 text-xl dark:text-white font-medium  text-center">
                   {{ title ? title : "Create or update data" }}
                 </div>
+             
               </slot>
             </div>
-
-            <div class="flex-start">
+            <div class="flex items-center ml-4">
               <div class="mr-4">
-                <slot name="before_close"> </slot>
+                <slot name="before_close"></slot>
               </div>
-
               <slot name="close">
                 <span class="text-xl cursor-pointer" @click="emit('hide', false)">
                   <svg
@@ -70,18 +72,38 @@ const emit = defineEmits(["hide"]);
                     fill="none"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="css-i6dzq1"
+                    class="text-gray-700 dark:text-white"
                   >
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
                 </span>
               </slot>
             </div>
           </div>
+        </div>
+
+        <!-- Contenido scrollable -->
+        <div class="flex-grow px-4 pb-4 overflow-y-auto overflow-x-hidden custom-scrollbar max-h-[calc(90vh-4rem)]">
           <slot></slot>
         </div>
       </div>
     </Transition>
   </Teleport>
 </template>
+
+<style scoped>
+.custom-scrollbar {
+  overflow-x: hidden;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #a0a0a0;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #8a8a8a;
+}
+</style>

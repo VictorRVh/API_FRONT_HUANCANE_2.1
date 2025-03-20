@@ -74,7 +74,7 @@ const goBack = () => {
     <!-- Utiliza w-full en móviles, w-[15%] en pantallas lg y la clase personalizada para resoluciones >=1550px -->
     <header
       v-if="sidebarOpen || isLargeScreen"
-      class="w-full lg:w-[200px] bg-plomoClaro dark:bg-gray-800 h-auto lg:h-screen sticky top-0 shadow-lg z-10 overflow-auto sidebar-responsive"
+      class="w-full lg:w-[220px] bg-plomoClaro dark:bg-gray-800 h-auto lg:h-screen sticky top-0 shadow-lg z-10 overflow-auto sidebar-responsive"
     >
       <DashboardHeader class="container mx-auto px-4 xl:px-0 gap-4 text-negroClaro dark:text-white" />
     </header>
@@ -211,7 +211,7 @@ const goBack = () => {
 @media (max-width: 1280px) and (min-width: 1024px) {
   /* Para resoluciones entre 1024px y 1280px, el sidebar tendrá 250px */
   .sidebar-responsive {
-    width: 100px !important;
+    width: 220px !important;
   }
 }
 }

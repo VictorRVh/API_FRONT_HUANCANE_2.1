@@ -172,7 +172,7 @@ const onSubmit = async () => {
   <!--  -->
   <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredPermissions">
-      <div class="mt-4 space-y-4">
+      <div class="mt-4 space-y-4 m-2">
         <FormInput
           v-model="formData.name"
           :focus="show"
@@ -182,56 +182,75 @@ const onSubmit = async () => {
           required
         />
 
-        <FormInput
-          v-model="formData.apellido_paterno"
-          :focus="show"
-          label="Apellido Paterno"
-          :error="formErrors?.apellido_paterno"
-          required
-        />
+        <!-- Apellidos en la misma fila -->
+        <div class="grid grid-cols-2 gap-4">
+          <FormInput
+            v-model="formData.apellido_paterno"
+            :focus="show"
+            label="Apellido Paterno"
+            :error="formErrors?.apellido_paterno"
+            required
+          />
+          <FormInput
+            v-model="formData.apellido_materno"
+            :focus="show"
+            label="Apellido Materno"
+            :error="formErrors?.apellido_materno"
+            required
+          />
+        </div>
 
-        <FormInput
-          v-model="formData.apellido_materno"
-          :focus="show"
-          label="Apellido Materno"
-          :error="formErrors?.apellido_materno"
-          required
-        />
-
-        <FormInput
-          v-model="formData.dni"
-          :focus="show"
-          type="number"
-          label="Dni"
-          :error="formErrors?.dni"
-          required
-        />
-
-        <FormInput
-          v-model="formData.sexo"
-          :focus="show"
-          label="Sexo"
-          :error="formErrors?.sexo"
-          required
-        />
-
-        <FormInput
-          v-model="formData.celular"
-          :focus="show"
-          type="number"
-          label="Celular"
-          :error="formErrors?.celular"
-          required
-        />
-
-        <FormInput
-          v-model="formData.fecha_nacimiento"
-          :focus="show"
-          label="Fecha de Nacimiento"
-          type="date"
-          :error="formErrors?.fecha_nacimiento"
-          required
-        />
+        <!-- Fila: DNI, Celular, Fecha de Nacimiento, Sexo -->
+        <div class="grid grid-cols-4 gap-4">
+          <FormInput
+            v-model="formData.dni"
+            :focus="show"
+            type="number"
+            label="DNI"
+            :error="formErrors?.dni"
+            required
+          />
+          <FormInput
+            v-model="formData.celular"
+            :focus="show"
+            type="number"
+            label="Celular"
+            :error="formErrors?.celular"
+            required
+          />
+          <FormInput
+            v-model="formData.fecha_nacimiento"
+            :focus="show"
+            label="Fecha de Nacimiento"
+            type="date"
+            :error="formErrors?.fecha_nacimiento"
+            required
+          />
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Sexo <span class="text-red-500">*</span></label>
+            <div class="flex items-center space-x-4">
+              <label class="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  value="Masculino"
+                  v-model="formData.sexo"
+                  class="form-radio text-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <span class="text-sm text-gray-700 dark:text-gray-300">Masculino</span>
+              </label>
+              <label class="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  value="Femenino"
+                  v-model="formData.sexo"
+                  class="form-radio text-blue-600 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <span class="text-sm text-gray-700 dark:text-gray-300">Femenino</span>
+              </label>
+            </div>
+            <FormLabelError :message="formErrors?.sexo" />
+          </div>
+        </div>
 
         <FormInput
           v-model="formData.email"

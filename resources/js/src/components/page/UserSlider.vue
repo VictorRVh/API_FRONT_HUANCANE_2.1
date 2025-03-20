@@ -178,7 +178,9 @@ const onSubmit = async () => {
   <!--  -->
   <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredPermissions">
-      <div class="mt-4 space-y-4">
+      <div class="mt-4 space-y-4 m-2">
+        
+        <!-- Nombre -->
         <FormInput
           v-model="formData.name"
           :focus="show"
@@ -187,55 +189,83 @@ const onSubmit = async () => {
           required
         />
 
-        <FormInput
-          v-model="formData.apellido_paterno"
-          :focus="show"
-          label="Apellido Paterno"
-          :error="formErrors?.apellido_paterno"
-          required
-        />
+        <!-- Apellido Paterno y Materno en una fila -->
+        <div class="grid grid-cols-2 gap-4">
+          <FormInput
+            v-model="formData.apellido_paterno"
+            :focus="show"
+            label="Apellido Paterno"
+            :error="formErrors?.apellido_paterno"
+            required
+          />
+          <FormInput
+            v-model="formData.apellido_materno"
+            :focus="show"
+            label="Apellido Materno"
+            :error="formErrors?.apellido_materno"
+            required
+          />
+        </div>
 
-        <FormInput
-          v-model="formData.apellido_materno"
-          :focus="show"
-          label="Apellido Materno"
-          :error="formErrors?.apellido_materno"
-          required
-        />
+        <!-- DNI, Sexo (SELECT), Celular, Fecha Nacimiento en una fila -->
+        <div class="grid grid-cols-4 gap-4">
+          <FormInput
+            v-model="formData.dni"
+            :focus="show"
+            label="DNI"
+            :error="formErrors?.dni"
+            required
+          />
+          <FormInput
+            v-model="formData.celular"
+            :focus="show"
+            label="Celular"
+            :error="formErrors?.celular"
+            required
+          />
 
-        <FormInput
-          v-model="formData.dni"
-          :focus="show"
-          label="Dni"
-          :error="formErrors?.dni"
-          required
-        />
+          <FormInput
+            v-model="formData.fecha_nacimiento"
+            :focus="show"
+            label="Fecha de Nacimiento"
+            type="date"
+            :error="formErrors?.fecha_nacimiento"
+            required
+          />
 
-        <FormInput
-          v-model="formData.sexo"
-          :focus="show"
-          label="Sexo"
-          :error="formErrors?.sexo"
-          required
-        />
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-white">
+              Sexo <span class="text-red-500 ">*</span>
+            </label>
+            <div class="flex items-center space-x-4 dark:text-white">
+              <label class="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  value="M"
+                  v-model="formData.sexo"
+                  class="form-radio text-blue-600"
+                />
+                <span>Masculino</span>
+              </label>
+              <label class="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  value="F"
+                  v-model="formData.sexo"
+                  class="form-radio text-pink-600"
+                />
+                <span>Femenino</span>
+              </label>
+            </div>
+            <div v-if="formErrors?.sexo" class="text-red-500 text-sm mt-1">
+              {{ formErrors?.sexo }}
+            </div>
+          </div>
 
-        <FormInput
-          v-model="formData.celular"
-          :focus="show"
-          label="Celular"
-          :error="formErrors?.celular"
-          required
-        />
+          
+        </div>
 
-        <FormInput
-          v-model="formData.fecha_nacimiento"
-          :focus="show"
-          label="Fecha de Nacimiento"
-          type="date"
-          :error="formErrors?.fecha_nacimiento"
-          required
-        />
-
+        <!-- Correo -->
         <FormInput
           v-model="formData.email"
           label="Correo electrónico"
@@ -243,6 +273,7 @@ const onSubmit = async () => {
           required
         />
 
+        <!-- Contraseña y confirmar contraseña solo si es nuevo -->
         <template v-if="!user?.id">
           <FormInput
             v-model="formData.password"
@@ -260,16 +291,18 @@ const onSubmit = async () => {
           />
         </template>
 
+        <!-- Asignar rol -->
         <FormLabelError label="Asignar rol">
           <VSelect
             v-model="selectedRole"
             :options="roleOptions"
             label="name"
             @update:model-value="(role) => onRoleSelect(role)"
-            class=" dark:text-gray-700  "
+            class=" dark:text-gray-700"
           />
         </FormLabelError>
 
+        <!-- Lista de roles asignados -->
         <div class="w-full space-y-3 dark:text-white">
           <FormLabelError v-if="formData.roles?.length" label="User roles" />
 
@@ -277,7 +310,7 @@ const onSubmit = async () => {
             <li
               v-for="role in formData.roles"
               :key="role.id"
-              class="shadow-google rounded-sm "
+              class="shadow-google rounded-sm"
             >
               <div
                 class="p-4 flex-between w-full dark:bg-gray-800/60 rounded-sm border border-[#e6e6e6] dark:border-gray-700"
@@ -304,6 +337,7 @@ const onSubmit = async () => {
                 </span>
               </div>
             </li>
+
 
             <Button
               :title="user?.id ? 'Actualizar' : 'Guardar'"
