@@ -191,6 +191,9 @@ const onSubmit = async () => {
 
     if (props.Enrollment?.id_matricula) {
       response = await updateEnrollment(props.Enrollment.id_matricula, data);
+
+      console.log('ACTUALIZANDO MATRICULA')
+
     } else {
       response = await createEnrollment(data);
     }
@@ -199,7 +202,7 @@ const onSubmit = async () => {
 
     // 3. VERIFICAS RESPUESTA EXITOSA
     if (response?.matricula?.id_matricula) {
-      showToast(`Matrícula ${props.Enrollment?.name ? "actualizada" : "creada"} con éxito`, "success");
+      showToast(`Matrícula ${props.Enrollment?.estudiante.name ? "actualizada" : "creada"} con éxito`, "success");
 
       // Cargas nuevamente el listado
       EnrollmentStore.loadEnrollmentBySpecialtiesAndGroup(

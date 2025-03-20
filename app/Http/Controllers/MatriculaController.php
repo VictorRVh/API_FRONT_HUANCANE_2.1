@@ -106,9 +106,35 @@ class MatriculaController extends Controller
 
         if (!$matricula) {
             return response()->json([
-                'message' => 'Matricula no encontrada',
+                'message' => 'Matrícula no encontrada',
                 'status' => 404
             ], 404);
+        }
+
+        // Obtener el grupo nuevo para verificar plan y especialidad
+        $grupoNuevo = Grupo::find($request->id_grupo);
+
+        if (!$grupoNuevo) {
+            return response()->json([
+                'message' => 'Grupo no encontrado',
+                'status' => 404
+            ], 404);
+        }
+
+        // Verificar si el estudiante ya está matriculado en el mismo plan académico y especialidad (excluyendo esta misma matrícula)
+        $existe = Matricula::where('id_estudiante', $request->id_estudiante)
+            ->where('id_matricula', '!=', $id) 
+            ->whereHas('grupos', function ($query) use ($grupoNuevo) {
+                $query->where('id_plan', $grupoNuevo->id_plan)
+                    ->where('id_especialidad', $grupoNuevo->id_especialidad);
+            })
+            ->exists();
+
+        if ($existe) {
+            return response()->json([
+                'message' => 'El estudiante ya está matriculado en esta especialidad y plan académico',
+                'status' => 409
+            ], 409);
         }
 
         // Actualizar el registro
@@ -117,10 +143,12 @@ class MatriculaController extends Controller
         $matricula->save();
 
         return response()->json([
+            'message' => 'Matrícula actualizada correctamente',
             'matricula' => $matricula,
             'status' => 200
         ], 200);
     }
+
 
     public function destroy($id)
     {
