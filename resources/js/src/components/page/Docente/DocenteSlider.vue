@@ -232,7 +232,7 @@ const onSubmit = async () => {
               <label class="flex items-center space-x-1">
                 <input
                   type="radio"
-                  value="Masculino"
+                  value="M"
                   v-model="formData.sexo"
                   class="form-radio text-blue-600 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -241,7 +241,7 @@ const onSubmit = async () => {
               <label class="flex items-center space-x-1">
                 <input
                   type="radio"
-                  value="Femenino"
+                  value="F"
                   v-model="formData.sexo"
                   class="form-radio text-blue-600 dark:bg-gray-700 dark:border-gray-600"
                 />
