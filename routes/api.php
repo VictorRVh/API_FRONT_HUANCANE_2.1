@@ -247,6 +247,11 @@ Route::middleware('auth:sanctum')->group(function () {
         'getUnidadDidacticaPrograma',
     ])->middleware('permission:units-all|units-view|note-student-all');
 
+    Route::get('unidad_didactica_index/{id_programa}', [
+        \App\Http\Controllers\UnidadDidacticaController::class,
+        'getUnidadesByPrograma',
+    ])->middleware('permission:units-all|units-view|note-student-all');
+
     Route::post('unidad_didactica', [
         \App\Http\Controllers\UnidadDidacticaController::class,
         'store',

@@ -159,9 +159,30 @@ class UnidadDidacticaController extends Controller
                     'dias' => $unidad->dias,
                     'horas' => $unidad->horas,
                     'capacidad' => $unidad->capacidad,
-                    'semestre' => $unidad->numero_unidad
+                    'numero_unidad' => $unidad->numero_unidad
                 ];
             })
+        ], 200);
+    }
+
+    public function getUnidadesByPrograma($id_programa)
+    {
+        $programa = Programa::find($id_programa);
+
+        if (!$programa) {
+            return response()->json([
+                'message' => 'Programa no encontrado',
+                'status' => 404
+            ], 404);
+        }
+
+        $unidades = UnidadDidactica::where('id_programa', $id_programa)
+            ->select('nombre_unidad', 'numero_unidad')
+            ->get();
+
+        return response()->json([
+            'unidades_didacticas' => $unidades,
+            'status' => 200
         ], 200);
     }
 }
