@@ -24,6 +24,7 @@ class UnidadDidactica extends Model
         'dias',
         'horas',
         'capacidad',
+        'numero_unidad',
         'id_programa',
     ];
 

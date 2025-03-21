@@ -30,6 +30,7 @@ class UnidadDidacticaController extends Controller
             'dias' => 'required|integer',
             'horas' => 'required|integer',
             'capacidad' => 'required',
+            'numero_unidad' => 'required',
             'id_programa' => 'required|exists:programas,id_programa',
         ]);
 
@@ -91,6 +92,7 @@ class UnidadDidacticaController extends Controller
             'creditos' => 'required|integer',
             'dias' => 'required|integer',
             'horas' => 'required|integer',
+            'numero_unidad' => 'required',
             'id_programa' => 'exists:programas,id_programa',
         ]);
 
@@ -156,7 +158,8 @@ class UnidadDidacticaController extends Controller
                     'creditos' => $unidad->creditos,
                     'dias' => $unidad->dias,
                     'horas' => $unidad->horas,
-                    'capacidad' => $unidad->capacidad
+                    'capacidad' => $unidad->capacidad,
+                    'semestre' => $unidad->numero_unidad
                 ];
             })
         ], 200);
