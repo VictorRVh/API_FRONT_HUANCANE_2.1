@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Grupo;
 use App\Models\Matricula;
+use App\Models\Nivel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -63,11 +64,53 @@ class MatriculaController extends Controller
             'id_estudiante' => $request->id_estudiante,
         ]);
 
+        // Cálculo del ciclo actual según la fecha
+        $anio = date('Y');
+        $mes = date('n');
+        $periodo = ($mes >= 1 && $mes <= 6) ? 'I' : 'II';
+        $anioCiclo = $anio . '-' . $periodo;
+        $ordenCiclo = $this->calcularOrdenCiclo($anio, $periodo);
+
+        // Buscar último nivel anterior
+        $ultimoNivel = Nivel::whereHas('matricula', function ($q) use ($request) {
+            $q->where('id_estudiante', $request->id_estudiante);
+        })
+            ->orderBy('orden_ciclo', 'desc')
+            ->first();
+
+        $nuevoSemestre = $ultimoNivel ? $ultimoNivel->semestre + 1 : 1;
+
+        // Crear nivel con semestre nuevo
+        $nivel = Nivel::create([
+            'id_matricula' => $matricula->id_matricula,
+            'semestre' => $nuevoSemestre,
+            'anio_ciclo' => $anioCiclo,
+            'orden_ciclo' => $ordenCiclo,
+            'activo' => 0, // El actual es "en curso"
+        ]);
+
+        // Actualizar nivel anterior a activo = 1 (completado)
+        if ($ultimoNivel) {
+            $ultimoNivel->update(['activo' => 1]);
+        }
+
         return response()->json([
-            'message' => 'Matrícula creada exitosamente',
+            'message' => 'Matrícula y nivel creados exitosamente',
             'matricula' => $matricula,
+            'nivel' => $nivel,
             'status' => 201
         ], 201);
+    }
+
+    // Tu helper adicional:
+    private function calcularOrdenCiclo($anio, $periodo)
+    {
+        $anioBase = 2025;
+        $semestresPorAnio = 2;
+        $diferenciaAnios = $anio - $anioBase;
+        $orden = ($diferenciaAnios * $semestresPorAnio);
+
+        return ($periodo == 'I') ? $orden + 1 : $orden + 2;
     }
 
 
@@ -123,7 +166,7 @@ class MatriculaController extends Controller
 
         // Verificar si el estudiante ya está matriculado en el mismo plan académico y especialidad (excluyendo esta misma matrícula)
         $existe = Matricula::where('id_estudiante', $request->id_estudiante)
-            ->where('id_matricula', '!=', $id) 
+            ->where('id_matricula', '!=', $id)
             ->whereHas('grupos', function ($query) use ($grupoNuevo) {
                 $query->where('id_plan', $grupoNuevo->id_plan)
                     ->where('id_especialidad', $grupoNuevo->id_especialidad);

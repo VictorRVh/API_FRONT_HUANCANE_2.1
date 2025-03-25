@@ -515,4 +515,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::get('/users-by-role/{role_id}', [UserController::class, 'getUsersByRole']);
+
+
+    Route::post('nivelUno/{id_matricula}', [
+        \App\Http\Controllers\NivelController::class,
+        'crearNivel',
+    ])->middleware('permission:groups-all|groups-view');
+
+    Route::post('nivelDos/{id_matricula}', [
+        \App\Http\Controllers\NivelController::class,
+        'avanzarNivel',
+    ])->middleware('permission:groups-all|groups-view');
+
 });
