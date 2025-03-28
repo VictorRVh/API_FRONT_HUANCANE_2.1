@@ -1,46 +1,56 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-// useHttpRequest para interactuar con la API
 import useHttpRequest from '../../composables/useHttpRequest';
 
 const useUnitsStore = defineStore('units', () => {
-    // Importamos las funciones necesarias de useHttpRequest
+    // Petición para la primera API
     const {
-        //index: getUnits,
-        show: getUnitById, // Añadimos el método show para obtener una especialidad por ID
-        //show: getunits,
-        loading: UnitsLoading,
-        initialLoading: UnitsFirstTimeLoading,
+        show: getUnitById, 
+        loading: UnitsLoading1,
+        initialLoading: UnitsFirstTimeLoading1,
     } = useHttpRequest('/unidad_didactica');
 
-    const Unit = ref(null); // Para almacenar una sola especialidad
-    const Units = ref([]);  // Para almacenar la lista de especialidades
+    // Petición para la segunda API
+    const {
+        show: getUnitIndex, 
+        loading: UnitsLoading2,
+        initialLoading: UnitsFirstTimeLoading2,
+    } = useHttpRequest('/unidad_didactica_index');
 
-    // Función para establecer una especialidad específica
-    const setUnit = (authUnit) => {
-        Unit.value = authUnit;
-    };
+    const Unit = ref(null); 
+    const Units = ref([]);
+    const indexAll = ref([]);  
 
-    // Función para cargar todas las especialidades
+    // Estado combinado de carga
+    const UnitsLoading = computed(() => UnitsLoading1.value || UnitsLoading2.value);
+    const UnitsFirstTimeLoading = computed(() => UnitsFirstTimeLoading1.value || UnitsFirstTimeLoading2.value);
+
+    // Cargar datos de unidad
     const loadUnits = async (id) => {
         const response = await getUnitById(id);
         Units.value = response;
     };
 
-    // Nueva función para cargar una especialidad por su ID
+    // Cargar unidad específica
     const loadUnitById = async (id) => {
-        const response = await getUnitById(id); // Usamos el método show
+        const response = await getUnitById(id);
         Unit.value = response;
+    };
+    const loadUnitAllindex = async (programId) => {
+        const response = await getUnitIndex(programId);
+        indexAll.value = response;
     };
 
     return {
         Unit,
-        setUnit,
         Units,
+        indexAll,
+        setUnit: (authUnit) => Unit.value = authUnit,
         UnitsLoading,
         UnitsFirstTimeLoading,
         loadUnits,
-        loadUnitById, // Retornamos la nueva función para obtener una especialidad por ID
+        loadUnitAllindex,
+        loadUnitById,
     };
 });
 
