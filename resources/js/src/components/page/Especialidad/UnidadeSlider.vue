@@ -148,7 +148,7 @@ const onSubmit = async () => {
     <AuthorizationFallback :permissions="requiredUnits">
       <div class="mt-4 space-y-4">
         <FormLabelError label="Selecciona la Unidad" :error="formErrors.numero_unidad">
-          <VSelect v-model="formData.numero_unidad" :options="UnitOptions" label="name" :reduce="4"
+          <VSelect v-model="formData.numero_unidad" :options="UnitOptions" label="name" :reduce="option => option.id"
             :class="formErrors.numero_unidad ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''" />
         </FormLabelError>
 
