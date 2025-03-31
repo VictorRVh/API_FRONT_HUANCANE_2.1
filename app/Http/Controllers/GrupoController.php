@@ -283,7 +283,6 @@ class GrupoController extends Controller
 
         // Obtener y ordenar las unidades didácticas del grupo
         $unidadesDidacticas = $grupo && $grupo->programa ? $grupo->programa->unidadesDidacticas->sortBy('numero_unidad')->values() : collect();
-
         // Filtrar unidades didácticas que no tienen notas registradas
         $unidadesConNotas = $alumnos->pluck('estudiante.notas.*.id_unidad_didactica')->flatten()->unique();
         $unidadesSinNotas = $unidadesDidacticas->whereNotIn('id_unidad_didactica', $unidadesConNotas);

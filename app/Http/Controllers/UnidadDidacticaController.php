@@ -167,8 +167,6 @@ class UnidadDidacticaController extends Controller
                 })
         ], 200);
     }
-
-
     public function getUnidadesByPrograma($id_programa)
     {
         $programa = Programa::find($id_programa);
