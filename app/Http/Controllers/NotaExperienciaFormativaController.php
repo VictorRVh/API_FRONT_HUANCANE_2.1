@@ -154,20 +154,41 @@ class NotaExperienciaFormativaController extends Controller
             ], 400);
         }
 
-        // Insertar las notas masivamente
-        $notas = array_map(function ($nota) {
-            return [
-                'id_nota' => (string) Str::uuid(),
-                'nota' => $nota['nota'],
-                'id_experiencia' => $nota['id_experiencia'],
-                'id_estudiante' => $nota['id_estudiante'],
-                'id_grupo' => $nota['id_grupo'],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        }, $request->notas);
+        $notasFiltradas = [];
+        $notasDuplicadas = [];
 
-        NotaExperienciaFormativa::insert($notas);
+        foreach ($request->notas as $nota) {
+            // Verificar si ya existe una nota para ese estudiante en la experiencia formativa
+            $existeNota = NotaExperienciaFormativa::where('id_estudiante', $nota['id_estudiante'])
+                ->where('id_experiencia', $nota['id_experiencia'])
+                ->exists();
+
+            if (!$existeNota) {
+                $notasFiltradas[] = [
+                    'id_nota' => (string) Str::uuid(),
+                    'nota' => $nota['nota'],
+                    'id_experiencia' => $nota['id_experiencia'],
+                    'id_estudiante' => $nota['id_estudiante'],
+                    'id_grupo' => $nota['id_grupo'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            } else {
+                $notasDuplicadas[] = $nota['id_experiencia'];
+            }
+        }
+
+        // Insertar solo las notas que no existen
+        if (!empty($notasFiltradas)) {
+            NotaExperienciaFormativa::insert($notasFiltradas);
+        }
+
+        if (!empty($notasDuplicadas)) {
+            return response()->json([
+                'message' => 'Ya se registró nota en esta experiencia formativa',
+                'status' => 409
+            ], 409);
+        }
 
         return response()->json([
             'message' => 'Notas guardadas exitosamente',
