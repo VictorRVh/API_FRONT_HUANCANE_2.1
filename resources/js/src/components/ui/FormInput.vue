@@ -89,7 +89,7 @@ const disableKeys = (event, keys = ["e", "E", "+", "-"]) => {
         :step="step ? step : type === 'number' ? 'any' : null"
         :placeholder="placeholder || ''"
         :class="[
-          'border-b border-gray-300 bg-transparent focus:border-b-2 focus:border-active focus:ring-0 text-sm w-full py-1 px-2 pr-10 outline-none transition-all duration-200 ease-in-out text-gray-700 tracking-wide dark:text-gray-300 dark:border-gray-500 dark:focus:border-b-2 dark:focus:border-active dark:bg-transparent',
+          'border-b border-gray-300 bg-transparent focus:border-b-2 focus:border-active focus:ring-0 text-sm w-full py-1 px-2  outline-none transition-all duration-200 ease-in-out text-gray-700 tracking-wide dark:text-gray-300 dark:border-gray-500 dark:focus:border-b-2 dark:focus:border-active dark:bg-transparent',
           applyUppercase ? 'uppercase' : '',
           disabled && 'cursor-not-allowed',
           inputClass

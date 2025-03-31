@@ -175,7 +175,7 @@ const onSubmit = async () => {
 
         <Button
           :title="Indicator?.id_indicador ? 'Actualizar' : 'Crear'"
-          :loading-title="Indicator?.id_indicador ? 'Saving...' : 'Creating...'"
+          :loading-title="Indicator?.id_indicador ? 'Actualizando...' : 'Creando...'"
           class="!w-full"
           :loading="saving || updating"
           key="submit-btn"

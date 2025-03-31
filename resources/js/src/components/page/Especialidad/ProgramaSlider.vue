@@ -180,7 +180,7 @@ const onSubmit = async () => {
 <template>
   <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredSpecialties">
-      <div class="mt-4 space-y-4">
+      <div class="mt-4 grid grid-cols-2 gap-4">
         <FormInput
           v-model="formData.nombre_programa"
           :focus="show"
@@ -206,15 +206,17 @@ const onSubmit = async () => {
           @blur="validateInput"
         />
         
-
-        <Button
+<div class="col-span-2 flex justify-center items-center">
+  <Button
           :title="program?.id_programa ? 'Guardar' : 'Crear'"
           :loading-title="program?.id_programa ? 'Guardando...' : 'Creando...'"
-          class="!w-full"
+          class="w-[200px] mx-auto text-center"
           :loading="saving || updating"
           key="submit-btn"
           @click="onSubmit"
         />
+</div>
+        
       </div>
     </AuthorizationFallback>
   </Slider>

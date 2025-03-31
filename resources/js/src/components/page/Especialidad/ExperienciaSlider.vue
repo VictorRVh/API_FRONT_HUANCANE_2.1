@@ -64,11 +64,11 @@ const title = computed(() =>
 const initialFormData = () => ({
   nombre_experiencia: null,
   id_programa: props.ProgramId,
-  fecha_inicio:null,
-  fecha_fin:null,
-  creditos:null,
-  dias:null,
-  horas:null,
+  fecha_inicio: null,
+  fecha_fin: null,
+  creditos: null,
+  dias: null,
+  horas: null,
 });
 
 // Variables reactivas para los datos del formulario y los errores
@@ -82,14 +82,14 @@ watch(
     if (newValue) {
       console.log(props)
       if (props.experiencia?.id_experiencia_formativa) {
-        formData.value = { 
+        formData.value = {
           nombre_experiencia: props.experiencia.nombre_experiencia,
-          fecha_inicio:props.experiencia.fecha_inicio,
-          fecha_fin:props.experiencia.fecha_fin,
-          creditos:props.experiencia.creditos,
-          dias:props.experiencia.dias,
-          horas:props.experiencia.horas,
-        
+          fecha_inicio: props.experiencia.fecha_inicio,
+          fecha_fin: props.experiencia.fecha_fin,
+          creditos: props.experiencia.creditos,
+          dias: props.experiencia.dias,
+          horas: props.experiencia.horas,
+
         };
       } else {
         formData.value = initialFormData();
@@ -108,23 +108,20 @@ const schema = yup.object().shape({
     .string()
     .nullable()
     .required("El nombre de la experiencia es obligatorio"),
-    fecha_inicio:yup
+  fecha_inicio: yup
     .date()
     .nullable()
     .required("La fecha de incio es obligatorio"),
-  fecha_fin:yup
-    .date()
-    .nullable()
-    .required("La fecha final es obligatorio"),
-  creditos:yup
+  fecha_fin: yup.date().nullable().required("La fecha final es obligatoria").min(yup.ref("fecha_inicio"), "La fecha final debe ser posterior a la fecha de inicio"),
+  creditos: yup
     .number()
     .nullable()
-    .required("Los creditos es obligatorio"), 
-  dias:yup
+    .required("Los creditos es obligatorio"),
+  dias: yup
     .number()
     .nullable()
     .required("Los días es obligatorio"),
-  horas:yup
+  horas: yup
     .number()
     .nullable()
     .required("Las horas es obligatorio"),
@@ -159,8 +156,7 @@ const onSubmit = async () => {
     // Si la respuesta es exitosa
     if (response.experiencia?.id_experiencia) {
       showToast(
-        `Experiencia ${
-          props.experiencia?.id_experiencia_formativa ? "actualizada" : "creada"
+        `Experiencia ${props.experiencia?.id_experiencia_formativa ? "actualizada" : "creada"
         } correctamente.`
       );
 
@@ -194,58 +190,22 @@ const onSubmit = async () => {
 <template>
   <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredExperiencias">
-      <div class="mt-4 space-y-4">
-        <FormInput
-          v-model="formData.nombre_experiencia"
-          :focus="show"
-          label="Nombre de la experiencia formativa"
-          :error="formErrors?.nombre_experiencia"
-          required
-        />
-        <FormInput
-          v-model="formData.fecha_inicio"
-          type="date"
-          label="Fecha Inicio"
-          :error="formErrors?.fecha_inicio"
-          required
-        />
-        <FormInput
-          v-model="formData.fecha_fin"
-          type="date"
-          label="Fecha Final"
-          :error="formErrors?.fecha_fin"
-          required
-        />
-        <FormInput
-          v-model="formData.creditos"
-          type="number"
-          label="Créditos"
-          :error="formErrors?.creditos"
-          required
-        />
-        <FormInput
-          v-model="formData.dias"
-          type="number"
-          label="Días"
-          :error="formErrors?.dias"
-          required
-        />
-        <FormInput
-          v-model="formData.horas"
-          type="number"
-          label="Horas"
-          :error="formErrors?.horas"
-          required
-        />
+      <div class="mt-4 grid grid-cols-2 gap-4">
+        <FormInput v-model="formData.nombre_experiencia" :focus="show" label="Nombre de la experiencia formativa"
+          :error="formErrors?.nombre_experiencia" required />
+        <FormInput v-model="formData.creditos" type="number" label="Créditos" :error="formErrors?.creditos" required />
+        <FormInput v-model="formData.fecha_inicio" type="date" label="Fecha Inicio" :error="formErrors?.fecha_inicio"
+          required />
+        <FormInput v-model="formData.fecha_fin" type="date" label="Fecha Final" :error="formErrors?.fecha_fin"
+          required />
 
-        <Button
-          :title="experiencia?.id_experiencia ? 'Actualizar' : 'Crear'"
-          :loading-title="experiencia?.id_experiencia ? 'Saving...' : 'Creating...'"
-          class="!w-full"
-          :loading="saving || updating"
-          key="submit-btn"
-          @click="onSubmit"
-        />
+        <FormInput v-model="formData.dias" type="number" label="Días" :error="formErrors?.dias" required />
+        <FormInput v-model="formData.horas" type="number" label="Horas" :error="formErrors?.horas" required />
+        <div class="col-span-2 flex justify-center items-center">
+          <Button :title="experiencia?.id_experiencia ? 'Actualizar' : 'Crear'"
+            :loading-title="experiencia?.id_experiencia ? 'Saving...' : 'Creating...'"  class="w-full md:w-[200px]"
+            :loading="saving || updating" key="submit-btn" @click="onSubmit" />
+        </div>
       </div>
     </AuthorizationFallback>
   </Slider>

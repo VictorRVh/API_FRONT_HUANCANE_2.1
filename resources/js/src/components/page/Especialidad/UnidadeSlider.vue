@@ -51,7 +51,15 @@ const initialFormData = () => ({
 const formData = ref(initialFormData());
 const formErrors = ref({});
 const unidadesOcupadas = ref([]);
+const unidadesOcupadasUpdate = ref([]);
 const UnitOptions = ref([]);
+
+
+unidadesOcupadasUpdate.value = Array.from({ length: 10 }, (_, i) => ({
+  id: i + 1,
+  name: `Unidad ${i + 1}`,
+  enable: true
+}));
 
 function recargarindexUnidades() {
   unidadesOcupadas.value = Array.isArray(UnitStore.indexAll?.unidades_didacticas) ? UnitStore.indexAll.unidades_didacticas : [];
@@ -63,18 +71,12 @@ function recargarindexUnidades() {
     unidadesOcupadas.value = [];
   }
 
-  UnitOptions.value = Array.from({ length: 10 }, (_, i) => ({
-    id: i + 1,
-    name: `Unidad ${i + 1}`,
-    enable: true
-  })).filter(unit => !unidadesOcupadas.value.some(u => parseInt(u.numero_unidad) === unit.id));
- 
- 
 
-  // ✅ Seleccionar automáticamente la primera unidad disponible
+  UnitOptions.value = unidadesOcupadasUpdate.value.filter(unit => !unidadesOcupadas.value.some(u => parseInt(u.numero_unidad) === unit.id));
+  // Seleccionar automáticamente la primera unidad disponible
   if (UnitOptions.value.length > 0) {
     formData.value.numero_unidad = UnitOptions.value[0].id;
-    console.log("index Creado en fomr: ",formData.value.numero_unidad )
+    console.log("index Creado en fomr: ", formData.value.numero_unidad)
   }
 
 }
@@ -82,7 +84,7 @@ function recargarindexUnidades() {
 onMounted(async () => {
   try {
     await UnitStore.loadUnitAllindex(props.ProgramId);
-   // console.log("Datos cargados index:", UnitStore.indexAll?.unidades_didacticas);
+    // console.log("Datos cargados index:", UnitStore.indexAll?.unidades_didacticas);
     recargarindexUnidades();
   } catch (error) {
     console.error("Error cargando unidades didácticas:", error);
@@ -92,12 +94,20 @@ onMounted(async () => {
 watch(
   () => props.show,
   (newValue) => {
-    formData.value = newValue && props.Unit ? { ...props.Unit, id_programa: props.ProgramId } : initialFormData();
+    formData.value = newValue && props.Unit
+      ? {
+        ...props.Unit,
+        id_programa: props.ProgramId,
+        numero_unidad: props.Unit.numero_unidad, // Asegurar que es solo el índice
+      }
+      : initialFormData();
     formErrors.value = {};
   }
 );
 
+
 const schema = yup.object().shape({
+  numero_unidad: yup.string().nullable().required("El nivel de unidad didáctica es obligatorio"),
   nombre_unidad: yup.string().nullable().required("El nombre de la unidad didáctica es obligatorio"),
   fecha_inicio: yup.date().nullable().required("La fecha de inicio es obligatoria"),
   fecha_fin: yup.date().nullable().required("La fecha final es obligatoria").min(yup.ref("fecha_inicio"), "La fecha final debe ser posterior a la fecha de inicio"),
@@ -146,9 +156,10 @@ const onSubmit = async () => {
 <template>
   <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredUnits">
-      <div class="mt-4 space-y-4">
-        <FormLabelError label="Selecciona la Unidad" :error="formErrors.numero_unidad">
-          <VSelect v-model="formData.numero_unidad" :options="UnitOptions" label="name" :reduce="option => option.id"
+      <div class="mt-4 grid grid-cols-2 gap-4">
+        <FormLabelError v-if="!props.Unit" label="Selecciona la Unidad"
+          :error="formErrors.numero_unidad">
+          <VSelect v-model="formData.numero_unidad" :options="UnitOptions" label="name" :reduce="(option) => option.id"
             :class="formErrors.numero_unidad ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''" />
         </FormLabelError>
 
@@ -156,6 +167,7 @@ const onSubmit = async () => {
           :error="formErrors.nombre_unidad" required />
         <FormInput v-model="formData.fecha_inicio" type="date" label="Fecha Inicio" :error="formErrors.fecha_inicio"
           required />
+
         <FormInput v-model="formData.fecha_fin" type="date" label="Fecha Final" :error="formErrors.fecha_fin"
           required />
         <FormInput v-model="formData.creditos" type="number" label="Créditos" :error="formErrors.creditos" required />
@@ -163,8 +175,14 @@ const onSubmit = async () => {
         <FormInput v-model="formData.horas" type="number" label="Horas" :error="formErrors.horas" required />
         <CustomTextarea v-model="formData.capacidad" label="Capacidad de unidad didáctica"
           placeholder="Escribe algo aquí..." :error="formErrors.capacidad" required />
-        <Button :title="Unit?.id_unidad_didactica ? 'Actualizar' : 'Crear'" :loading="saving || updating"
-          @click="onSubmit" class="!w-full" />
+        
+        <div class="col-span-2 flex justify-center items-center">
+          <Button 
+          :title="props.Unit?.id_unidad_didactica ? 'Actualizar' : 'Crear'" 
+          :loading-title="props.Unit?.id_unidad_didactica ? 'Actualizando...' : 'Guardando...'"
+          :loading="saving || updating"
+            @click="onSubmit" class="w-[100px] mx-auto text-center" />
+        </div>
       </div>
     </AuthorizationFallback>
   </Slider>

@@ -175,7 +175,7 @@ const onSubmit = async () => {
 
         <Button
           :title="specialty?.id_especialidad ? 'Actualizar' : 'Crear'"
-          :loading-title="specialty?.id_especialidad ? 'Saving...' : 'Creating...'"
+          :loading-title="specialty?.id_especialidad ? 'Actualizando...' : 'Creando...'"
           class="!w-full"
           :loading="saving || updating"
           key="submit-btn"

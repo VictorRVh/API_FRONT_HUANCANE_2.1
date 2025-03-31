@@ -266,7 +266,7 @@ class GrupoController extends Controller
         })
             ->with([
                 'estudiante.notas' => function ($query) use ($grupo_id) {
-                    $query->where('id_grupo', $grupo_id); // Filtrar notas por el grupo actual
+                    $query->where('id_grupo', $grupo_id);
                 },
                 'estudiante.notas.unidadDidactica'
             ])
@@ -281,8 +281,8 @@ class GrupoController extends Controller
             }
         });
 
-        // Obtener las unidades didácticas del grupo
-        $unidadesDidacticas = $grupo && $grupo->programa ? $grupo->programa->unidadesDidacticas : collect();
+        // Obtener y ordenar las unidades didácticas del grupo
+        $unidadesDidacticas = $grupo && $grupo->programa ? $grupo->programa->unidadesDidacticas->sortBy('numero_unidad')->values() : collect();
 
         // Filtrar unidades didácticas que no tienen notas registradas
         $unidadesConNotas = $alumnos->pluck('estudiante.notas.*.id_unidad_didactica')->flatten()->unique();

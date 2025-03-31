@@ -9,7 +9,7 @@ defineProps({
   },
   sliderClass: {
     type: String,
-    default: () => "w-full max-w-[90%] md:w-[1000px]",
+    default: () => "w-full max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-4xl md:max-w-50% ",
   },
   transitionClass: {
     type: String,
@@ -28,7 +28,7 @@ const emit = defineEmits(["hide"]);
   <Teleport to="body">
     <div
       v-if="show"
-      class="fixed inset-0 z-[308] bg-black/80 backdrop-blur-sm"
+      class="fixed inset-0 z-[308] bg-black/40 backdrop-blur-sm"
       @click="emit('hide', false)"
     ></div>
   </Teleport>
@@ -43,7 +43,7 @@ const emit = defineEmits(["hide"]);
     >
       <div
         v-if="show"
-        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[309] bg-white dark:bg-gray-800 border border-gray-400 dark:border-gray-900 shadow-lg rounded-2xl max-h-[90vh] overflow-hidden flex flex-col"
+        class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[309] bg-white dark:bg-gray-800 border border-gray-500 dark:border-gray-600 shadow-lg rounded-2xl max-h-[90vh] overflow-hidden flex flex-col"
         :class="[sliderClass]"
       >
         <!-- Encabezado -->

@@ -16,6 +16,7 @@ import useModalToast from '../../composables/useModalToast';
 
 import * as yup from 'yup';
 
+
 const props = defineProps({
     show: {
         type: Boolean,
@@ -26,6 +27,8 @@ const props = defineProps({
         default: () => null,
     },
 });
+
+
 const emit = defineEmits(['hide']);
 
 const userStore = useUserStore();
@@ -124,7 +127,7 @@ const onAddAllPermissions = () => {
 };
 
 const schema = yup.object().shape({
-    name: yup.string().nullable().required(),
+    name: yup.string().nullable().required("El nombre es un campo obligatorio"),
 });
 
 const onSubmit = async () => {
@@ -251,7 +254,7 @@ const onSubmit = async () => {
                         <Button
                             :title="role?.id ? 'Actualizar' : 'Agregar'"
                             :loading-title="
-                                role?.id ? 'Saving...' : 'Updating...'
+                                role?.id ? 'Actualizando...' : 'Creando...'
                             "
                             class="!w-full"
                             :loading="saving || updating"

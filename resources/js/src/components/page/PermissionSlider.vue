@@ -83,7 +83,7 @@ watch(
 );
 
 const schema = yup.object().shape({
-  name: yup.string().nullable().required(),
+  name: yup.string().nullable().required("El nombre es un campo obligatorio"),
 });
 
 const onSubmit = async () => {
@@ -103,7 +103,7 @@ const onSubmit = async () => {
     : await createPermission(data);
 
   if (response?.id) {
-    showToast(`Permission ${props.permission?.id ? "updated" : "created"} successfully`);
+    showToast(`Permiso ${props.permission?.id ? "Actualizado" : "Creado"} con éxito`);
 
     permissionStore.loadPermissions();
     userStore.loadUsers();
@@ -129,7 +129,7 @@ const onSubmit = async () => {
 
         <Button
           :title="permission?.id ? 'Actualizar' : 'Guardar'"
-          :loading-title="permission?.id ? 'actualizando...' : 'Guardando...'"
+          :loading-title="permission?.id ? 'Actualizando...' : 'Guardando...'"
           class="!w-full"
           :loading="saving || updating"
           key="submit-btn"

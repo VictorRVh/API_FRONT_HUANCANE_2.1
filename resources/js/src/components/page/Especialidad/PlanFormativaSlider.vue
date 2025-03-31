@@ -117,7 +117,7 @@ const onSubmit = async () => {
 
     // Verificar si la respuesta es exitosa
     if (response?.plan?.id_plan) {
-      showToast(`Plan ${props.plan?.id_plan ? "updated" : "created"} successfully`);
+      showToast(`Plan ${props.plan?.id_plan ? "actualizado" : "creado"} con exíto`);
 
       // Cargar datos actualizados en las stores necesarias
       planStore.loadPlans();
@@ -152,7 +152,7 @@ const onSubmit = async () => {
           :error="formErrors?.nombre_plan" required />
 
         <Button :title="plan?.id_plan ? 'Actualizar' : 'Crear'"
-          :loading-title="plan?.id_plan ? 'Saving...' : 'Creating...'" class="!w-full" :loading="saving || updating"
+          :loading-title="plan?.id_plan ? 'Actualizando...' : 'Creando...'" class="!w-full" :loading="saving || updating"
           key="submit-btn" @click="onSubmit" />
       </div>
     </AuthorizationFallback>

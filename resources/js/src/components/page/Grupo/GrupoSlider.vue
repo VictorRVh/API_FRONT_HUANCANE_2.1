@@ -156,11 +156,13 @@ const schema = yup.object().shape({
   id_turno: yup.number().nullable().required("El turno es obligatorio"),
   id_especialidad: yup.string().nullable().required("La especialidad es obligatoria"),
   id_plan: yup.string().nullable().required("El plan es obligatorio"),
-  id_docente: yup.string().nullable().required("El docente es obligatorio"),
+  id_programa: yup.string().nullable().required("El Programa es obligatorio o te olvidaste de crear"),
+  
 });
 
-// Envío del formulario
 const onSubmit = async () => {
+
+  console.log("hola esto enviando")
   if (saving.value || updating.value) return;
 
   try {
@@ -235,84 +237,81 @@ watch(
 <template>
   <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredGroup">
-      <div class="mt-4 space-y-4">
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormInput
           v-model="formData.nombre_grupo"
           :focus="show"
           label="Nombre del grupo"
           :error="formErrors?.nombre_grupo"
           required
+          class="col-span-1 md:col-span-2"
         />
 
-        <FormLabelError label="Selecciona la sede">
+        <FormLabelError label="Selecciona la sede" :error="formErrors?.id_sede">
           <VSelect
             v-model="formData.id_sede"
             :options="sedeOptions"
             label="name"
             :reduce="(option) => option.id"
-            :error="formErrors?.id_sede"
           />
         </FormLabelError>
 
-        <FormLabelError label="Selecciona el turno">
+        <FormLabelError label="Selecciona el turno" :error="formErrors?.id_turno">
           <VSelect
             v-model="formData.id_turno"
             :options="turnoOptions"
             label="name"
             :reduce="(option) => option.id"
-            :error="formErrors?.id_turno"
           />
         </FormLabelError>
 
-        <FormLabelError label="Selecciona la especialidad">
+        <FormLabelError label="Selecciona la especialidad" :error="formErrors?.id_especialidad">
           <VSelect
             v-model="formData.id_especialidad"
             :options="specialtyOptions"
             label="name"
             :reduce="(option) => option.id"
-            :error="formErrors?.id_especialidad"
           />
         </FormLabelError>
 
-        <FormLabelError label="Selecciona el plan">
+        <FormLabelError label="Selecciona el plan" :error="formErrors?.id_plan">
           <VSelect
             v-model="formData.id_plan"
             :options="planOptions"
             label="name"
             :reduce="(option) => option.id"
-            :error="formErrors?.id_plan"
           />
         </FormLabelError>
 
-        <FormLabelError label="Selecciona el programa">
+        <FormLabelError label="Selecciona el programa" :error="formErrors?.id_programa">
           <VSelect
             v-model="formData.id_programa"
             :options="programOptions"
             label="name"
             :reduce="(option) => option.id"
-            :error="formErrors?.id_programa"
             disabled
           />
         </FormLabelError>
 
-        <FormLabelError label="Selecciona el docente">
+        <FormLabelError label="Selecciona el docente" :error="formErrors?.id_docente">
           <VSelect
             v-model="formData.id_docente"
             :options="docenteOptions"
             label="name"
             :reduce="(option) => option.id"
-            :error="formErrors?.id_docente"
           />
         </FormLabelError>
 
-        <Button
-          :title="group?.id_grupo ? 'Actualizar' : 'Crear'"
-          :loading-title="group?.id_grupo ? 'Saving...' : 'Creating...'"
-          class="!w-full"
-          :loading="saving || updating"
-          key="submit-btn"
-          @click="onSubmit"
-        />
+        <div class="col-span-2 flex justify-center items-center">
+          <Button
+            :title="group?.id_grupo ? 'Actualizar' : 'Crear'"
+            :loading-title="group?.id_grupo ? 'Saving...' : 'Creating...'"
+             class="w-full md:w-[200px]"
+            :loading="saving || updating"
+            key="submit-btn"
+            @click="onSubmit"
+          />
+        </div>
       </div>
     </AuthorizationFallback>
   </Slider>

@@ -136,7 +136,7 @@ watch(() => props.idgroup, loadGroupData);
 
       <!-- Tabla de estudiantes -->
       <section class="w-full">
-        <Table class="border-collapse divide-y divide-transparent">
+        <Table class="border-collapse ">
           <THead>
             <Tr>
               <Th>Id</Th>
@@ -153,9 +153,9 @@ watch(() => props.idgroup, loadGroupData);
               <Td class="py-2 px-4 border-0 text-black">
                 {{ user?.fullName }}
               </Td>
-              <Td class="py-2 w-[100px] border-0">
+              <Td class="  border-0 w-[100px]">
                 <CustomInput v-model="user.nota" :input-class="[
-                  'w-[50px] m-auto text-center',
+                  ' text-center',
                   user.nota === null
                     ? 'text-gray-500 dark:text-gray-400'
                     : parseFloat(user.nota) <= 10
@@ -169,8 +169,10 @@ watch(() => props.idgroup, loadGroupData);
         </Table>
 
         <!-- Botón para guardar -->
-        <div class="flex justify-end w-[120px] mt-4">
-          <Button :title="isSubmitting ? 'Guardando...' : 'Guardar'" :loading="isSubmitting" :disabled="isSubmitting"
+        <div class="flex justify-end w-[180px] mt-4">
+          <Button :title=" 'Guardar' "
+          :loading-title="isSubmitting ? 'Guardando...' : 'Creando...'"
+          :loading="isSubmitting" :disabled="isSubmitting"
             class="!w-full" @click="submitNote" />
         </div>
       </section>

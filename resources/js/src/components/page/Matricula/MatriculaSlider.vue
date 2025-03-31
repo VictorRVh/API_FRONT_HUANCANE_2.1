@@ -309,10 +309,12 @@ watch([idPlanRef, idSpecialty], ([newPlan, newSpecialty]) => {
 <template>
   <Slider :show="show" :title="title" @hide="emit('hide')">
     <AuthorizationFallback :permissions="requiredEnrollment">
-      <div class="mt-4 space-y-4">
-        <FormLabelError v-if="!props.Enrollment" label="Buscar Estudiante por DNI">
-          <FormInput v-model="searchQuery" placeholder="Ingresa DNI" :error="formErrors.id_estudiante" />
-        </FormLabelError>
+      <div class="mt-4 grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <FormLabelError v-if="!props.Enrollment" label="Buscar Estudiante por DNI">
+            <FormInput v-model="searchQuery" placeholder="Ingresa DNI" :error="formErrors.id_estudiante" />
+          </FormLabelError>
+        </div>
 
         <FormLabelError label="Selecciona el Estudiante" :error="formErrors.id_estudiante">
           <VSelect v-model="formData.id_estudiante" :options="studentOptions" label="name"
@@ -334,9 +336,10 @@ watch([idPlanRef, idSpecialty], ([newPlan, newSpecialty]) => {
             :class="formErrors.id_grupo ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''" />
         </FormLabelError>
 
-
-        <Button :title="props.Enrollment?.id_matricula ? 'Actualizar' : 'Matricular'" class="!w-full" @click="onSubmit"
-          :loading="saving || updating" />
+        <div class="col-span-2 flex justify-center items-center">
+          <Button :title="props.Enrollment?.id_matricula ? 'Actualizar' : 'Matricular'"  @click="onSubmit"
+          class="w-full md:w-[200px]" :loading="saving || updating" />
+        </div>
       </div>
     </AuthorizationFallback>
   </Slider>

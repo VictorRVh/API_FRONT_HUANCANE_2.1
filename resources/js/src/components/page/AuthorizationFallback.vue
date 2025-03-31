@@ -13,7 +13,7 @@ const props = defineProps({
 const userStore = useUserStore();
 
 const isAuthorized = computed(() => {
-  console.log("Required permissions:", props.permissions);
+  console.log("Requieres permisos:", props.permissions);
   console.log(
     "User permissions:",
     userStore.user?.permissions.map((p) => p.name)

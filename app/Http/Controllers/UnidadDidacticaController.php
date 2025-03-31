@@ -149,21 +149,25 @@ class UnidadDidacticaController extends Controller
 
         return response()->json([
             'programa' => $programa->only(['id_programa', 'nombre_programa']),
-            'unidades_didacticas' => $programa->unidadesDidacticas->map(function ($unidad) {
-                return [
-                    'id_unidad_didactica' => $unidad->id_unidad_didactica,
-                    'nombre_unidad' => $unidad->nombre_unidad,
-                    'fecha_inicio' => $unidad->fecha_inicio,
-                    'fecha_fin' => $unidad->fecha_fin,
-                    'creditos' => $unidad->creditos,
-                    'dias' => $unidad->dias,
-                    'horas' => $unidad->horas,
-                    'capacidad' => $unidad->capacidad,
-                    'numero_unidad' => $unidad->numero_unidad
-                ];
-            })
+            'unidades_didacticas' => $programa->unidadesDidacticas
+                ->sortBy('numero_unidad') // Ordenar por numero_unidad
+                ->values() // Reindexar la colección después de ordenar
+                ->map(function ($unidad) {
+                    return [
+                        'id_unidad_didactica' => $unidad->id_unidad_didactica,
+                        'nombre_unidad' => $unidad->nombre_unidad,
+                        'fecha_inicio' => $unidad->fecha_inicio,
+                        'fecha_fin' => $unidad->fecha_fin,
+                        'creditos' => $unidad->creditos,
+                        'dias' => $unidad->dias,
+                        'horas' => $unidad->horas,
+                        'capacidad' => $unidad->capacidad,
+                        'numero_unidad' => $unidad->numero_unidad
+                    ];
+                })
         ], 200);
     }
+
 
     public function getUnidadesByPrograma($id_programa)
     {
