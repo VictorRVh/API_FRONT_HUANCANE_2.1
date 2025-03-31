@@ -306,15 +306,19 @@ class GrupoController extends Controller
                         'celular' => $matricula->estudiante->celular,
                         'fecha_nacimiento' => $matricula->estudiante->fecha_nacimiento,
                         'email' => $matricula->estudiante->email,
-                        'notas' => $matricula->estudiante->notas->map(function ($nota) {
-                            return [
-                                'id_nota' => $nota->id_nota,
-                                'nota' => $nota->nota,
-                                'id_unidad_didactica' => $nota->id_unidad_didactica,
-                                'nombre_unidad' => $nota->unidadDidactica->nombre_unidad ?? null,
-                                'id_grupo' => $nota->id_grupo,
-                            ];
-                        }),
+                        'notas' => $matricula->estudiante->notas
+                            ->sortBy(fn($nota) => $nota->unidadDidactica->numero_unidad ?? PHP_INT_MAX)
+                            ->values()
+                            ->map(function ($nota) {
+                                return [
+                                    'id_nota' => $nota->id_nota,
+                                    'nota' => $nota->nota,
+                                    'id_unidad_didactica' => $nota->id_unidad_didactica,
+                                    'nombre_unidad' => $nota->unidadDidactica->nombre_unidad ?? null,
+                                    'numero_unidad' => $nota->unidadDidactica->numero_unidad ?? null,
+                                    'id_grupo' => $nota->id_grupo,
+                                ];
+                            }),
                     ],
                 ];
             }),

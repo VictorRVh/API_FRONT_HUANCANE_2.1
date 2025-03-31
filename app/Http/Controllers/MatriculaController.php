@@ -330,10 +330,10 @@ class MatriculaController extends Controller
             'grupos.programa.experienciasFormativas.notas',
         ])
             ->whereHas('estudiante', function ($query) use ($dni) {
-                $query->where('id_estudiante', $dni); // Cambiado para buscar por DNI
+                $query->where('id_estudiante', $dni); // Buscar por ID de estudiante
             });
 
-        // Agregar filtro por grupo si se proporciona
+        // Filtrar por grupo si se proporciona
         if ($id_grupo) {
             $matriculaQuery->where('id_grupo', $id_grupo);
         }
@@ -347,21 +347,24 @@ class MatriculaController extends Controller
                 'programa' => $registro->grupos->programa->nombre_programa,
                 'unidad_competencia' => $registro->grupos->programa->unidades_competencia,
                 'fecha_inicio' => optional($registro->grupos->programa->unidadesDidacticas->sortBy('fecha_inicio')->first())->fecha_inicio,
-                "fecha_fin" => optional($registro->grupos->programa->unidadesDidacticas->sortByDesc('fecha_final')->first())->fecha_fin,
+                'fecha_fin' => optional($registro->grupos->programa->unidadesDidacticas->sortByDesc('fecha_final')->first())->fecha_fin,
                 'dni' => $registro->estudiante->dni,
                 'apellidos_nombres' => strtoupper($registro->estudiante->apellido_paterno) . ' ' . strtoupper($registro->estudiante->apellido_materno) . ', ' . $registro->estudiante->name,
-                'unidades_didacticas' => $registro->grupos->programa->unidadesDidacticas->map(function ($unidad, $index) use ($registro) {
-                    $nota = $unidad->notas->firstWhere('id_estudiante', $registro->estudiante->id);
-                    return [
-                        'numero' => str_pad($index + 1, 2, '0', STR_PAD_LEFT),
-                        'nombre_unidad' => $unidad->nombre_unidad,
-                        'credito' => $unidad->creditos,
-                        'hora' => $unidad->horas,
-                        'condicion' => 'G',
-                        'nota' => $nota ? $nota->nota : 'N/A',
-                        'capacidad' => $unidad->capacidad
-                    ];
-                }),
+                'unidades_didacticas' => $registro->grupos->programa->unidadesDidacticas
+                    ->sortBy('numero_unidad') // Ordena por número de unidad
+                    ->values() // Reajusta los índices
+                    ->map(function ($unidad, $index) use ($registro) {
+                        $nota = $unidad->notas->firstWhere('id_estudiante', $registro->estudiante->id);
+                        return [
+                            'numero' => str_pad($index + 1, 2, '0', STR_PAD_LEFT),
+                            'nombre_unidad' => $unidad->nombre_unidad,
+                            'credito' => $unidad->creditos,
+                            'hora' => $unidad->horas,
+                            'condicion' => 'G',
+                            'nota' => $nota ? $nota->nota : 'N/A',
+                            'capacidad' => $unidad->capacidad
+                        ];
+                    }),
                 'experiencias_formativas' => $registro->grupos->programa->experienciasFormativas->map(function ($experiencia) use ($registro) {
                     $nota = $experiencia->notas->firstWhere('id_estudiante', $registro->estudiante->id);
                     return [
