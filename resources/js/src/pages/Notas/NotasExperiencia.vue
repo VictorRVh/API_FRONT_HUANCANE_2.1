@@ -70,8 +70,8 @@ const seeNote = () => {
             </Tr>
           </THead>
           <TBody>
-            <Tr v-for="(user,index) in userStore.student.estudiantes" :key="user.id">
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">{{ index+1 }}</Td>
+            <Tr v-for="(user, index) in userStore.student.estudiantes" :key="user.id">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">{{ index + 1 }}</Td>
               <Td class="py-2 px-4 border-0">
                 <div class="text-black font-medium dark:text-white">{{ user.estudiante?.name }}</div>
                 <div class="text-sm text-gray-500 dark:text-white">{{ user.estudiante?.email }}</div>
@@ -81,7 +81,14 @@ const seeNote = () => {
               <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.dni }}</Td>
               <Td class="py-2 px-4 border-0 text-black" v-for="note in user.estudiante?.notas_experiencia_formativa"
                 :key="note.id_nota_experiencia">
-                {{ note.nota_experiencia }}
+                <span :class="[
+                  'px-2 py-1 rounded-full',
+                  note.nota_experiencia <= 10
+                    ? ' text-red-600  dark:text-red-500 font-bold'
+                    : ' text-green-600  dark:text-green-300 font-bold'
+                ]">
+                  {{ note.nota_experiencia }}
+                </span>
               </Td>
             </Tr>
           </TBody>

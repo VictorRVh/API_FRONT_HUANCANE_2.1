@@ -64,7 +64,7 @@ console.log("datos de la vida: ", dataCertificate.value)
             <Td class="border p-2">{{ dato.programa }}</Td>
             <Td class="border p-2">{{ dato.unidad_competencia }}</Td>
             <Td class="border p-2">{{ dato.fecha_inicio }}</Td>
-            <Td class="border p-2">{{ dato.fecha_fin  }} </Td>
+            <Td class="border p-2">{{ dato.fecha_fin }} </Td>
           </tr>
         </TBody>
       </Table>
@@ -75,22 +75,34 @@ console.log("datos de la vida: ", dataCertificate.value)
           <Tr class="bg-gray-100">
             <Th class="border p-1">N°</Th>
             <Th class="border p-2">Nombre de la Unidad</Th>
+            <Th class="border p-2">Capacidad</Th>
             <Th class="border p-2">Créditos</Th>
             <Th class="border p-2">Horas</Th>
             <Th class="border p-2">Condición</Th>
             <Th class="border p-2">Nota</Th>
-            <Th class="border p-2">Capacidad</Th>
+
           </Tr>
         </THead>
         <TBody>
           <Tr v-for="(unidad, i) in dataCertificate[0]?.unidades_didacticas" :key="i">
             <Td class="border p-1">{{ unidad.numero }}</Td>
             <Td class="border p-2">{{ unidad.nombre_unidad }}</Td>
+            <Td class="border p-2">{{ unidad.capacidad }}</Td>
             <Td class="border p-2">{{ unidad.credito }}</Td>
             <Td class="border p-2">{{ unidad.hora }}</Td>
             <Td class="border p-2">{{ unidad.condicion }}</Td>
-            <Td class="border p-2">{{ unidad.nota }}</Td>
-            <Td class="border p-2">{{ unidad.capacidad }}</Td>
+
+            <Td class="border p-2">
+            <span :class="[
+              'px-2 py-1 rounded-full',
+              unidad.nota <= 10
+                ? ' text-red-600  dark:text-red-500 font-bold'
+                : ' text-green-600  dark:text-green-300 font-bold'
+            ]">
+                {{ unidad.nota }}
+              </span>
+            </Td>
+
           </Tr>
         </TBody>
       </Table>
@@ -110,7 +122,16 @@ console.log("datos de la vida: ", dataCertificate.value)
             <Td class="border p-2">{{ exp.nombre_experiencia }}</Td>
             <Td class="border p-2">{{ exp.creditos_exp }}</Td>
             <Td class="border p-2">{{ exp.horas_exp }}</Td>
-            <Td class="border p-2">{{ exp.nota }}</Td>
+            
+            <Td class="border p-2"><span :class="[
+              'px-2 py-1 rounded-full',
+              exp.nota <= 10
+                ? ' text-red-600  dark:text-red-500 font-bold'
+                : ' text-green-600  dark:text-green-300 font-bold'
+            ]">
+                {{ exp.nota }}
+              </span>
+              </Td>
           </Tr>
         </TBody>
       </Table>

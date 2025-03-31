@@ -106,6 +106,15 @@ const submitNote = async () => {
 
       router.push(routeName);
       showToast("Notas guardadas exitosamente", "success");
+
+      // Evita que el usuario regrese con el botón "atrás"
+      setTimeout(() => {
+        history.replaceState(null, "", location.href);
+        window.onpopstate = function () {
+          history.replaceState(null, "", location.href);
+        };
+      }, 200);
+      
     } else {
       throw new Error("Error al guardar");
     }
@@ -118,6 +127,7 @@ const submitNote = async () => {
     isSubmitting.value = false;
   }
 };
+
 
 // ================== CICLOS DE VIDA ==================
 onMounted(loadGroupData);
