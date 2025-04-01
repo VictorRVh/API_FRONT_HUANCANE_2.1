@@ -39,6 +39,8 @@ const url = props.idType === TYPE_EXPERIENCE
   ? "/registrar_nota_experiencia"
   : "/registrar_notas_unidades";
 
+
+
 const { store: createUnit, saving } = useHttpRequest(url);
 const { showToast } = useModalToast();
 const userStore = useStudentsStore();
@@ -82,6 +84,7 @@ const validateNotes = () => {
 };
 
 // Enviar las notas al servidor
+// Enviar las notas al servidor
 const submitNote = async () => {
   if (isSubmitting.value) return;
 
@@ -107,14 +110,6 @@ const submitNote = async () => {
       router.push(routeName);
       showToast("Notas guardadas exitosamente", "success");
 
-      // Evita que el usuario regrese con el botón "atrás"
-      setTimeout(() => {
-        history.replaceState(null, "", location.href);
-        window.onpopstate = function () {
-          history.replaceState(null, "", location.href);
-        };
-      }, 200);
-      
     } else {
       throw new Error("Error al guardar");
     }
@@ -156,9 +151,9 @@ watch(() => props.idgroup, loadGroupData);
           </THead>
 
           <TBody>
-            <Tr v-for="(user,index) in listNotes" :key="user.id_estudiante">
+            <Tr v-for="(user, index) in listNotes" :key="user.id_estudiante">
               <Td class="py-2 px-4 border-0 text-black">
-                {{ index+1 }}
+                {{ index + 1 }}
               </Td>
               <Td class="py-2 px-4 border-0 text-black">
                 {{ user?.fullName }}
@@ -180,10 +175,8 @@ watch(() => props.idgroup, loadGroupData);
 
         <!-- Botón para guardar -->
         <div class="flex justify-end w-[180px] mt-4">
-          <Button :title=" 'Guardar' "
-          :loading-title="isSubmitting ? 'Guardando...' : 'Creando...'"
-          :loading="isSubmitting" :disabled="isSubmitting"
-            class="!w-full" @click="submitNote" />
+          <Button :title="'Guardar'" :loading-title="isSubmitting ? 'Guardando...' : 'Creando...'"
+            :loading="isSubmitting" :disabled="isSubmitting" class="!w-full" @click="submitNote" />
         </div>
       </section>
     </div>

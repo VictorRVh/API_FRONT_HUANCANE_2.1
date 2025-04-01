@@ -30,7 +30,14 @@ onMounted(async () => {
   idExp.value = userStore.student?.experiencia_formativa[0]?.id_experiencia
   showBtn.value = userStore.student?.experiencia_formativa[0].nota_asignada;
   //console.log("hola : sacateañl ",userStore.student?.experiencia_formativa[0].nota_asignada  )
-  console.log("hola : sacateañl ", userStore?.student?.experiencia_formativa)
+  //console.log("hola : sacateañl ", userStore?.student?.experiencia_formativa)
+
+  // paraque no vuielca a regresar a agrhgar notas
+  window.location.hash = "no-back-button";
+  window.location.hash = "Again-No-back-button"; // Necesario para Chrome
+  window.onhashchange = function () {
+    window.location.hash = "no-back-button";
+  };
 
 });
 

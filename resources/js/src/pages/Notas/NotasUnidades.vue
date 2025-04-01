@@ -19,6 +19,7 @@ const props = defineProps({
   },
 });
 
+
 const userStore = useStudentsStore();
 const listUnit = ref([]);
 const lengthUnit = ref(0);
@@ -34,12 +35,17 @@ onMounted(async () => {
   if (listUnit.value.length > 0) {
     selectUnit.value = listUnit.value[0].id_unidad_didactica;
   }
-  console.log("victor hola", lengthUnit)
+  // console.log("victor hola", lengthUnit)
+  window.location.hash = "no-back-button";
+  window.location.hash = "Again-No-back-button"; // Necesario para Chrome
+  window.onhashchange = function () {
+    window.location.hash = "no-back-button";
+  };
 
 });
 
-console.log("victor hola fuera", lengthUnit)
 
+//console.log("victor hola fuera", lengthUnit)
 
 watch(() => props.idUnitNote, async (newId) => {
   await userStore.loadGroupStudentNote(newId);
@@ -61,6 +67,9 @@ const seeNote = () => {
     console.error("Por favor, seleccione una unidad antes de continuar.");
   }
 };
+
+
+
 </script>
 
 <template>
@@ -94,8 +103,8 @@ const seeNote = () => {
             </Tr>
           </THead>
           <TBody>
-            <Tr v-for="(user,index) in userStore.student.estudiantes" :key="user.id">
-              <Td class="py-2 px-4 border-0 text-black dark:text-white">{{ index+1 }}</Td>
+            <Tr v-for="(user, index) in userStore.student.estudiantes" :key="user.id">
+              <Td class="py-2 px-4 border-0 text-black dark:text-white">{{ index + 1 }}</Td>
               <Td class="py-2 px-4 border-0">
                 <div class="text-black font-medium dark:text-white">{{ user.estudiante?.name }}</div>
                 <div class="text-sm text-gray-500 dark:text-white">{{ user.estudiante?.email }}</div>
@@ -104,14 +113,16 @@ const seeNote = () => {
               <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.apellido_materno }}</Td>
               <Td class="py-2 px-4 border-0 text-black">{{ user.estudiante?.dni }}</Td>
               <Td class="py-2 px-4 border-0" v-for="note in user.estudiante?.notas" :key="note.id_nota">
+
                 <span :class="[
                   'px-2 py-1 rounded-full',
                   note.nota <= 10
-                    ? 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300 font-bold'
-                    : 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300'
+                    ? ' text-red-600  dark:text-red-500 font-bold'
+                    : ' text-green-600  dark:text-green-300 font-bold'
                 ]">
                   {{ note.nota }}
                 </span>
+
               </Td>
             </Tr>
           </TBody>
