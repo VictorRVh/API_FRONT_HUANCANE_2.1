@@ -16,32 +16,38 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
+            // Validación con `size:8` para asegurar que el DNI tenga exactamente 8 caracteres
             $credentials = $request->validate([
-                'email' => ['required', 'email'],
+                'dni' => ['required', 'string', 'size:8'],
                 'password' => ['required'],
             ]);
 
+            // Buscar usuario por DNI
             $user = User::with('roles.permissions')
-                ->where('email', $credentials['email'])
+                ->where('dni', $credentials['dni'])
                 ->first();
-            if (
-                !$user ||
-                !Hash::check($credentials['password'], $user->password)
-            ) {
-                throw new \Exception(
-                    'Error|Credentials doesn\'t match--403',
-                    13333
-                );
+
+            // Validar usuario y contraseña
+            if (!$user || !Hash::check($credentials['password'], $user->password)) {
+                return response()->json([
+                    'error' => 'Las credenciales no coinciden'
+                ], 403);
             }
 
-            $request->session()->regenerate();
+            // Iniciar sesión y regenerar sesión después del login
             Auth::loginUsingId($user->id, true);
+            $request->session()->regenerate();
 
+            // Retornar permisos del usuario
             return response()->json($this->extractPermissionsFromUser($user));
         } catch (\Exception $error) {
-            return $this->errorResponse($error);
+            return response()->json([
+                'error' => 'Ocurrió un error en el servidor',
+                'details' => $error->getMessage(),
+            ], 500);
         }
     }
+
 
     public function verify()
     {

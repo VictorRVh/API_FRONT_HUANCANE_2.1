@@ -19,7 +19,7 @@ class PermissionRoleTableSeeder extends Seeder
             $item = [
                 'role_id' => 1,
                 'permission_id' => $i,
-                'created_at' => now(),
+                
             ];
 
             $permissionRole[] = $item;

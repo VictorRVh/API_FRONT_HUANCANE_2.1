@@ -1,17 +1,11 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch,computed } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import DashboardHeader from "./DashboardHeader.vue";
 import SuspenseFallback from "./SuspenseFallback.vue";
 import useUserStore from "../store/useUserStore";
 import Data from "./Data.vue"; // Importación de Data.vue
 import Breadcrumb from '../components/pagination/Breadcrumb.vue';
-
-
-import { useBreadcrumb } from "../composables/useBreadcrumb"; // Asegúrate de importar correctamente
-
-const router = useRouter();
-const { breadcrumbs } = useBreadcrumb();
 
 const userStore = useUserStore();
 
@@ -20,8 +14,8 @@ console.log("datos usuario: ", userStore);
 const asyncLoading = ref(false);
 const sidebarOpen = ref(false);
 const isLargeScreen = ref(window.innerWidth >= 1280);
-
-
+const route = useRoute();
+const router = useRouter();
 const mostrarData = ref(false); // Estado para mostrar u ocultar el componente Data.vue
 
 // Función para alternar la visibilidad de Data.vue
@@ -60,20 +54,15 @@ onBeforeUnmount(() => {
 });
 
 // Cerrar sidebar automáticamente al seleccionar una herramienta en móviles
-watch(() => router.fullPath, () => {
+watch(() => route.fullPath, () => {
   if (!isLargeScreen.value) {
     sidebarOpen.value = false;
   }
 });
-// Computed para obtener la última ruta válida del breadcrumb
-const lastBreadcrumbRoute = computed(() => {
-  return breadcrumbs.value.length > 1
-    ? breadcrumbs.value[breadcrumbs.value.length - 2].path // Toma la penúltima ruta
-    : "/home"; // Ruta por defecto si no hay historial
-});
-// Función para regresar a la última ruta del breadcrumb
+
+// Función para navegar hacia atrás
 const goBack = () => {
-  router.push(lastBreadcrumbRoute.value);
+  router.back();
 };
 </script>
 
@@ -84,7 +73,7 @@ const goBack = () => {
     <!-- Sidebar Header -->
     <!-- Utiliza w-full en móviles, w-[15%] en pantallas lg y la clase personalizada para resoluciones >=1550px -->
     <header v-if="sidebarOpen || isLargeScreen"
-      class="w-full lg:w-[220px] bg-plomoClaro dark:bg-gray-800 h-auto lg:h-screen sticky top-0 shadow-lg z-10 overflow-auto sidebar-responsive">
+      class="w-full lg:w-[200px] bg-plomoClaro dark:bg-gray-800 h-auto lg:h-screen sticky top-0 shadow-lg z-10 overflow-auto sidebar-responsive">
       <DashboardHeader class="container mx-auto px-4 xl:px-0 gap-4 text-negroClaro dark:text-white" />
     </header>
 
@@ -105,7 +94,7 @@ const goBack = () => {
         class="flex items-center justify-between p-4 bg-blancoPuro dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600 mx-auto rounded-lg w-[99%] mt-2">
         <div class="text-left rounded-lg">
           <p class="text-lg font-regular text-dark-fondo dark:text-white">INTRANET</p>
-          <p class="text-xs font-semibold mt-1 text-dark-surface dark:text-gray-300">CETPRO HUANCANÉ</p>
+          <p class="text-xs font-semibold mt-1 text-dark-surface dark:text-gray-300">CEPRO HUANCANÉ</p>
         </div>
         <div class="flex items-center space-x-4 relative">
           <div class="text-right">
@@ -116,18 +105,20 @@ const goBack = () => {
               {{ userStore.user.roles[0]?.name }}
             </p>
           </div>
+          <!-- pepepep -->
           <div
-            class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-300 cursor-pointer"
-            @click.stop="toggleData">
+            class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-300 cursor-pointer relative"
+            @mouseenter="mostrarData = true" @mouseleave="mostrarData = false">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
               stroke="currentColor" class="w-8 h-8">
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
             </svg>
           </div>
+          <!-- Menú desplegable -->
           <div v-if="mostrarData" id="data-dropdown"
-            class="absolute top-12 right-4 w-640 bg-transparent dark:bg-gray-700 p-4 z-50 transition-transform transform"
-            :class="mostrarData ? 'opacity-100 scale-100' : 'opacity-0 scale-95'">
+            class="absolute top-12 right-0 w-70 bg-white dark:bg-gray-700 p-4 z-50 transition-opacity duration-200 shadow-lg rounded-md"
+            @mouseenter="mostrarData = true" @mouseleave="mostrarData = false">
             <Data />
           </div>
         </div>
@@ -180,7 +171,7 @@ const goBack = () => {
 
     /* Para resoluciones entre 1024px y 1280px, el sidebar tendrá 250px */
     .sidebar-responsive {
-      width: 220px !important;
+      width: 100px !important;
     }
   }
 }

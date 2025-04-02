@@ -8,7 +8,6 @@ export default [
             permissions: [],
             breadcrumb: 'Login'
         },
-
     },
     {
         path: '/home',
@@ -20,7 +19,6 @@ export default [
             breadcrumb: 'Inicio'
         },
     },
-
     {
         path: '/users',
         name: 'users',

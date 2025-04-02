@@ -1,5 +1,5 @@
 <script setup>
-import { inject } from "vue";
+import { ref, inject } from "vue";
 import { useRouter } from "vue-router";
 import useUserStore from "../store/useUserStore";
 import useHttpRequest from "../composables/useHttpRequest";
@@ -36,16 +36,22 @@ const onLogout = async () => {
   }
 };
 
+
+// Notificación de copiado
+const copied = ref(false);
+
 // Copiar correo al portapapeles
 const copyEmail = async () => {
   try {
     await navigator.clipboard.writeText(userStore.user?.email);
-    alert("Correo copiado al portapapeles");
+    copied.value = true;
+    setTimeout(() => (copied.value = false), 900); // Oculta el mensaje después de 1.5 segundos
   } catch (err) {
     console.error("Error al copiar:", err);
   }
 };
 </script>
+
 
 <template>
   <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg w-[280px] border border-gray-300 dark:border-gray-700 flex flex-col items-center">
@@ -74,8 +80,11 @@ const copyEmail = async () => {
       <p class="text-sm text-blue-600 dark:text-blue-400 font-medium hover:underline">
         {{ userStore.user?.email }}
       </p>
-      <span class="absolute left-0 top-6 text-xs text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">Copiar</span>
+      <span v-if="copied" class="absolute left-0 top-6 text-xs text-green-500 font-semibold transition-opacity duration-300">
+        Copiado ✔
+      </span>
     </div>
+
 
     <!-- Controles de tema y cerrar sesión -->
     <div class="flex justify-between items-center w-full mt-4 border-t pt-3 border-gray-300 dark:border-gray-600">

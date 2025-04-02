@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import Button from "../components/ui/Button.vue";
-
+import FormInput from '../components/ui/FormInput.vue';
 import useHttpRequest from "../composables/useHttpRequest";
 import useValidation from "../composables/useValidation";
 import useAppRouter from "../composables/useAppRouter";
@@ -15,7 +15,7 @@ const userStore = useUserStore();
 import { string, object } from "yup";
 
 const formData = ref({
-  email: null,
+  dni: null,
   password: null,
 });
 const formErrors = ref({});
@@ -24,7 +24,7 @@ const formErrors = ref({});
 const showPassword = ref(false);
 
 const schema = object().shape({
-  email: string().email().nullable().required(),
+  dni: string().nullable().required(),
   password: string().nullable().required(),
 });
 
@@ -46,7 +46,7 @@ const onSignIn = async () => {
 
   if (user?.id) {
     userStore.setUser(user);
-    await pushToRoute({ name: "home" });
+    await pushToRoute({ name: "users" });
   }
 };
 </script>
@@ -54,7 +54,7 @@ const onSignIn = async () => {
 <template>
   <div class="min-h-screen flex bg-[#F8F8FA]">
     <!-- Sección Izquierda -->
-    <div class="w-full md:w-3/7 flex flex-col justify-between bg-[#F8F8FA] p-8">
+    <div class=" hidden md:flex w-[70%] flex-col justify-between bg-[#F8F8FA] p-8">
       <div class="flex justify-start">
         <h2 class="text-3xl font-regular text-[#49454F] p-5">Intranet</h2>
       </div>
@@ -69,7 +69,7 @@ const onSignIn = async () => {
     </div>
 
     <!-- Sección Derecha -->
-    <div class="flex flex-col justify-center w-full md:w-2/5 p-8 bg-white">
+    <div class="w-full md:w-[30%] flex flex-col min-h-screen items-center justify-center p-8 bg-white"> 
       <div class="w-full mx-auto">
         <h2 class="text-3xl text-center text-[#49454F]">Bienvenido</h2>
         <p class="mt-4 text-center text-base text-[#49454F]">
@@ -80,21 +80,22 @@ const onSignIn = async () => {
         <form @submit.prevent="onSignIn" class="mt-8 space-y-6">
           <!-- Input para Usuario -->
           <div>
-            <label for="email" class="block text-sm font-medium text-[#49454F]">
+            <label for="dni" class="block text-sm font-medium text-[#49454F]">
               Usuario
             </label>
+
             <input
-              v-model="formData.email"
-              id="email"
-              name="email"
-              type="email"
-              autocomplete="email"
+              v-model="formData.dni"
+              id="dni"
+              name="dni"
+              type="text"
+              autocomplete="dni"
               required
               @keyup.enter="onSignIn"
               class="block w-full px-1 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-0 sm:text-sm"
             />
-            <p v-if="formErrors?.email" class="mt-1 text-sm text-red-500">
-              {{ formErrors.email }}
+            <p v-if="formErrors?.dni" class="mt-1 text-sm text-red-500">
+              {{ formErrors.dni }}
             </p>
           </div>
 
@@ -206,3 +207,7 @@ const onSignIn = async () => {
     </div>
   </div>
 </template>
+   <!-- Sección Derecha 
+    <div class=" hidden md:flex w-[70%] flex-col justify-between bg-[#F8F8FA] p-8">
+      <div class="w-full md:w-[30%] flex flex-col min-h-screen items-center justify-center p-8 bg-white"> 
+    -->
